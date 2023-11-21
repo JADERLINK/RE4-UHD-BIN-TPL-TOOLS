@@ -4,16 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using RE4_UHD_BIN_TOOL.ALL;
+using RE4_UHD_BIN_TOOL.EXTRACT;
 
 namespace RE4_UHD_BIN_TOOL.REPACK
 {
     public class MtlConverter
     {
-        private string baseDiretory;
+        private string baseDirectory;
 
-        public MtlConverter(string baseDiretory) 
+        private Dictionary<TexPathRef, (ushort width, ushort height)> TexturesDimension;
+
+        public MtlConverter(string baseDirectory) 
         {
-            this.baseDiretory = baseDiretory;
+            this.baseDirectory = baseDirectory;
+            TexturesDimension = new Dictionary<TexPathRef, (ushort width, ushort height)>();
         }
 
         public void Convert(IdxMtl idxmtl, ref UhdTPL uhdTpl, out IdxMaterial idxMaterial) 
@@ -141,7 +146,7 @@ namespace RE4_UHD_BIN_TOOL.REPACK
             }
 
             (ushort width, ushort height) dimension = (info.width, info.height);
-            GetImagemDimension(texPathRef, ref dimension);
+            GetDimension(texPathRef, ref dimension);
             info.width = dimension.width;
             info.height = dimension.height;
 
@@ -151,11 +156,25 @@ namespace RE4_UHD_BIN_TOOL.REPACK
             return index;
         }
 
+        //TexturesDimension
+        private void GetDimension(TexPathRef texPathRef, ref (ushort width, ushort height) dimension) 
+        {
+            if (TexturesDimension.ContainsKey(texPathRef))
+            {
+                dimension = TexturesDimension[texPathRef];
+            }
+            else 
+            {
+                GetImagemDimension(texPathRef, ref dimension);
+                TexturesDimension.Add(texPathRef, dimension);
+            }
+        }
+
         private void GetImagemDimension(TexPathRef texPathRef, ref (ushort width, ushort height) dimension)
         {
             try
             {
-                string file = Path.Combine(baseDiretory, texPathRef.GetPath());
+                string file = Path.Combine(baseDirectory, texPathRef.GetPath());
                 if (File.Exists(file))
                 {
                     BinaryReader br = new BinaryReader(new FileInfo(file).OpenRead());
@@ -188,7 +207,6 @@ namespace RE4_UHD_BIN_TOOL.REPACK
                 {
                     Console.WriteLine("Error when getting image dimension: " + texPathRef + Environment.NewLine + "The file does not exist.");
                 }
-
 
             }
             catch (Exception ex)

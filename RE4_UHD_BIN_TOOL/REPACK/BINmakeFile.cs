@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using RE4_UHD_BIN_TOOL.REPACK.Structures;
+using RE4_UHD_BIN_TOOL.ALL;
+using RE4_UHD_BIN_TOOL.EXTRACT;
 
 namespace RE4_UHD_BIN_TOOL.REPACK
 {

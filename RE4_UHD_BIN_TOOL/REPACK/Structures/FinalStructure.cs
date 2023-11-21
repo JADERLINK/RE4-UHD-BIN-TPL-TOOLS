@@ -19,12 +19,12 @@ namespace RE4_UHD_BIN_TOOL.REPACK.Structures
         public FinalMaterialGroup[] Groups;
     }
 
-    public class FinalMaterialGroup 
+    public class FinalMaterialGroup
     {
-        // colocar classe dos materiais
+        // nome do material usado
         public string materialName;
 
-         public FinalFace[] Mesh;
+        public FinalFace[] Mesh;
     }
 
     public class FinalFace

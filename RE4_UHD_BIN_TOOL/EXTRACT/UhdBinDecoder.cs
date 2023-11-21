@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using RE4_UHD_BIN_TOOL.ALL;
 
-namespace RE4_UHD_BIN_TOOL
+namespace RE4_UHD_BIN_TOOL.EXTRACT
 {
     public static class UhdBinDecoder
     {

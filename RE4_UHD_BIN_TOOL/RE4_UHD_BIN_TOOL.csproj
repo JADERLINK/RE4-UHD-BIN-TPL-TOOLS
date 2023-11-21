@@ -52,9 +52,12 @@
   <ItemGroup>
     <Compile Include="ALL\CONSTs.cs" />
     <Compile Include="ALL\MaterialPart.cs" />
+    <Compile Include="EXTRACT\HeaderExtension.cs" />
+    <Compile Include="EXTRACT\OutputMaterial.cs" />
     <Compile Include="REPACK\BINmakeFile.cs" />
     <Compile Include="REPACK\BINrepackFinal.cs" />
     <Compile Include="REPACK\BINrepackIntermediary.cs" />
+    <Compile Include="REPACK\BINrepackIntermediaryL2.cs" />
     <Compile Include="REPACK\BINrepackOBJ.cs" />
     <Compile Include="REPACK\BINrepackSMD.cs" />
     <Compile Include="REPACK\CjClutter.ObjLoader.Loader\Data\DataStore\IGroupNameDataStore.cs" />

@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RE4_UHD_BIN_TOOL
+namespace RE4_UHD_BIN_TOOL.ALL
 {
+    /// <summary>
+    /// representa um material do .bin
+    /// </summary>
     public class MaterialPart
     {
         public byte unk_min_11;
@@ -61,6 +64,69 @@ namespace RE4_UHD_BIN_TOOL
             b[22] = unk_11;
             b[23] = custom_specular_map;
             return b;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is MaterialPart m
+                && m.material_flag == material_flag
+                && m.diffuse_map == diffuse_map
+                && m.bump_map == bump_map
+                && m.opacity_map == opacity_map
+                && m.generic_specular_map == generic_specular_map
+                && m.intensity_specular_r == intensity_specular_r
+                && m.intensity_specular_g == intensity_specular_g
+                && m.intensity_specular_b == intensity_specular_b
+                && m.unk_08 == unk_08
+                && m.unk_09 == unk_09
+                && m.specular_scale == specular_scale
+                && m.unk_11 == unk_11
+                && m.custom_specular_map == custom_specular_map
+                && m.unk_min_01 == unk_min_01
+                && m.unk_min_02 == unk_min_02
+                && m.unk_min_03 == unk_min_03
+                && m.unk_min_04 == unk_min_04
+                && m.unk_min_05 == unk_min_05
+                && m.unk_min_06 == unk_min_06
+                && m.unk_min_07 == unk_min_07
+                && m.unk_min_08 == unk_min_08
+                && m.unk_min_09 == unk_min_09
+                && m.unk_min_10 == unk_min_10
+                && m.unk_min_11 == unk_min_11
+                ;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + material_flag.GetHashCode();
+                hash = hash * 23 + diffuse_map.GetHashCode();
+                hash = hash * 23 + bump_map.GetHashCode();
+                hash = hash * 23 + opacity_map.GetHashCode();
+                hash = hash * 23 + generic_specular_map.GetHashCode();
+                hash = hash * 23 + intensity_specular_r.GetHashCode();
+                hash = hash * 23 + intensity_specular_g.GetHashCode();
+                hash = hash * 23 + intensity_specular_b.GetHashCode();
+                hash = hash * 23 + unk_08.GetHashCode();
+                hash = hash * 23 + unk_09.GetHashCode();
+                hash = hash * 23 + specular_scale.GetHashCode();
+                hash = hash * 23 + unk_11.GetHashCode();
+                hash = hash * 23 + custom_specular_map.GetHashCode();
+                hash = hash * 23 + unk_min_01.GetHashCode();
+                hash = hash * 23 + unk_min_02.GetHashCode();
+                hash = hash * 23 + unk_min_03.GetHashCode();
+                hash = hash * 23 + unk_min_04.GetHashCode();
+                hash = hash * 23 + unk_min_05.GetHashCode();
+                hash = hash * 23 + unk_min_06.GetHashCode();
+                hash = hash * 23 + unk_min_07.GetHashCode();
+                hash = hash * 23 + unk_min_08.GetHashCode();
+                hash = hash * 23 + unk_min_09.GetHashCode();
+                hash = hash * 23 + unk_min_10.GetHashCode();
+                hash = hash * 23 + unk_min_11.GetHashCode();
+                return hash;
+            }
         }
 
     }

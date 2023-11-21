@@ -5,16 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 
-namespace RE4_UHD_BIN_TOOL
+namespace RE4_UHD_BIN_TOOL.ALL
 {
+    /// <summary>
+    /// representa o arquivo .mtl
+    /// </summary>
     public class IdxMtl
     {
-        // material name, MtlObj
+        /// <summary>
+        /// material name, MtlObj
+        /// </summary>
         public Dictionary<string, MtlObj> MtlDic;
-
     }
 
 
+    /// <summary>
+    /// representa um material do .mtl
+    /// </summary>
     public class MtlObj 
     {
         /*
@@ -82,23 +89,43 @@ namespace RE4_UHD_BIN_TOOL
 
         */
 
-        public TexPathRef map_Kd = null; //diffuse_texture
 
-        public TexPathRef map_Bump = null; //bump_texture (bump)
+        /// <summary>
+        /// diffuse_texture
+        /// </summary>
+        public TexPathRef map_Kd = null;
 
-        public TexPathRef map_d = null; //opacity_map alpha_texture
+        /// <summary>
+        /// bump_texture (bump)
+        /// </summary>
+        public TexPathRef map_Bump = null;
 
-        // map_Ks  // map_Ns
-        public TexPathRef ref_specular_map = null; //generic_specular_map
+        /// <summary>
+        /// opacity_map alpha_texture
+        /// </summary>
+        public TexPathRef map_d = null;
 
-        public byte specular_scale = 0; // specular_scale
+        /// <summary>
+        /// (map_Ks) or (map_Ns) // generic_specular_map or custom_specular_map
+        /// </summary>
+        public TexPathRef ref_specular_map = null;
 
-        public KsClass Ks = null; // intensity_specular_r, intensity_specular_g, intensity_specular_b
+        /// <summary>
+        /// specular_scale
+        /// </summary>
+        public byte specular_scale = 0;
+
+        /// <summary>
+        /// intensity_specular_r, intensity_specular_g, intensity_specular_b
+        /// </summary>
+        public KsClass Ks = null;
 
     }
 
 
-    // é usado para definir o caminho das texturas no mtl
+    /// <summary>
+    /// é usado para definir o caminho das texturas no mtl
+    /// </summary>
     public class TexPathRef 
     {
         public uint PackID { get; private set; }
@@ -157,6 +184,22 @@ namespace RE4_UHD_BIN_TOOL
             return PackID.ToString("x8") + "/" + TextureID.ToString("D4") + "." + Format;
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is TexPathRef tpr && tpr.PackID == PackID && tpr.TextureID == TextureID && tpr.Format == Format;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + PackID.GetHashCode();
+                hash = hash * 23 + TextureID.GetHashCode();
+                hash = hash * 23 + Format.GetHashCode();
+                return hash;
+            }
+        }
     }
 
     public class KsClass 
@@ -204,7 +247,22 @@ namespace RE4_UHD_BIN_TOOL
             return b;
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is KsClass ks && ks.r == r && ks.g == g && ks.b == b;
+        }
 
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + r.GetHashCode();
+                hash = hash * 23 + g.GetHashCode();
+                hash = hash * 23 + b.GetHashCode();
+                return hash;
+            }
+        }
     }
 
 

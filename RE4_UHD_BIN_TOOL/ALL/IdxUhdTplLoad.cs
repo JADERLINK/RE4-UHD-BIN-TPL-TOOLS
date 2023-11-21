@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Globalization;
+using RE4_UHD_BIN_TOOL.EXTRACT;
 
-namespace RE4_UHD_BIN_TOOL
+namespace RE4_UHD_BIN_TOOL.ALL
 {
    public static class IdxUhdTplLoad
     {

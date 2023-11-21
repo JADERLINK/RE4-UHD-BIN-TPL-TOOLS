@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RE4_UHD_BIN_TOOL
+namespace RE4_UHD_BIN_TOOL.ALL
 {
     public static class CONSTs
     {
@@ -14,7 +14,7 @@ namespace RE4_UHD_BIN_TOOL
         //                                     545460800000.00
         //                                            16384.00
         public const string UHD_MATERIAL = "UHD_MATERIAL_";
-
+        public const string SCENARIO_MATERIAL = "ROOM_MATERIAL_";
 
         public const byte FACE_TYPE_TRIANGLE_LIST = 0x05;
         public const byte FACE_TYPE_TRIANGLE_STRIP = 0x06;

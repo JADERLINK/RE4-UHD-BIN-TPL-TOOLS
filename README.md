@@ -8,6 +8,12 @@ Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do re4 Uhd;
 <br>Nota2: Não suportado o campo de Morph (não foi implementado essa funcionalidade no programa);
 <br>Nota3: Esse arquivo de README.md esta incompleto. Vou colocar mais informações futuramente;
 
+**Update: B.1.0.0.1**
+ * correções de bugs: ao gerar o arquivo .mtl com um .tpl que não é o correto para o .bin, estava crashando o programa, isso foi corrigido, agora caso faltar referência no arquivo .tpl, no arquivo .mtl será preenchido "00000000/0000.null", isso significa, que o .tpl fornecido não é do .bin em questão;
+ * No repack ao ler as dimensões das imagens, agora será lido somente uma vez cada imagens, em vez de vária vezes como era feito na versão anterior.
+ *Nota: essa versão é compatível com os arquivos da versão anterior.
+
+
 ## JADERLINK_UHD_BIN_TOOL.exe
 
 Programa responsavel por extrair e recompilar os arquivos .bin/.tpl;

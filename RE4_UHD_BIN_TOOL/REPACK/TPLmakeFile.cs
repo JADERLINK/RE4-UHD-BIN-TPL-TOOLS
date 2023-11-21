@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using RE4_UHD_BIN_TOOL.EXTRACT;
 
 namespace RE4_UHD_BIN_TOOL.REPACK
 {
@@ -54,6 +55,16 @@ namespace RE4_UHD_BIN_TOOL.REPACK
                 TplInfo tplInfo = uhdTPL.TplArray[i];
                 bw.Write((uint)tplInfo.PackID);
                 bw.Write((uint)tplInfo.TextureID);
+            }
+
+            //padding
+            int rest = (int)bw.BaseStream.Position % 16;  
+            if (rest != 0)
+            {
+                int div = (int)bw.BaseStream.Position / 16;
+                int total = (div + 1) * 16;
+                int padding = total - (int)bw.BaseStream.Position;
+                bw.Write(new byte[padding]);
             }
 
             endOffset = bw.BaseStream.Position;

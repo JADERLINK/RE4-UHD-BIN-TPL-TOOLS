@@ -9,7 +9,7 @@ namespace RE4_UHD_BIN_TOOL
 {
     class Program
     {
-        public const string VERSION = "B.1.0.0.0";
+        public const string VERSION = "B.1.0.0.1";
 
         public static string headerText()
         {
@@ -71,7 +71,7 @@ namespace RE4_UHD_BIN_TOOL
         private static void Actions(FileInfo fileInfo1, string file1Extension, FileInfo fileInfo2, string file2Extension) 
         {
             //diretorio, e nome do arquivo
-            string baseDiretory = fileInfo1.DirectoryName + "\\";
+            string baseDirectory = fileInfo1.DirectoryName + "\\";
             string baseName = fileInfo1.Name.Remove(fileInfo1.Name.Length - fileInfo1.Extension.Length, fileInfo1.Extension.Length);
 
             //stream
@@ -225,7 +225,7 @@ namespace RE4_UHD_BIN_TOOL
                     // se não tiver fica sem mesmo.
                     if (tplFile == null && idxuhdtplFile == null)
                     {
-                        string tplFilePath = baseDiretory + baseName + ".tpl";
+                        string tplFilePath = baseDirectory + baseName + ".tpl";
                         if (File.Exists(tplFilePath))
                         {
                             Console.WriteLine("Load File: " + baseName + ".tpl");
@@ -239,7 +239,7 @@ namespace RE4_UHD_BIN_TOOL
                     //requisita tambem o .MTL, caso não tenha sido declarado um .IdxMaterial
                     // opcionalmente caso seja um mtl, pode carregar o IDXUHDTPL (a não ser tenha sido pasado um .tpl como segundo parametro)
 
-                    string idxbinFilePath = baseDiretory + baseName + ".idxuhdbin";
+                    string idxbinFilePath = baseDirectory + baseName + ".idxuhdbin";
                     if (File.Exists(idxbinFilePath))
                     {
                         Console.WriteLine("Load File: " + baseName + ".idxuhdbin");
@@ -255,7 +255,7 @@ namespace RE4_UHD_BIN_TOOL
                     //debug, carrega um arquivo .idxmaterial // não usado
                     /*if (idxmaterialFile == null)
                     {
-                        string materialFilePath = baseDiretory + baseName + ".idxmaterial";
+                        string materialFilePath = baseDirectory + baseName + ".idxmaterial";
                         if (File.Exists(materialFilePath))
                         {
                             Console.WriteLine("Load File: " + baseName + ".idxmaterial");
@@ -275,7 +275,7 @@ namespace RE4_UHD_BIN_TOOL
                     {
                         if (mtlFile == null)
                         {
-                            string mtlFilePath = baseDiretory + baseName + ".mtl";
+                            string mtlFilePath = baseDirectory + baseName + ".mtl";
                             if (File.Exists(mtlFilePath))
                             {
                                 Console.WriteLine("Load File: " + baseName + ".mtl");
@@ -291,7 +291,7 @@ namespace RE4_UHD_BIN_TOOL
 
                         if (tplFile == null && idxuhdtplFile == null)
                         {
-                            string idxtplFilePath = baseDiretory + baseName + ".IdxUhdTpl";
+                            string idxtplFilePath = baseDirectory + baseName + ".IdxUhdTpl";
                             if (File.Exists(idxtplFilePath))
                             {
                                 Console.WriteLine("Load File: " + baseName + ".IdxUhdTpl");
@@ -321,36 +321,36 @@ namespace RE4_UHD_BIN_TOOL
             //carrega os objetos arquivos.
 
 
-            UhdBIN uhdBIN = null;
-            UhdTPL uhdTPL = null;
-            IdxMaterial material = null;
+            EXTRACT.UhdBIN uhdBIN = null;
+            EXTRACT.UhdTPL uhdTPL = null;
+            ALL.IdxMaterial material = null;
 
             REPACK.IdxUhdBin idxbin = null;
 
-            IdxMtl idxMtl = null;
+            ALL.IdxMtl idxMtl = null;
 
             if (binFile != null) //.BIN
             {
-                uhdBIN = UhdBinDecoder.Decoder(binFile, 0, out _);
-                material = IdxMaterialParser.Parser(uhdBIN);
+                uhdBIN = EXTRACT.UhdBinDecoder.Decoder(binFile, 0, out _);
+                material = ALL.IdxMaterialParser.Parser(uhdBIN);
                 binFile.Close();
             }
 
             if (tplFile != null) //.TPL
             {
-                uhdTPL = UhdTplDecoder.Decoder(tplFile, 0, out _);
+                uhdTPL = EXTRACT.UhdTplDecoder.Decoder(tplFile, 0, out _);
                 tplFile.Close();
             }
 
             if (idxuhdtplFile != null) // .IDXUHDTPL
             {
-                uhdTPL = IdxUhdTplLoad.Load(idxuhdtplFile);
+                uhdTPL = ALL.IdxUhdTplLoad.Load(idxuhdtplFile);
                 idxuhdtplFile.Close();
             }
 
             if (idxmaterialFile != null) //.IDXMATERIAL
             {
-                material = IdxMaterialLoad.Load(idxmaterialFile);
+                material = ALL.IdxMaterialLoad.Load(idxmaterialFile);
                 idxmaterialFile.Close();
             }
 
@@ -370,29 +370,29 @@ namespace RE4_UHD_BIN_TOOL
 
             if (file1Extension == ".BIN") // modo extract
             {
-                OutputFiles.CreateSMD(uhdBIN, baseDiretory, baseName);
-                OutputFiles.CreateOBJ(uhdBIN, baseDiretory, baseName);
-                OutputFiles.CreateIdxUhdBin(uhdBIN, baseDiretory, baseName);
-                OutputFiles.CreateIdxMaterial(material, baseDiretory, baseName);
+                EXTRACT.OutputFiles.CreateSMD(uhdBIN, baseDirectory, baseName);
+                EXTRACT.OutputFiles.CreateOBJ(uhdBIN, baseDirectory, baseName);
+                EXTRACT.OutputFiles.CreateIdxUhdBin(uhdBIN, baseDirectory, baseName);
+                EXTRACT.OutputMaterial.CreateIdxMaterial(material, baseDirectory, baseName);
 
                 if (tplFile != null) // cria somente um arquivo .idxuhdtpl somente se a origem for .tpl
                 {
-                    OutputFiles.CreateIdxUhdTpl(uhdTPL, baseDiretory, baseName);
+                    EXTRACT.OutputMaterial.CreateIdxUhdTpl(uhdTPL, baseDirectory, baseName);
                 }
                 if (uhdTPL != null) // caso tiver o conteudo de .tpl/.idxuhdtpl, é criado o .mtl
                 {
-                    var _idxMtl = IdxMtlParser.Parser(material, uhdTPL);
-                    OutputFiles.CreateMTL(_idxMtl, baseDiretory, baseName);
+                    var _idxMtl = ALL.IdxMtlParser.Parser(material, uhdTPL);
+                    EXTRACT.OutputMaterial.CreateMTL(_idxMtl, baseDirectory, baseName);
                 }
             }
             else if (file1Extension == ".OBJ") //repack with obj
             {
                 if (idxMtl != null)
                 {
-                    new REPACK.MtlConverter(baseDiretory).Convert(idxMtl, ref uhdTPL, out material);
+                    new REPACK.MtlConverter(baseDirectory).Convert(idxMtl, ref uhdTPL, out material);
 
-                    OutputFiles.CreateIdxUhdTpl(uhdTPL, baseDiretory, baseName + ".Repack");
-                    OutputFiles.CreateIdxMaterial(material, baseDiretory, baseName + ".Repack");
+                    EXTRACT.OutputMaterial.CreateIdxUhdTpl(uhdTPL, baseDirectory, baseName + ".Repack");
+                    EXTRACT.OutputMaterial.CreateIdxMaterial(material, baseDirectory, baseName + ".Repack");
                 }
 
                 REPACK.FinalBoneLine[] boneLines = idxbin.Bones;
@@ -408,7 +408,7 @@ namespace RE4_UHD_BIN_TOOL
                 }
 
 
-                string binFilePath = baseDiretory + baseName + ".bin";
+                string binFilePath = baseDirectory + baseName + ".bin";
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0 , out _, final, boneLines, material,
                     idxbin.BonePairLines, idxbin.UseExtendedNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag, idxbin.EnableAdjacentBoneTag, false);
@@ -416,7 +416,7 @@ namespace RE4_UHD_BIN_TOOL
 
                 if (uhdTPL != null)
                 {
-                    string tplFilePath = baseDiretory + baseName + ".tpl";
+                    string tplFilePath = baseDirectory + baseName + ".tpl";
                     Stream tplstream = File.Open(tplFilePath, FileMode.Create);
                     REPACK.TPLmakeFile.MakeFile(uhdTPL, tplstream, 0, out _);
                     tplstream.Close();
@@ -426,10 +426,10 @@ namespace RE4_UHD_BIN_TOOL
             {
                 if (idxMtl != null)
                 {
-                    new REPACK.MtlConverter(baseDiretory).Convert(idxMtl, ref uhdTPL, out material);
+                    new REPACK.MtlConverter(baseDirectory).Convert(idxMtl, ref uhdTPL, out material);
 
-                    OutputFiles.CreateIdxUhdTpl(uhdTPL, baseDiretory, baseName + ".Repack");
-                    OutputFiles.CreateIdxMaterial(material, baseDiretory, baseName + ".Repack");
+                    EXTRACT.OutputMaterial.CreateIdxUhdTpl(uhdTPL, baseDirectory, baseName + ".Repack");
+                    EXTRACT.OutputMaterial.CreateIdxMaterial(material, baseDirectory, baseName + ".Repack");
                 }
 
                 REPACK.FinalBoneLine[] boneLines = null;
@@ -444,7 +444,7 @@ namespace RE4_UHD_BIN_TOOL
                 }
 
 
-                string binFilePath = baseDiretory + baseName + ".bin";
+                string binFilePath = baseDirectory + baseName + ".bin";
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
                     idxbin.BonePairLines, idxbin.UseExtendedNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag, idxbin.EnableAdjacentBoneTag, false);
@@ -452,7 +452,7 @@ namespace RE4_UHD_BIN_TOOL
 
                 if (uhdTPL != null)
                 {
-                    string tplFilePath = baseDiretory + baseName + ".tpl";
+                    string tplFilePath = baseDirectory + baseName + ".tpl";
                     Stream tplstream = File.Open(tplFilePath, FileMode.Create);
                     REPACK.TPLmakeFile.MakeFile(uhdTPL, tplstream, 0, out _);
                     tplstream.Close();
@@ -461,11 +461,11 @@ namespace RE4_UHD_BIN_TOOL
             }
             else if (file1Extension == ".TPL" && file2Extension == null) // extrai so o arquivo tpl
             {
-                OutputFiles.CreateIdxUhdTpl(uhdTPL, baseDiretory, baseName);
+                EXTRACT.OutputMaterial.CreateIdxUhdTpl(uhdTPL, baseDirectory, baseName);
             }
             else if (file1Extension == ".IDXUHDTPL" && file2Extension == null) // faz repack do arquivo .idxuhdtpl
             {
-                string tplFilePath = baseDiretory + baseName + ".tpl";
+                string tplFilePath = baseDirectory + baseName + ".tpl";
                 Stream stream = File.Open(tplFilePath, FileMode.Create);
                 REPACK.TPLmakeFile.MakeFile(uhdTPL, stream, 0, out _);
                 stream.Close();
@@ -474,15 +474,15 @@ namespace RE4_UHD_BIN_TOOL
             // outras situações
             else if (uhdTPL != null && material != null) // cria um .mtl com o tpl e idxmaterial
             {
-                var _idxMtl = IdxMtlParser.Parser(material, uhdTPL);
-                OutputFiles.CreateMTL(_idxMtl, baseDiretory, baseName);
+                var _idxMtl = ALL.IdxMtlParser.Parser(material, uhdTPL);
+                EXTRACT.OutputMaterial.CreateMTL(_idxMtl, baseDirectory, baseName);
             }
             else if (idxMtl != null) // cria idxMaterial derivado do .mtl (pode usar o .tpl/.idxuhdtpl)
             {
-                new REPACK.MtlConverter(baseDiretory).Convert(idxMtl, ref uhdTPL, out material);
+                new REPACK.MtlConverter(baseDirectory).Convert(idxMtl, ref uhdTPL, out material);
 
-                OutputFiles.CreateIdxUhdTpl(uhdTPL, baseDiretory, baseName + ".Repack");
-                OutputFiles.CreateIdxMaterial(material, baseDiretory, baseName + ".Repack");
+                EXTRACT.OutputMaterial.CreateIdxUhdTpl(uhdTPL, baseDirectory, baseName + ".Repack");
+                EXTRACT.OutputMaterial.CreateIdxMaterial(material, baseDirectory, baseName + ".Repack");
             }
 
     

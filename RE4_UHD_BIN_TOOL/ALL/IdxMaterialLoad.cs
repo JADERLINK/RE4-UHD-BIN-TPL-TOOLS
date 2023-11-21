@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Globalization;
 
-namespace RE4_UHD_BIN_TOOL
+namespace RE4_UHD_BIN_TOOL.ALL
 {
     public static class IdxMaterialLoad
     {
