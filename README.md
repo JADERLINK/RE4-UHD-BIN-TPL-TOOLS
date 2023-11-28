@@ -8,10 +8,9 @@ Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do re4 Uhd;
 <br>Nota2: Não suportado o campo de Morph (não foi implementado essa funcionalidade no programa);
 
 **Update: B.1.0.0.1**
- * correções de bugs: ao gerar o arquivo .mtl com um .tpl que não é o correto para o .bin, estava crashando o programa, isso foi corrigido, agora caso faltar referência no arquivo .tpl, no arquivo .mtl será preenchido "00000000/0000.null", isso significa, que o .tpl fornecido não é do .bin em questão;
- * No repack ao ler as dimensões das imagens, agora será lido somente uma vez cada imagens, em vez de vária vezes como era feito na versão anterior.
- *Nota: essa versão é compatível com os arquivos da versão anterior.
-
+<br> * correções de bugs: ao gerar o arquivo .mtl com um .tpl que não é o correto para o .bin, estava crashando o programa, isso foi corrigido, agora caso faltar referência no arquivo .tpl, no arquivo .mtl será preenchido "00000000/0000.null", isso significa, que o .tpl fornecido não é do .bin em questão;
+<br> * No repack ao ler as dimensões das imagens, agora será lido somente uma vez cada imagens, em vez de vária vezes como era feito na versão anterior.
+<br> *Nota: essa versão é compatível com os arquivos da versão anterior.
 
 ## JADERLINK_UHD_BIN_TOOL.exe
 
@@ -80,11 +79,10 @@ Para arrumar a ordem dos ids dos bones nos arquivos smd, depois de serem exporta
 No blender para carregar o modelo .SMD com as texturas, em um novo "projeto", importe primeiro o arquivo .obj para ele carregar as texturas, delete o modelo do .obj importado, agora importe o modelo .smd, agora ele será carregado com as texturas.
 <br>Lembrando também que tem que as texturas devem estar na pasta com o nome de seu arquivo .PACK e essa pasta deve esta ao lado do arquivo .mtl;
 
-
 ## Código de terceiro:
 
 [ObjLoader by chrisjansson](https://github.com/chrisjansson/ObjLoader):
 Encontra-se no JADERLINK_UHD_BIN_TOOL, código modificado, as modificações podem ser vistas aqui: [link](https://github.com/JADERLINK/ObjLoader).
 
 **At.te: JADERLINK**
-<br>**2023-11-12**
+<br>**2023-11-28**
