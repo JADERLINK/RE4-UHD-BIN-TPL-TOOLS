@@ -7,6 +7,9 @@ Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do re4 Uhd;
 <br>Nota1: o programa não suporta cores por vértices (.obj e .smd não tem suporte para isso);
 <br>Nota2: Não suportado o campo de Morph (não foi implementado essa funcionalidade no programa);
 
+**Update: B.1.0.0.2**
+<br> Corrigido bug que deformava a malha do modelo 3d, estava sendo criado faces do tipo "quad" de maneira errada; 
+
 **Update: B.1.0.0.1**
 <br> * correções de bugs: ao gerar o arquivo .mtl com um .tpl que não é o correto para o .bin, estava crashando o programa, isso foi corrigido, agora caso faltar referência no arquivo .tpl, no arquivo .mtl será preenchido "00000000/0000.null", isso significa, que o .tpl fornecido não é do .bin em questão;
 <br> * No repack ao ler as dimensões das imagens, agora será lido somente uma vez cada imagens, em vez de vária vezes como era feito na versão anterior.
@@ -85,4 +88,4 @@ No blender para carregar o modelo .SMD com as texturas, em um novo "projeto", im
 Encontra-se no JADERLINK_UHD_BIN_TOOL, código modificado, as modificações podem ser vistas aqui: [link](https://github.com/JADERLINK/ObjLoader).
 
 **At.te: JADERLINK**
-<br>**2023-11-28**
+<br>**2024-01-05**
