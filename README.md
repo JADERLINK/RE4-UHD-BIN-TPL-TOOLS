@@ -7,6 +7,10 @@ Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do re4 Uhd;
 <br>Nota1: o programa não suporta cores por vértices (.obj e .smd não tem suporte para isso);
 <br>Nota2: Não suportado o campo de Morph (não foi implementado essa funcionalidade no programa);
 
+**Update: B.1.0.0.3**
+<br> Corrido erro, ao ter material sem a textura principal "map_Kd", será preenchido como Pack ID 00000000 e Texture ID 000;
+<br> Agora, caso a quantidade de vértices for superior ao limite do arquivo, o programa vai avisar. (Não será criado o arquivo BIN);
+
 **Update: B.1.0.0.2**
 <br> Corrigido bug que deformava a malha do modelo 3d, estava sendo criado faces do tipo "quad" de maneira errada; 
 

@@ -9,7 +9,7 @@ namespace RE4_UHD_BIN_TOOL
 {
     class Program
     {
-        public const string VERSION = "B.1.0.0.2";
+        public const string VERSION = "B.1.0.0.3 (2024-01-12)";
 
         public static string headerText()
         {
@@ -407,7 +407,16 @@ namespace RE4_UHD_BIN_TOOL
                     final = REPACK.BinRepack.MakeFinalStructure(level2);
                 }
 
+                //checa limite de vertives
+                if (final.Vertex_Position_Array.Length > ushort.MaxValue)
+                {
+                    Console.WriteLine("Number of vertices greater than the limit: " + final.Vertex_Position_Array.Length);
+                    Console.WriteLine("The limit is: " + ushort.MaxValue);
+                    Console.WriteLine("BIN file not created!!");
+                    return;
+                }
 
+                // cria arquivos
                 string binFilePath = baseDirectory + baseName + ".bin";
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0 , out _, final, boneLines, material,
@@ -443,7 +452,16 @@ namespace RE4_UHD_BIN_TOOL
                     final = REPACK.BinRepack.MakeFinalStructure(level2);
                 }
 
+                //checa limite de vertives
+                if (final.Vertex_Position_Array.Length > ushort.MaxValue)
+                {
+                    Console.WriteLine("Number of vertices greater than the limit: " + final.Vertex_Position_Array.Length);
+                    Console.WriteLine("The limit is: " + ushort.MaxValue);
+                    Console.WriteLine("BIN file not created!!");
+                    return;
+                }
 
+                // cria arquivos
                 string binFilePath = baseDirectory + baseName + ".bin";
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
