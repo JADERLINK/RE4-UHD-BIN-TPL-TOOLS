@@ -143,25 +143,25 @@ namespace RE4_UHD_BIN_TOOL.ALL
         {
             this.PackID = PackID;
             this.TextureID = TextureID;
-            this.Format = ImageFormat;
+            this.Format = ImageFormat.ToLowerInvariant();
         }
 
         public TexPathRef(string texturePath) 
         {
-            Format = "";
+            Format = "null";
             if (texturePath == null)
             {
                 texturePath = "";
             }
 
-            texturePath = texturePath.Replace("\\", "/");
+            texturePath = texturePath.Replace("\\", "/").ToUpperInvariant();
             var split = texturePath.Split('/').Where(s => s.Length != 0).ToArray();
 
             try
             {
                 var last = split.Last().Split('.').Where(s => s.Length != 0).ToArray();
                 TextureID = uint.Parse(Utils.ReturnValidDecValue(last[0]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                Format = last.Last();
+                Format = last.Last().ToLowerInvariant();
             }
             catch (Exception)
             {
