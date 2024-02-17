@@ -54,6 +54,7 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
                     indexs[0] = uhdbin.Materials[g].face_index_array[l].i1;
                     indexs[1] = uhdbin.Materials[g].face_index_array[l].i2;
                     indexs[2] = uhdbin.Materials[g].face_index_array[l].i3;
+
                     for (int i = 0; i < indexs.Length; i++)
                     {
                         float vx = uhdbin.Vertex_Position_Array[indexs[i]].vx / CONSTs.GLOBAL_POSITION_SCALE;
@@ -65,7 +66,7 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
                         float nz = uhdbin.Vertex_Normal_Array[indexs[i]].nz / NORMAL_FIX * -1;
 
                         float tu = uhdbin.Vertex_UV_Array[indexs[i]].tu;
-                        float tv = (uhdbin.Vertex_UV_Array[indexs[i]].tv -1) * -1;
+                        float tv = (uhdbin.Vertex_UV_Array[indexs[i]].tv - 1) * -1;
 
                         string res = "0"
                         + " " + vx.ToString("F9", inv)
@@ -110,11 +111,10 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
 
                         text.WriteLine(res);
                     }
-
-
                 }
 
             }
+
 
             text.WriteLine("end");
             text.WriteLine("// RE4_UHD_BIN_TOOL" + Environment.NewLine +

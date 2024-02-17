@@ -9,7 +9,7 @@ namespace RE4_UHD_BIN_TOOL
 {
     class Program
     {
-        public const string VERSION = "B.1.0.0.4 (2024-01-20)";
+        public const string VERSION = "B.1.0.0.5 (2024-02-17)";
 
         public static string headerText()
         {
@@ -410,10 +410,9 @@ namespace RE4_UHD_BIN_TOOL
                 //checa limite de vertives
                 if (final.Vertex_Position_Array.Length > ushort.MaxValue)
                 {
-                    Console.WriteLine("Number of vertices greater than the limit: " + final.Vertex_Position_Array.Length);
-                    Console.WriteLine("The limit is: " + ushort.MaxValue);
-                    Console.WriteLine("BIN file not created!!");
-                    return;
+                    Console.WriteLine("Warning: Number of vertices greater than the limit: " + final.Vertex_Position_Array.Length + ";");
+                    Console.WriteLine("The limit is: " + ushort.MaxValue + ";");
+                    Console.WriteLine("If this .BIN is not used in a Scenario SMD, it will not work correctly;");
                 }
 
                 // cria arquivos
@@ -455,10 +454,9 @@ namespace RE4_UHD_BIN_TOOL
                 //checa limite de vertives
                 if (final.Vertex_Position_Array.Length > ushort.MaxValue)
                 {
-                    Console.WriteLine("Number of vertices greater than the limit: " + final.Vertex_Position_Array.Length);
-                    Console.WriteLine("The limit is: " + ushort.MaxValue);
-                    Console.WriteLine("BIN file not created!!");
-                    return;
+                    Console.WriteLine("Warning: Number of vertices greater than the limit: " + final.Vertex_Position_Array.Length + ";");
+                    Console.WriteLine("The limit is: " + ushort.MaxValue + ";");
+                    Console.WriteLine("If this .BIN is not used in a Scenario SMD, it will not work correctly;");
                 }
 
                 // cria arquivos
