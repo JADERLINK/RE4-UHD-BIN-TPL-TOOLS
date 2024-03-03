@@ -7,6 +7,9 @@ Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do re4 Uhd;
 <br>Nota1: o programa não suporta cores por vértices (.obj e .smd não tem suporte para isso);
 <br>Nota2: Não suportado o campo de Morph (não foi implementado essa funcionalidade no programa);
 
+**Update: B.1.0.0.6**
+<br>Arrumado bug ao carregar o arquivo .idxmaterial;
+
 **Update: B.1.0.0.5**
 <br>Agora o programa é compatível em extrair e criar arquivos .BIN acima do limite de vértices;
 <br>Atenção: Os .BIN com vértices acima do limite só funcionam corretamente se eles forem usados dentro de arquivos Scenario .SMD;
@@ -43,17 +46,17 @@ Programa responsavel por extrair e recompilar os arquivos .bin/.tpl;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.OBJ"**
     <br>Faz repack do arquivo .bin, requisita na mesma pasta o arquivo .idxuhdbin de mesmo nome, o arquivo .mtl de mesmo nome e opcionalmente o arquivo .idxuhdtpl
     <br>Nota: você pode passar como segundo parâmetro o arquivo .mtl ou .idxuhdtpl/.tpl, o resultado da operação é o mesmo citado acima;
-    <br>Nota2: as operações com o .mtl envolvido requisita que na mesma pasta do mtl tenha as texturas na qual ele faz referencia;
+    <br>Nota2: as operações com o .mtl envolvido requisita que na mesma pasta do mtl tenha as texturas na qual ele faz referência;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.OBJ" "file.idxmaterial"**
     <br>Faz repack do arquivo .bin, usado os arquivo .obj e .idxmaterial, requisita somente na mesma pasta o arquivo .idxuhdbin;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.SMD"**
-    <br> Mesma explicado que do arquivo .obj, so que agora fazendo o repack usando o arquivo .smd;
+    <br> Mesma explicação que do arquivo .obj, so que agora fazendo o repack usando o arquivo .smd;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.SMD" "file.idxmaterial"**
     <br>O mesmo que expliquei acima.
 * **JADERLINK_UHD_BIN_TOOL.exe "file.MTL"**
     <br>"Extrai" o arquivo .mtl cria os arquivos: File.Repack.idxmaterial e File.Repack.idxuhdtpl
-    <br>Nota: você pode passar como segundo parâmetro o arquivo .tpl/.idxuhdtpl, no qual ele vai usar como referencia para ordenar as texturas no tpl;
-    <br>Nota2: as operações com o .mtl envolvido requisita que na mesma pasta do mtl tenha as texturas na qual ele faz referencia;
+    <br>Nota: você pode passar como segundo parâmetro o arquivo .tpl/.idxuhdtpl, no qual ele vai usar como referência para ordenar as texturas no tpl;
+    <br>Nota2: as operações com o .mtl envolvido requisita que na mesma pasta do mtl tenha as texturas na qual ele faz referência;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.tpl" "file.idxmaterial"**
     <br> Cria o arquivo .mtl;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.idxuhdtpl" "file.idxmaterial"**
@@ -100,4 +103,4 @@ No blender para carregar o modelo .SMD com as texturas, em um novo "projeto", im
 Encontra-se no JADERLINK_UHD_BIN_TOOL, código modificado, as modificações podem ser vistas aqui: [link](https://github.com/JADERLINK/ObjLoader).
 
 **At.te: JADERLINK**
-<br>**2024-02-17**
+<br>**2024-03-03**

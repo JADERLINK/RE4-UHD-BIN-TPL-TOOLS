@@ -9,12 +9,13 @@ namespace RE4_UHD_BIN_TOOL
 {
     class Program
     {
-        public const string VERSION = "B.1.0.0.5 (2024-02-17)";
+        public const string VERSION = "B.1.0.0.6 (2024-03-03)";
 
         public static string headerText()
         {
-            return "# RE4_UHD_BIN_TOOL" + Environment.NewLine +
-                   "# by: JADERLINK" + Environment.NewLine +
+            return "# github.com/JADERLINK/RE4-UHD-BIN-TOOL" + Environment.NewLine +
+                   "# youtube.com/@JADERLINK" + Environment.NewLine +
+                   "# RE4_UHD_BIN_TOOL by: JADERLINK" + Environment.NewLine +
                    "# Thanks to \"mariokart64n\" and \"CodeMan02Fr\"" + Environment.NewLine +
                    "# Material information by \"Albert\"" + Environment.NewLine +
                   $"# Version {VERSION}";
@@ -28,6 +29,8 @@ namespace RE4_UHD_BIN_TOOL
             {
                 Console.WriteLine("For more information read:");
                 Console.WriteLine("https://github.com/JADERLINK/RE4-UHD-BIN-TOOL");
+                Console.WriteLine("Press any key to close the console.");
+                Console.ReadKey();
             }
             else if (args.Length >= 1 && File.Exists(args[0]))
             {
