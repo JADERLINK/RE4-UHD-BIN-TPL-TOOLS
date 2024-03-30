@@ -9,7 +9,7 @@ namespace RE4_UHD_BIN_TOOL
 {
     class Program
     {
-        public const string VERSION = "B.1.0.0.6 (2024-03-03)";
+        public const string VERSION = "B.1.0.07 (2024-03-30)";
 
         public static string headerText()
         {

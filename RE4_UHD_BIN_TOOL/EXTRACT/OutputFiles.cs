@@ -14,10 +14,6 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
         //Studiomdl Data
         public static void CreateSMD(UhdBIN uhdbin, string baseDirectory, string baseFileName)
         {
-            float NORMAL_FIX = uhdbin.Header.ReturnsNormalsFixValue();
-
-            var inv = System.Globalization.CultureInfo.InvariantCulture;
-
             TextWriter text = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".smd")).CreateText();
             text.WriteLine("version 1");
             text.WriteLine("nodes");
@@ -35,9 +31,9 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
             for (int i = 0; i < uhdbin.Bones.Length; i++)
             {
                 text.WriteLine(uhdbin.Bones[i].BoneID + "  " +
-                    (uhdbin.Bones[i].PositionX / CONSTs.GLOBAL_POSITION_SCALE).ToString("f9", inv) + " " +
-                    (uhdbin.Bones[i].PositionZ * -1 / CONSTs.GLOBAL_POSITION_SCALE).ToString("f9", inv) + " " +
-                    (uhdbin.Bones[i].PositionY / CONSTs.GLOBAL_POSITION_SCALE).ToString("f9", inv) + "  0.000000 0.000000 0.000000");
+                    (uhdbin.Bones[i].PositionX / CONSTs.GLOBAL_POSITION_SCALE).ToFloatString() + " " +
+                    (uhdbin.Bones[i].PositionZ * -1 / CONSTs.GLOBAL_POSITION_SCALE).ToFloatString() + " " +
+                    (uhdbin.Bones[i].PositionY / CONSTs.GLOBAL_POSITION_SCALE).ToFloatString() + "  0.0 0.0 0.0");
             }
 
             text.WriteLine("end");
@@ -61,22 +57,28 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
                         float vy = uhdbin.Vertex_Position_Array[indexs[i]].vy / CONSTs.GLOBAL_POSITION_SCALE;
                         float vz = uhdbin.Vertex_Position_Array[indexs[i]].vz / CONSTs.GLOBAL_POSITION_SCALE * -1;
 
-                        float nx = uhdbin.Vertex_Normal_Array[indexs[i]].nx / NORMAL_FIX;
-                        float ny = uhdbin.Vertex_Normal_Array[indexs[i]].ny / NORMAL_FIX;
-                        float nz = uhdbin.Vertex_Normal_Array[indexs[i]].nz / NORMAL_FIX * -1;
+                        float nx = uhdbin.Vertex_Normal_Array[indexs[i]].nx;
+                        float ny = uhdbin.Vertex_Normal_Array[indexs[i]].ny;
+                        float nz = uhdbin.Vertex_Normal_Array[indexs[i]].nz;
+
+                        float NORMAL_FIX = (float)Math.Sqrt((nx * nx) + (ny * ny) + (nz * nz));
+                        NORMAL_FIX = (NORMAL_FIX == 0) ? 1 : NORMAL_FIX;
+                        nx /= NORMAL_FIX;
+                        ny /= NORMAL_FIX;
+                        nz /= NORMAL_FIX * -1;
 
                         float tu = uhdbin.Vertex_UV_Array[indexs[i]].tu;
                         float tv = (uhdbin.Vertex_UV_Array[indexs[i]].tv - 1) * -1;
 
                         string res = "0"
-                        + " " + vx.ToString("F9", inv)
-                        + " " + vz.ToString("F9", inv)
-                        + " " + vy.ToString("F9", inv)
-                        + " " + nx.ToString("F9", inv)
-                        + " " + nz.ToString("F9", inv)
-                        + " " + ny.ToString("F9", inv)
-                        + " " + tu.ToString("F9", inv)
-                        + " " + tv.ToString("F9", inv);
+                        + " " + vx.ToFloatString()
+                        + " " + vz.ToFloatString()
+                        + " " + vy.ToFloatString()
+                        + " " + nx.ToFloatString()
+                        + " " + nz.ToFloatString()
+                        + " " + ny.ToFloatString()
+                        + " " + tu.ToFloatString()
+                        + " " + tv.ToFloatString();
 
                         if (uhdbin.WeightMaps != null && uhdbin.WeightIndex.Length != 0)
                         {
@@ -88,26 +90,24 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
 
                             if (links >= 1)
                             {
-                                res += " " + uhdbin.WeightMaps[indexw].boneId1 + " " + (uhdbin.WeightMaps[indexw].weight1 / 100f).ToString("F9", inv);
+                                res += " " + uhdbin.WeightMaps[indexw].boneId1 + " " + (uhdbin.WeightMaps[indexw].weight1 / 100f).ToFloatString();
                             }
 
                             if (links >= 2)
                             {
-                                res += " " + uhdbin.WeightMaps[indexw].boneId2 + " " + (uhdbin.WeightMaps[indexw].weight2 / 100f).ToString("F9", inv);
+                                res += " " + uhdbin.WeightMaps[indexw].boneId2 + " " + (uhdbin.WeightMaps[indexw].weight2 / 100f).ToFloatString();
                             }
 
                             if (links >= 3)
                             {
-                                res += " " + uhdbin.WeightMaps[indexw].boneId3 + " " + (uhdbin.WeightMaps[indexw].weight3 / 100f).ToString("F9", inv);
+                                res += " " + uhdbin.WeightMaps[indexw].boneId3 + " " + (uhdbin.WeightMaps[indexw].weight3 / 100f).ToFloatString();
                             }
 
                         }
                         else
                         {
-
                             res += " 0";
                         }
-
 
                         text.WriteLine(res);
                     }
@@ -125,10 +125,6 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
 
         public static void CreateOBJ(UhdBIN uhdbin, string baseDirectory, string baseFileName)
         {
-            float NORMAL_FIX = uhdbin.Header.ReturnsNormalsFixValue();
-
-            var inv = System.Globalization.CultureInfo.InvariantCulture;
-
             var obj = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".obj")).CreateText();
 
             obj.WriteLine(Program.headerText());
@@ -140,22 +136,29 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
                 float vx = uhdbin.Vertex_Position_Array[i].vx / CONSTs.GLOBAL_POSITION_SCALE;
                 float vy = uhdbin.Vertex_Position_Array[i].vy / CONSTs.GLOBAL_POSITION_SCALE;
                 float vz = uhdbin.Vertex_Position_Array[i].vz / CONSTs.GLOBAL_POSITION_SCALE;
-                obj.WriteLine("v " + vx.ToString("F9", inv) + " " + vy.ToString("F9", inv) + " " + vz.ToString("F9", inv));
+                obj.WriteLine("v " + vx.ToFloatString() + " " + vy.ToFloatString() + " " + vz.ToFloatString());
             }
 
             for (int i = 0; i < uhdbin.Vertex_Normal_Array.Length; i++)
             {
-                float nx = uhdbin.Vertex_Normal_Array[i].nx / NORMAL_FIX;
-                float ny = uhdbin.Vertex_Normal_Array[i].ny / NORMAL_FIX;
-                float nz = uhdbin.Vertex_Normal_Array[i].nz / NORMAL_FIX;
-                obj.WriteLine("vn " + nx.ToString("F9", inv) + " " + ny.ToString("F9", inv) + " " + nz.ToString("F9", inv));
+                float nx = uhdbin.Vertex_Normal_Array[i].nx;
+                float ny = uhdbin.Vertex_Normal_Array[i].ny;
+                float nz = uhdbin.Vertex_Normal_Array[i].nz;
+
+                float NORMAL_FIX = (float)Math.Sqrt((nx * nx) + (ny * ny) + (nz * nz));
+                NORMAL_FIX = (NORMAL_FIX == 0) ? 1 : NORMAL_FIX;
+                nx /= NORMAL_FIX;
+                ny /= NORMAL_FIX;
+                nz /= NORMAL_FIX;
+
+                obj.WriteLine("vn " + nx.ToFloatString() + " " + ny.ToFloatString() + " " + nz.ToFloatString());
             }
 
             for (int i = 0; i < uhdbin.Vertex_UV_Array.Length; i++)
             {
                 float tu = uhdbin.Vertex_UV_Array[i].tu;
                 float tv = (uhdbin.Vertex_UV_Array[i].tv -1) *-1;
-                obj.WriteLine("vt " + tu.ToString("F9", inv) + " " + tv.ToString("F9", inv));
+                obj.WriteLine("vt " + tu.ToFloatString() + " " + tv.ToFloatString());
             }
 
 
