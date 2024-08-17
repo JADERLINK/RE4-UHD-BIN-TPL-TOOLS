@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ALL\CONSTs.cs" />
-    <Compile Include="ALL\FloatExtencions.cs" />
+    <Compile Include="ALL\FloatExtensions.cs" />
     <Compile Include="ALL\MaterialPart.cs" />
     <Compile Include="EXTRACT\HeaderExtension.cs" />
     <Compile Include="EXTRACT\OutputMaterial.cs" />

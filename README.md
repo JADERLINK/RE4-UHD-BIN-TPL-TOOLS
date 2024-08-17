@@ -3,9 +3,16 @@ Extract and repack RE4 UHD .BIN/.TPL files
 
 **Translate from Portuguese Brazil**
 
-Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do re4 Uhd;
-<br>Nota1: o programa não suporta cores por vértices (.obj e .smd não tem suporte para isso);
+Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do RE4 UHD;
+<br><del>Nota1: o programa não suporta cores por vértices (.obj e .smd não tem suporte para isso);</del>
 <br>Nota2: Não suportado o campo de Morph (não foi implementado essa funcionalidade no programa);
+
+## Updates
+
+**Update: B.1.0.8**
+<br>Adicionado compatibilidade com mais arquivos BIN/TPL;
+<br>Adicionado suporte para cores de vértices para os arquivos OBJ, para ativar essa função, você deve definir a variável "UseVertexColor" como "True" no arquivo "idxuhdbin". Nota: ao extrair o arquivo, essa variável vai ser sempre "False".
+<br>Agora, ao fazer repack com OBJ/SMD o arquivo "idxuhdtpl" será ignorado, para usá-lo, você deve passar esse arquivo como segundo parâmetro.
 
 **Update: B.1.0.07**
 <br>Agora, ao extrair o arquivo .bin as "normals" serão normalizadas em vez de ser dividido por um valor padrão, então agora é possível extrair os arquivos .bin gerados pela tool do percia sem erros.
@@ -49,9 +56,10 @@ Programa responsavel por extrair e recompilar os arquivos .bin/.tpl;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.BIN" "file.TPL"**
     <br>Ira gera os arquivos citados anteriormente mais o arquivo: file.mtl;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.OBJ"**
-    <br>Faz repack do arquivo .bin, requisita na mesma pasta o arquivo .idxuhdbin de mesmo nome, o arquivo .mtl de mesmo nome e opcionalmente o arquivo .idxuhdtpl
+    <br>Faz repack do arquivo .bin, requisita na mesma pasta o arquivo .idxuhdbin de mesmo nome e o arquivo .mtl de mesmo nome; <del>e opcionalmente o arquivo .idxuhdtpl</del>
     <br>Nota: você pode passar como segundo parâmetro o arquivo .mtl ou .idxuhdtpl/.tpl, o resultado da operação é o mesmo citado acima;
     <br>Nota2: as operações com o .mtl envolvido requisita que na mesma pasta do mtl tenha as texturas na qual ele faz referência;
+    <br>Nota3: a partir da versão B.1.0.8, para usar o arquivo .idxuhdtpl/.tpl, você deve passá-lo como segundo parâmetro.
 * **JADERLINK_UHD_BIN_TOOL.exe "file.OBJ" "file.idxmaterial"**
     <br>Faz repack do arquivo .bin, usado os arquivo .obj e .idxmaterial, requisita somente na mesma pasta o arquivo .idxuhdbin;
 * **JADERLINK_UHD_BIN_TOOL.exe "file.SMD"**
@@ -79,28 +87,29 @@ Programa responsavel por extrair e recompilar os arquivos .bin/.tpl;
 * .IDXMATERIAL: é o arquivo que contem os materiais presente no .bin (pode ser editado);
 
 ## Arquivo .IDXUHDBIN
-(irei colocar futuramente informações sobre esse arquivo aqui)
+Arquivo com configurações adicionais para o repack
+<br>veja sobre aqui: [RE4 UHD BIN TOOL - Documentação: IDXUHDBIN](https://jaderlink.blogspot.com/2024/08/RE4-UHD-BIN-TOOL-IDXUHDBIN.html)
 
 ## Arquivo .IDXUHDTPL
 Pode ser usado para editar/criar arquivos .tpl
 <br>veja sobre aqui: [RE4 UHD BIN TOOL - Documentação: IDXUHDTPL](https://jaderlink.blogspot.com/2023/11/RE4-UHD-BIN-TOOL-IDXUHDTPL.html)
 
 ## Arquivo .IDXMATERIAL
-Pode ser usado para editar os materias do bin sem usar o arquivo .mtl
-<br>veja sobre aqui: [RE4 UHD BIN TOOL - Documentação: IDXMATERIAL](https://jaderlink.blogspot.com/2023/11/RE4-UHD-BIN-TOOL-IDXMATERIAL.html)
+Pode ser usado para editar os materiais do bin sem usar o arquivo .mtl
+<br>veja sobre isso aqui: [RE4 UHD BIN TOOL - Documentação: IDXMATERIAL](https://jaderlink.blogspot.com/2023/11/RE4-UHD-BIN-TOOL-IDXMATERIAL.html)
 
 ## Arquivo .MTL
-è usado para carregar as texturas no editor 3d, tabem pode ser usado para recompilar os materiais, ou diretamente o arquivo .bin; 
-<br>veja sobre aqui: [RE4 UHD BIN TOOL - Documentação: MTL](https://jaderlink.blogspot.com/2023/11/RE4-UHD-BIN-TOOL-MTL.html)
+É usado para carregar as texturas no editor 3d, também pode ser usado para recompilar os materiais, ou diretamente o arquivo .bin; 
+<br>veja sobre isso aqui: [RE4 UHD BIN TOOL - Documentação: MTL](https://jaderlink.blogspot.com/2023/11/RE4-UHD-BIN-TOOL-MTL.html)
 
 ## Ordem dos bones no arquivo .SMD
 
-Para arrumar a ordem dos ids dos bones nos arquivos smd, depois de serem exportados do blender ou outro software de edição de modelos usar o programa: GC_GC_Skeleton_Changer.exe (procure o programa no fórum do re4)
+Para arrumar a ordem dos ids dos bones nos arquivos smd, depois de serem exportados do blender ou outro software de edição de modelos, usar o programa: GC_GC_Skeleton_Changer.exe (procure o programa no fórum do re4)
 
 ## Carregando as texturas no arquivo .SMD
 
 No blender para carregar o modelo .SMD com as texturas, em um novo "projeto", importe primeiro o arquivo .obj para ele carregar as texturas, delete o modelo do .obj importado, agora importe o modelo .smd, agora ele será carregado com as texturas.
-<br>Lembrando também que tem que as texturas devem estar na pasta com o nome de seu arquivo .PACK e essa pasta deve esta ao lado do arquivo .mtl;
+<br>Lembrando também que as texturas devem estar na pasta com o nome de seu arquivo .PACK e essa pasta deve estar ao lado do arquivo .mtl;
 
 ## Código de terceiro:
 
@@ -108,4 +117,4 @@ No blender para carregar o modelo .SMD com as texturas, em um novo "projeto", im
 Encontra-se no JADERLINK_UHD_BIN_TOOL, código modificado, as modificações podem ser vistas aqui: [link](https://github.com/JADERLINK/ObjLoader).
 
 **At.te: JADERLINK**
-<br>**2024-03-30**
+<br>**2024-08-17**

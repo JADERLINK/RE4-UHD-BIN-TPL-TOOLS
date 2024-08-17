@@ -11,7 +11,7 @@ namespace RE4_UHD_BIN_TOOL.REPACK
 {
     public static partial class BinRepack
     {
-        public static void RepackOBJ(Stream objFile, bool CompressVertices, int ObjFileUseBone, out IntermediaryStructure intermediaryStructure, bool UseExtendedNormals)
+        public static void RepackOBJ(Stream objFile, bool CompressVertices, int ObjFileUseBone, out IntermediaryStructure intermediaryStructure, bool UseExtendedNormals, bool UseColors)
         {
 
             // load .obj file
@@ -26,7 +26,6 @@ namespace RE4_UHD_BIN_TOOL.REPACK
 
             StartStructure startStructure = new StartStructure();
 
-            Vector4 color = new Vector4(1, 1, 1, 1);
             StartWeightMap weightMap = new StartWeightMap(1, ObjFileUseBone, 1, 0, 0, 0, 0);
 
             for (int iG = 0; iG < arqObj.Groups.Count; iG++)
@@ -88,6 +87,17 @@ namespace RE4_UHD_BIN_TOOL.REPACK
                             nz /= NORMAL_FIX;
 
                             vertice.Normal = new Vector3(nx, ny, nz);
+                        }
+
+                        Vector4 color = new Vector4(1, 1, 1, 1);
+                        if (UseColors)
+                        {
+                           color = new Vector4(
+                           arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].R,
+                           arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].G,
+                           arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].B,
+                           arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].A
+                           );
                         }
 
                         vertice.Color = color;

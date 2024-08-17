@@ -119,6 +119,7 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
             text.WriteLine("end");
             text.WriteLine("// RE4_UHD_BIN_TOOL" + Environment.NewLine +
                    "// by: JADERLINK" + Environment.NewLine +
+                   "// youtube.com/@JADERLINK" + Environment.NewLine +
                   $"// Version {Program.VERSION}");
             text.Close();
         }
@@ -136,7 +137,20 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
                 float vx = uhdbin.Vertex_Position_Array[i].vx / CONSTs.GLOBAL_POSITION_SCALE;
                 float vy = uhdbin.Vertex_Position_Array[i].vy / CONSTs.GLOBAL_POSITION_SCALE;
                 float vz = uhdbin.Vertex_Position_Array[i].vz / CONSTs.GLOBAL_POSITION_SCALE;
-                obj.WriteLine("v " + vx.ToFloatString() + " " + vy.ToFloatString() + " " + vz.ToFloatString());
+
+                string v = "v " + vx.ToFloatString() + " " + vy.ToFloatString() + " " + vz.ToFloatString();
+
+                if (uhdbin.Header.ReturnsIsEnableVertexColors())
+                {
+                    float r = uhdbin.Vertex_Color_Array[i].r / 255f;
+                    float g = uhdbin.Vertex_Color_Array[i].g / 255f;
+                    float b = uhdbin.Vertex_Color_Array[i].b / 255f;
+                    float a = uhdbin.Vertex_Color_Array[i].a / 255f;
+
+                    v += " " + r.ToFloatString() + " " + g.ToFloatString() + " " + b.ToFloatString() + " " + a.ToFloatString();
+                }
+
+                obj.WriteLine(v);
             }
 
             for (int i = 0; i < uhdbin.Vertex_Normal_Array.Length; i++)
@@ -206,16 +220,16 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
             idx.WriteLine("UseExtendedNormals:" + uhdbin.Header.ReturnsIfItIsNormalsExtended());
             idx.WriteLine("UseWeightMap:" + (uhdbin.Header.weight_count != 0));
             idx.WriteLine("EnableAdjacentBoneTag:" + uhdbin.Header.ReturnsEnableAdjacentBoneTag());
-            idx.WriteLine("EnableBonepairTag:" + uhdbin.Header.ReturnsEnableBonepairTag()); 
-
+            idx.WriteLine("EnableBonepairTag:" + uhdbin.Header.ReturnsEnableBonepairTag());
+            idx.WriteLine("UseVertexColor:False");
 
             idx.WriteLine();
             idx.WriteLine();
-            idx.WriteLine(": ## Bones ##");
+            idx.WriteLine("## Bones:");
             idx.WriteLine("ObjFileUseBone:0");
-            idx.WriteLine(": BonesCount in decimal value");
+            idx.WriteLine("# BonesCount in decimal value");
             idx.WriteLine("BonesCount:" + uhdbin.Bones.Length.ToString());
-            idx.WriteLine(": BoneLines -> 16 bytes in hex");
+            idx.WriteLine("# BoneLines -> 16 bytes in hex");
             for (int i = 0; i < uhdbin.Bones.Length; i++)
             {
                 idx.WriteLine("BoneLine_" + i + ":" + BitConverter.ToString(uhdbin.Bones[i].boneLine).Replace("-", ""));
@@ -226,11 +240,11 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
             {
                 idx.WriteLine();
                 idx.WriteLine();
-                idx.WriteLine(": ## bonepair ##");
-                idx.WriteLine(": bonepairCount in decimal value");
+                idx.WriteLine("## bonepair:");
+                idx.WriteLine("# bonepairCount in decimal value");
                 idx.WriteLine("bonepairCount:" + uhdbin.bonepairLines.Length.ToString());
 
-                idx.WriteLine(": bonepairLines -> 8 bytes in hex");
+                idx.WriteLine("# bonepairLines -> 8 bytes in hex");
                 for (int i = 0; i < uhdbin.bonepairLines.Length; i++)
                 {
                     idx.WriteLine("bonepairLine_" + i + ":" + BitConverter.ToString(uhdbin.bonepairLines[i]).Replace("-", ""));
@@ -241,11 +255,11 @@ namespace RE4_UHD_BIN_TOOL.EXTRACT
             {
                 idx.WriteLine();
                 idx.WriteLine();
-                idx.WriteLine(": ## adjacentBone ##");
-                idx.WriteLine(": adjacentBoneCount in decimal value");
+                idx.WriteLine("## adjacentBone:");
+                idx.WriteLine("# adjacentBoneCount in decimal value");
                 idx.WriteLine("adjacentBoneCount:" + uhdbin.adjacent_bone.Length.ToString());
 
-                idx.WriteLine(": adjacentBoneLines -> ushort in hex");
+                idx.WriteLine("# adjacentBoneLines -> ushort in hex");
 
                 for (int i = 0; i < uhdbin.adjacent_bone.Length; i++)
                 {

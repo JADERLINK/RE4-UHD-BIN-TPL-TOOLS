@@ -25,6 +25,8 @@ namespace RE4_UHD_BIN_TOOL.REPACK
         public bool EnableBonepairTag { get; set; }
 
         public bool EnableAdjacentBoneTag { get; set; }
+
+        public bool UseVertexColor { get; set; }
     }
 
 
@@ -68,6 +70,17 @@ namespace RE4_UHD_BIN_TOOL.REPACK
             }
 
             //-------
+
+            if (pair.ContainsKey("USEVERTEXCOLOR"))
+            {
+                try
+                {
+                    idx.UseVertexColor = bool.Parse(pair["USEVERTEXCOLOR"].Trim());
+                }
+                catch (Exception)
+                {
+                }
+            }
 
 
             if (pair.ContainsKey("COMPRESSVERTICES"))

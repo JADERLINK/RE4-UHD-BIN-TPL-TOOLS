@@ -9,7 +9,7 @@ namespace RE4_UHD_BIN_TOOL
 {
     class Program
     {
-        public const string VERSION = "B.1.0.07 (2024-03-30)";
+        public const string VERSION = "B.1.0.8 (2024-08-17)";
 
         public static string headerText()
         {
@@ -64,10 +64,10 @@ namespace RE4_UHD_BIN_TOOL
             }
             else
             {
-                Console.WriteLine("No arguments or file does not exist");
+                Console.WriteLine("File specified does not exist.");
             }
 
-            Console.WriteLine("End");
+            Console.WriteLine("Finished!!!");
 
         }
 
@@ -75,7 +75,7 @@ namespace RE4_UHD_BIN_TOOL
         {
             //diretorio, e nome do arquivo
             string baseDirectory = fileInfo1.DirectoryName + "\\";
-            string baseName = fileInfo1.Name.Remove(fileInfo1.Name.Length - fileInfo1.Extension.Length, fileInfo1.Extension.Length);
+            string baseName = Path.GetFileNameWithoutExtension(fileInfo1.Name);
 
             //stream
             Stream binFile = null;
@@ -130,7 +130,6 @@ namespace RE4_UHD_BIN_TOOL
             {
                 switch (file2Extension)
                 {
-                   
                     case ".BIN":
                     case ".OBJ":
                     case ".SMD":
@@ -167,7 +166,7 @@ namespace RE4_UHD_BIN_TOOL
                         }
                         else
                         {
-                            Console.WriteLine("Cannot have two .IdxUhdTpl files");
+                            Console.WriteLine("Cannot have two .IdxUhdTpl files.");
                             return;
                         }
                         break;
@@ -195,12 +194,12 @@ namespace RE4_UHD_BIN_TOOL
                     case ".MTL":
                         if (binFile != null)
                         {
-                            Console.WriteLine("You cannot pass an .mtl together with a .Bin file.");
+                            Console.WriteLine("You cannot pass an .MTL together with a .Bin file.");
                             return;
                         }
                         else if (idxmaterialFile != null)
                         {
-                            Console.WriteLine("You cannot pass an .Mtl together with a .IdxMaterial file.");
+                            Console.WriteLine("You cannot pass an .MTL together with a .IdxMaterial file.");
                             return;
                         }
                         else if (mtlFile == null)
@@ -209,7 +208,7 @@ namespace RE4_UHD_BIN_TOOL
                         }
                         else
                         {
-                            Console.WriteLine("Cannot have two .mtl files");
+                            Console.WriteLine("Cannot have two .MTL files.");
                             return;
                         }
                         break;
@@ -239,8 +238,8 @@ namespace RE4_UHD_BIN_TOOL
                 case ".OBJ":
                 case ".SMD":
                     // modo repack, tem que carregar o IDXUHDBIN
-                    //requisita tambem o .MTL, caso não tenha sido declarado um .IdxMaterial
-                    // opcionalmente caso seja um mtl, pode carregar o IDXUHDTPL (a não ser tenha sido pasado um .tpl como segundo parametro)
+                    // requisita tambem o .MTL, caso não tenha sido declarado um .IdxMaterial
+                    // (removido essa função) opcionalmente caso seja um mtl, pode carregar o IDXUHDTPL (a não ser tenha sido pasado um .tpl como segundo parametro)
 
                     string idxbinFilePath = baseDirectory + baseName + ".idxuhdbin";
                     if (File.Exists(idxbinFilePath))
@@ -253,25 +252,6 @@ namespace RE4_UHD_BIN_TOOL
                         Console.WriteLine(".IdxuhdBin file does not exist, it is necessary to repack the .Bin");
                         return;
                     }
-
-
-                    //debug, carrega um arquivo .idxmaterial // não usado
-                    /*if (idxmaterialFile == null)
-                    {
-                        string materialFilePath = baseDirectory + baseName + ".idxmaterial";
-                        if (File.Exists(materialFilePath))
-                        {
-                            Console.WriteLine("Load File: " + baseName + ".idxmaterial");
-                            idxmaterialFile = new FileInfo(materialFilePath).OpenRead();
-                        }
-                        else 
-                        {
-                            Console.WriteLine(".idxmaterial file does not exist");
-                            return;
-                        }
-                    }
-                    */
-
 
                     // versão com mtl 
                     if (idxmaterialFile == null)
@@ -286,12 +266,13 @@ namespace RE4_UHD_BIN_TOOL
                             }
                             else
                             {
-                                Console.WriteLine(".Mtl file does not exist, it is necessary to repack the .Bin or pass the .idxmaterial file as the second parameter");
+                                Console.WriteLine(".MTL file does not exist, it is necessary to repack the .Bin or pass the .idxmaterial file as the second parameter");
                                 return;
                             }
 
                         }
 
+                        /*
                         if (tplFile == null && idxuhdtplFile == null)
                         {
                             string idxtplFilePath = baseDirectory + baseName + ".IdxUhdTpl";
@@ -301,7 +282,8 @@ namespace RE4_UHD_BIN_TOOL
                                 idxuhdtplFile = new FileInfo(idxtplFilePath).OpenRead();
                             }
 
-                        }
+                        } 
+                        */
 
                     }
                     
@@ -318,7 +300,6 @@ namespace RE4_UHD_BIN_TOOL
                 default:
                     break;
             }
-
 
             //-----------
             //carrega os objetos arquivos.
@@ -405,7 +386,7 @@ namespace RE4_UHD_BIN_TOOL
                     int ObjFileUseBone = idxbin.ObjFileUseBone;
                     bool CompressVertices = idxbin.CompressVertices;
                     REPACK.Structures.IntermediaryStructure intermediaryStructure = null;
-                    REPACK.BinRepack.RepackOBJ(objFile, CompressVertices, ObjFileUseBone, out intermediaryStructure, idxbin.UseExtendedNormals);
+                    REPACK.BinRepack.RepackOBJ(objFile, CompressVertices, ObjFileUseBone, out intermediaryStructure, idxbin.UseExtendedNormals, idxbin.UseVertexColor);
                     REPACK.Structures.IntermediaryLevel2 level2 = REPACK.BinRepack.MakeIntermediaryLevel2(intermediaryStructure);
                     final = REPACK.BinRepack.MakeFinalStructure(level2);
                 }
@@ -422,7 +403,7 @@ namespace RE4_UHD_BIN_TOOL
                 string binFilePath = baseDirectory + baseName + ".bin";
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0 , out _, final, boneLines, material,
-                    idxbin.BonePairLines, idxbin.UseExtendedNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag, idxbin.EnableAdjacentBoneTag, false);
+                    idxbin.BonePairLines, idxbin.UseExtendedNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag, idxbin.EnableAdjacentBoneTag, idxbin.UseVertexColor);
                 binstream.Close();
 
                 if (uhdTPL != null)
