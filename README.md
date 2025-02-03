@@ -9,6 +9,14 @@ Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do RE4 UHD/PS4/
 
 ## Updates
 
+**Update: B.1.2.0**
+<br> Correção: arrumados os Ids dos bones com numeração maior que 128 que anteriormente ficavam com valor negativo;
+<br> Correção: Arrumados os problemas com bones com Ids repetidos.
+<br> Nota: bones com Ids maiores que 254 são inválidos;
+<br> Melhoria: melhorado a velocidade do repack, agora é muito rápido fazer o repack.
+<br> Correção: corrigido o "width X height" no TPL que estava invertido nas versões anteriores. A ordem correta no arquivo é "height X width";
+<br> E foram feitas melhorias gerais no código;
+
 **Update: B.1.1.0**
 <br>Adicionado suporte para as versões de PS4 e NS;
 
@@ -122,4 +130,4 @@ Encontra-se em "RE4_UHD_BIN_TOOL\\CjClutter.ObjLoader.Loader", código modificad
 **At.te: JADERLINK**
 <br>Thanks to \"mariokart64n\" and \"CodeMan02Fr\"
 <br>Material information by \"Albert\"
-<br>2024-10-06
+<br>2025-02-03

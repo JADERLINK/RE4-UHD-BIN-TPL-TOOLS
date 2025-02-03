@@ -8,7 +8,7 @@ namespace SHARED_UHD_BIN
 {
     public static class Shared
     {
-        public const string VERSION = "B.1.1.0 (2024-10-06)";
+        public const string VERSION = "B.1.2.0 (2025-02-03)";
 
         public static string HeaderText()
         {

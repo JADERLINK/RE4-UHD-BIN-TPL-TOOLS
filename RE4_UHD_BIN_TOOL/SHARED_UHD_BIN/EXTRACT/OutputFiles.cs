@@ -18,9 +18,41 @@ namespace SHARED_UHD_BIN.EXTRACT
             text.WriteLine("version 1");
             text.WriteLine("nodes");
 
-            for (int i = 0; i < uhdbin.Bones.Length; i++)
+            //Bones Fix
+            (uint BoneID, short BoneParent, float p1, float p2, float p3)[] FixedBones = new (uint BoneID, short BoneParent, float p1, float p2, float p3)[uhdbin.Bones.Length];
+
+            // Bone ID, number of times found
+            Dictionary<byte, int> BoneCheck = new Dictionary<byte, int>();
+            for (int i = uhdbin.Bones.Length - 1; i >= 0; i--)
             {
-                text.WriteLine(uhdbin.Bones[i].BoneID + " \"BONE_" + uhdbin.Bones[i].BoneID.ToString("D3") + "\" " + uhdbin.Bones[i].BoneParent);
+                byte InBoneID = uhdbin.Bones[i].BoneID;
+                uint OutBoneID = InBoneID;
+                if (BoneCheck.ContainsKey(InBoneID))
+                {
+                    OutBoneID += (uint)(0x100u * BoneCheck[InBoneID]);
+                    BoneCheck[InBoneID]++;
+                }
+                else
+                {
+                    BoneCheck.Add(InBoneID, 1);
+                }
+
+                short BoneParent = uhdbin.Bones[i].BoneParent;
+                if (BoneParent == 0xFF)
+                {
+                    BoneParent = -1;
+                }
+                
+                float p1 = uhdbin.Bones[i].PositionX / CONSTs.GLOBAL_POSITION_SCALE;
+                float p2 = uhdbin.Bones[i].PositionZ * -1 / CONSTs.GLOBAL_POSITION_SCALE;
+                float p3 = uhdbin.Bones[i].PositionY / CONSTs.GLOBAL_POSITION_SCALE;
+
+                FixedBones[i] = (OutBoneID, BoneParent, p1, p2, p3);
+            }
+
+            for (int i = 0; i < FixedBones.Length; i++)
+            {
+                text.WriteLine(FixedBones[i].BoneID + " \"BONE_" + FixedBones[i].BoneID.ToString("D3") + "\" " + FixedBones[i].BoneParent);
             }
 
             text.WriteLine("end");
@@ -28,12 +60,12 @@ namespace SHARED_UHD_BIN.EXTRACT
             text.WriteLine("skeleton");
             text.WriteLine("time 0");
 
-            for (int i = 0; i < uhdbin.Bones.Length; i++)
+            for (int i = 0; i < FixedBones.Length; i++)
             {
-                text.WriteLine(uhdbin.Bones[i].BoneID + "  " +
-                    (uhdbin.Bones[i].PositionX / CONSTs.GLOBAL_POSITION_SCALE).ToFloatString() + " " +
-                    (uhdbin.Bones[i].PositionZ * -1 / CONSTs.GLOBAL_POSITION_SCALE).ToFloatString() + " " +
-                    (uhdbin.Bones[i].PositionY / CONSTs.GLOBAL_POSITION_SCALE).ToFloatString() + "  0.0 0.0 0.0");
+                text.WriteLine(FixedBones[i].BoneID + "  " +
+                               FixedBones[i].p1.ToFloatString() + " " +
+                               FixedBones[i].p2.ToFloatString() + " " +
+                               FixedBones[i].p3.ToFloatString() + "  0.0 0.0 0.0");
             }
 
             text.WriteLine("end");

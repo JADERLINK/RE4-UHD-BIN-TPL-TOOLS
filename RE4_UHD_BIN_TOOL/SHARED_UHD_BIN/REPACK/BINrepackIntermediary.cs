@@ -47,9 +47,9 @@ namespace SHARED_UHD_BIN.REPACK
                         vertex.Links = (byte)item.Value.Faces[i][iv].WeightMap.Links;
 
 
-                        vertex.BoneID1 = (ushort)item.Value.Faces[i][iv].WeightMap.BoneID1;
-                        vertex.BoneID2 = (ushort)item.Value.Faces[i][iv].WeightMap.BoneID2;
-                        vertex.BoneID3 = (ushort)item.Value.Faces[i][iv].WeightMap.BoneID3;
+                        vertex.BoneID1 = (byte)(ushort)item.Value.Faces[i][iv].WeightMap.BoneID1;
+                        vertex.BoneID2 = (byte)(ushort)item.Value.Faces[i][iv].WeightMap.BoneID2;
+                        vertex.BoneID3 = (byte)(ushort)item.Value.Faces[i][iv].WeightMap.BoneID3;
 
                         vertex.Weight1 = (byte)(item.Value.Faces[i][iv].WeightMap.Weight1 * 100);
                         vertex.Weight2 = (byte)(item.Value.Faces[i][iv].WeightMap.Weight2 * 100);

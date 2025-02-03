@@ -216,15 +216,20 @@ namespace SHARED_UHD_BIN.REPACK
                         bonePos.X = skeleton.PosX * CONSTs.GLOBAL_POSITION_SCALE;
                         bonePos.Y = skeleton.PosZ * CONSTs.GLOBAL_POSITION_SCALE;
                         bonePos.Z = skeleton.PosY * -1 * CONSTs.GLOBAL_POSITION_SCALE;
+
+                        if (bonePos.Z == 0f * -1f) { bonePos.Z = 0; }
+
                     }
                 }
 
-                bones.Add(new FinalBoneLine((sbyte)smd.Nodes[i].ID, (sbyte)smd.Nodes[i].ParentID, bonePos.X, bonePos.Y, bonePos.Z));
-            }
+                byte ParentID = (byte)smd.Nodes[i].ParentID;
+                if (smd.Nodes[i].ParentID < 0)
+                {
+                    ParentID = 0xFF;
+                }
 
-            bones = (from bb in bones
-                     orderby bb.BoneId
-                     select bb).ToList();
+                bones.Add(new FinalBoneLine((byte)(ushort)smd.Nodes[i].ID, ParentID, bonePos.X, bonePos.Y, bonePos.Z));
+            }
 
             return bones.ToArray();
         }
