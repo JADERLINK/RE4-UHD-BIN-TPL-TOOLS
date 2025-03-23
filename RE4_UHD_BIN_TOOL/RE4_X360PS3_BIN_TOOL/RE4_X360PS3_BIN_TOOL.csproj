@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B032F333-140C-4C27-A3A8-5199E92B7A0E}</ProjectGuid>
+    <ProjectGuid>{18DDD1F5-233C-406E-ACAF-F96CF8878328}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RE4_PS4NS_BIN_TOOL</RootNamespace>
-    <AssemblyName>JADERLINK_RE4_PS4NS_BIN_TOOL</AssemblyName>
+    <RootNamespace>RE4_X360PS3_BIN_TOOL</RootNamespace>
+    <AssemblyName>JADERLINK_RE4_X360PS3_BIN_TOOL</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -38,7 +38,7 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>RE4_PS4NS_BIN_TOOL.Program</StartupObject>
+    <StartupObject>RE4_X360PS3_BIN_TOOL.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -52,9 +52,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <Import Project="..\SHARED_UHD_BIN\SHARED_UHD_BIN.projitems" Label="Shared" />
   <Import Project="..\CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.projitems" Label="Shared" />
-  <Import Project="..\SMD_READER_LIB\SMD_READER_LIB.projitems" Label="Shared" />
+  <Import Project="..\SHARED_UHD_BIN\SHARED_UHD_BIN.projitems" Label="Shared" />
   <Import Project="..\SimpleEndianBinaryIO\SimpleEndianBinaryIO.projitems" Label="Shared" />
+  <Import Project="..\SMD_READER_LIB\SMD_READER_LIB.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN.ALL;
+using SimpleEndianBinaryIO;
 
 namespace SHARED_UHD_BIN.EXTRACT
 {
@@ -227,10 +228,14 @@ namespace SHARED_UHD_BIN.EXTRACT
             obj.Close();
         }
 
-        public static void CreateIdxUhdBin(UhdBIN uhdbin, string baseDirectory, string baseFileName) 
+        public static void CreateIdxUhdBin(UhdBIN uhdbin, string baseDirectory, string baseFileName, Endianness endianness) 
         {
-
-            var idx = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".idxuhdbin")).CreateText();
+            string idxbinFormat = ".idxuhdbin";
+            if (endianness == Endianness.BigEndian)
+            {
+                idxbinFormat = ".idxuhdbinbig";
+            }
+            var idx = new FileInfo(Path.Combine(baseDirectory, baseFileName + idxbinFormat)).CreateText();
             idx.WriteLine(Shared.HeaderText());
 
             //idx.WriteLine();

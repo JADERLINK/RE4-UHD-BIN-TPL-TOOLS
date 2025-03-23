@@ -1,13 +1,17 @@
 # RE4-UHD-BIN-TOOL
-Extract and repack RE4 UHD/PS4/NS .BIN/.TPL files
+Extract and repack RE4 UHD/PS4/NS/X360/PS3 BIN/TPL files;
 
 **Translate from Portuguese Brazil**
 
-Programa destinado a extrair e reempacotar os arquivos .bin/.tpl do RE4 UHD/PS4/NS;
+Programa destinado a extrair e reempacotar os arquivos BIN/TPL do RE4 UHD/PS4/NS/X360/PS3;
 <br>Nota1: Não suportado o campo de Morph (não foi implementada essa funcionalidade no programa);
-<br>Nota2: A versão de UHD é um executável e a versão de Ps4/Ns é outro executável;
+<br>Nota2: A versão de UHD é um executável, a versão de PS4/NS é outro executável, e a versão de X360/PS3 também é outro executável;
 
 ## Updates
+
+**Update: B.1.2.3**
+<br>Adicionado suporte para as versões big endians PS3 e X360;
+<br>Nota: no lugar do arquivo "idxuhdbin" será gerado o arquivo "idxuhdbinbig", pois o conteúdo é incompatível entre esses dois arquivos.
 
 **Update: B.1.2.0**
 <br> Correção: arrumados os Ids dos bones com numeração maior que 128 que anteriormente ficavam com valor negativo;
@@ -115,7 +119,8 @@ Pode ser usado para editar os materiais do bin sem usar o arquivo .mtl
 
 ## Ordem dos bones no arquivo .SMD
 
-Para arrumar a ordem dos ids dos bones nos arquivos smd, depois de serem exportados do blender ou outro software de edição de modelos, usar o programa: GC_GC_Skeleton_Changer.exe (procure o programa no fórum do re4, remod)
+Para arrumar a ordem dos ids dos bones nos arquivos smd, depois de serem exportados do blender ou outro software de edição de modelos,<del> usar o programa: GC_GC_Skeleton_Changer.exe (procure o programa no fórum do re4, remod)</del>
+<br>Veja: [SMD_BONE_TOOLS](https://github.com/JADERLINK/SMD_BONE_TOOLS)
 
 ## Carregando as texturas no arquivo .SMD
 
@@ -130,4 +135,4 @@ Encontra-se em "RE4_UHD_BIN_TOOL\\CjClutter.ObjLoader.Loader", código modificad
 **At.te: JADERLINK**
 <br>Thanks to \"mariokart64n\" and \"CodeMan02Fr\"
 <br>Material information by \"Albert\"
-<br>2025-02-03
+<br>2025-03-23

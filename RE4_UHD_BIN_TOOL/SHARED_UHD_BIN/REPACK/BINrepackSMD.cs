@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN.REPACK.Structures;
 using SHARED_UHD_BIN.ALL;
+using SimpleEndianBinaryIO;
 
 namespace SHARED_UHD_BIN.REPACK
 {
     public static partial class BinRepack
     {
-        public static void RepackSMD(Stream smdFile, bool CompressVertices, out IntermediaryStructure intermediaryStructure, out FinalBoneLine[] bones, bool UseExtendedNormals)
+        public static void RepackSMD(Stream smdFile, bool CompressVertices, out IntermediaryStructure intermediaryStructure, out FinalBoneLine[] bones, bool UseExtendedNormals, Endianness endianness)
         {
             //carrega o arquivo smd;
             StreamReader stream = null;
@@ -190,10 +191,10 @@ namespace SHARED_UHD_BIN.REPACK
             intermediaryStructure = MakeIntermediaryStructure(startStructure, UseExtendedNormals);
 
             //FinalBoneLine é usado os bones do arquivo smd
-            bones = GetBoneLines(smd);
+            bones = GetBoneLines(smd, endianness);
         }
 
-        private static FinalBoneLine[] GetBoneLines(SMD_READER_LIB.SMD smd)
+        private static FinalBoneLine[] GetBoneLines(SMD_READER_LIB.SMD smd, Endianness endianness)
         {
             List<FinalBoneLine> bones = new List<FinalBoneLine>();
 
@@ -228,7 +229,7 @@ namespace SHARED_UHD_BIN.REPACK
                     ParentID = 0xFF;
                 }
 
-                bones.Add(new FinalBoneLine((byte)(ushort)smd.Nodes[i].ID, ParentID, bonePos.X, bonePos.Y, bonePos.Z));
+                bones.Add(new FinalBoneLine((byte)(ushort)smd.Nodes[i].ID, ParentID, bonePos.X, bonePos.Y, bonePos.Z, endianness));
             }
 
             return bones.ToArray();

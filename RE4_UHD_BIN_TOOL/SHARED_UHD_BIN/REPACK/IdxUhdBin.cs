@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN.ALL;
+using SimpleEndianBinaryIO;
 
 namespace SHARED_UHD_BIN.REPACK
 {
@@ -32,7 +33,7 @@ namespace SHARED_UHD_BIN.REPACK
 
     public static class IdxUhdBinLoad
     {
-        public static IdxUhdBin Load(Stream stream)
+        public static IdxUhdBin Load(Stream stream, Endianness endianness)
         {
             IdxUhdBin idx = new IdxUhdBin();
 
@@ -198,7 +199,7 @@ namespace SHARED_UHD_BIN.REPACK
 
                 }
 
-                BoneLines.Add(new FinalBoneLine(boneLine));
+                BoneLines.Add(new FinalBoneLine(boneLine, endianness));
             }
 
 

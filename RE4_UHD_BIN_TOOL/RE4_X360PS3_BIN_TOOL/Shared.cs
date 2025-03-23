@@ -14,18 +14,18 @@ namespace SHARED_UHD_BIN
         {
             return "# github.com/JADERLINK/RE4-UHD-BIN-TOOL" + Environment.NewLine +
                    "# youtube.com/@JADERLINK" + Environment.NewLine +
-                   "# RE4_PS4NS_BIN_TOOL by: JADERLINK" + Environment.NewLine +
+                   "# RE4_X360PS3_BIN_TOOL by: JADERLINK" + Environment.NewLine +
                    "# Thanks to \"mariokart64n\" and \"CodeMan02Fr\"" + Environment.NewLine +
                    "# Material information by \"Albert\"" + Environment.NewLine +
                   $"# Version {VERSION}";
         }
 
-        public static string HeaderTextSmd()
+        public static string HeaderTextSmd() 
         {
-            return "// RE4_PS4NS_BIN_TOOL" + Environment.NewLine +
+            return "// RE4_X360PS3_BIN_TOOL" + Environment.NewLine +
                    "// by: JADERLINK" + Environment.NewLine +
                    "// youtube.com/@JADERLINK" + Environment.NewLine +
-                  $"// Version {VERSION}";
+                  $"// Version {VERSION}";       
         }
     }
 }
