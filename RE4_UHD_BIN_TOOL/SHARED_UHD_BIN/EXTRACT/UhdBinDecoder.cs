@@ -56,7 +56,7 @@ namespace SHARED_UHD_BIN.EXTRACT
 
                 if (uhdBIN.Header.weight2_count > 255)
                 {
-                    uhdBIN.WeightMaps = fmtBIN_Weight_Ext(br, uhdBIN.Header.weight_offset + startOffset, uhdBIN.Header.weight2_count);
+                    uhdBIN.WeightMaps = fmtBIN_Weight(br, uhdBIN.Header.weight_offset + startOffset, uhdBIN.Header.weight2_count);
                 }
                 else
                 {
@@ -359,28 +359,6 @@ namespace SHARED_UHD_BIN.EXTRACT
             }
 
             return bones;
-        }
-
-
-        private static WeightMap[] fmtBIN_Weight_Ext(BinaryReader br, long offset, ushort count) 
-        {
-            br.BaseStream.Position = offset;
-
-            WeightMap[] weightMaps = new WeightMap[count];
-            for (int i = 0; i < count; i++)
-            {
-                WeightMap weightMap = new WeightMap();
-                weightMap.boneId1 = br.ReadUInt16();
-                weightMap.boneId2 = br.ReadUInt16();
-                weightMap.boneId3 = br.ReadUInt16();
-                weightMap.count = br.ReadUInt16();
-                weightMap.weight1 = br.ReadByte();
-                weightMap.weight2 = br.ReadByte();
-                weightMap.weight3 = br.ReadByte();
-                weightMap.unk018 = br.ReadByte();
-                weightMaps[i] = weightMap;
-            }
-            return weightMaps;
         }
 
         private static WeightMap[] fmtBIN_Weight(BinaryReader br, long offset, ushort count) 

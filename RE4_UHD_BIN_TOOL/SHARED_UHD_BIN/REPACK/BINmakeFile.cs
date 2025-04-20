@@ -232,31 +232,15 @@ namespace SHARED_UHD_BIN.REPACK
             int tempOffset = 0;
             for (int i = 0; i < WeightMaps.Length; i++)
             {
-                if (WeightMaps.Length > 255)
-                {
-                    EndianBitConverter.GetBytes(WeightMaps[i].BoneID1, endianness).CopyTo(b, tempOffset);
-                    EndianBitConverter.GetBytes(WeightMaps[i].BoneID2, endianness).CopyTo(b, tempOffset + 0x2);
-                    EndianBitConverter.GetBytes(WeightMaps[i].BoneID3, endianness).CopyTo(b, tempOffset + 0x4);
-                    EndianBitConverter.GetBytes(WeightMaps[i].Links, endianness).CopyTo(b, tempOffset + 0x6);
-                    b[tempOffset + 0x8] = WeightMaps[i].Weight1;
-                    b[tempOffset + 0x9] = WeightMaps[i].Weight2;
-                    b[tempOffset + 0xA] = WeightMaps[i].Weight3;
-                    b[tempOffset + 0xB] = 0;
-
-                    tempOffset += 12;
-                }
-                else 
-                {
-                    b[tempOffset + 0x0] = (byte)WeightMaps[i].BoneID1;
-                    b[tempOffset + 0x1] = (byte)WeightMaps[i].BoneID2;
-                    b[tempOffset + 0x2] = (byte)WeightMaps[i].BoneID3;
-                    b[tempOffset + 0x3] = (byte)WeightMaps[i].Links;
-                    b[tempOffset + 0x4] = WeightMaps[i].Weight1;
-                    b[tempOffset + 0x5] = WeightMaps[i].Weight2;
-                    b[tempOffset + 0x6] = WeightMaps[i].Weight3;
-                    b[tempOffset + 0x7] = 0;
-                    tempOffset += 8;
-                }
+                b[tempOffset + 0x0] = WeightMaps[i].BoneID1;
+                b[tempOffset + 0x1] = WeightMaps[i].BoneID2;
+                b[tempOffset + 0x2] = WeightMaps[i].BoneID3;
+                b[tempOffset + 0x3] = WeightMaps[i].Links;
+                b[tempOffset + 0x4] = WeightMaps[i].Weight1;
+                b[tempOffset + 0x5] = WeightMaps[i].Weight2;
+                b[tempOffset + 0x6] = WeightMaps[i].Weight3;
+                b[tempOffset + 0x7] = 0;
+                tempOffset += 8;
             }
             return b;
         }
@@ -590,19 +574,7 @@ namespace SHARED_UHD_BIN.REPACK
         private static uint CalculateBytesVertexWeightMap(uint count)
         {
             uint response = 0;
-            if (count > 255)
-            {
-                uint calc = count * 12;
-
-                uint div = calc / 16;
-                uint rest = calc % 16;
-                if (rest != 0)
-                {
-                    div++;
-                }
-                response = div * 16;
-            }
-            else if (count != 0)
+            if (count != 0)
             {
                 uint calc = count * 8;
 

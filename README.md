@@ -9,6 +9,12 @@ Programa destinado a extrair e reempacotar os arquivos BIN/TPL do RE4 UHD/PS4/NS
 
 ## Updates
 
+**Update: B.1.3.0**
+<br> Corrigido bug: quando a quantidade de combinações de WeightMap é superior a 255, na qual estava sendo colocado o conteúdo de maneira errada no aquivo BIN.
+<br> ATENÇÃO: arquivos BIN com a quantidade de combinações de WeightMap superior a 255 não funcionam no jogo base, eles crasham(fecham) o jogo.
+<br> Para o arquivo BIN funcionar no jogo, deve estar com a DLL do Qingsheng (X3DAudio1_7.dll), com a opção "Allocate more memory for bones" ativada.
+<br> Nota: quando o limite for superior ao permitido, o programa vai exibir um aviso no console.
+
 **Update: B.1.2.3**
 <br>Adicionado suporte para as versões big endians PS3 e X360;
 <br>Nota: no lugar do arquivo "idxuhdbin" será gerado o arquivo "idxuhdbinbig", pois o conteúdo é incompatível entre esses dois arquivos.
@@ -135,4 +141,4 @@ Encontra-se em "RE4_UHD_BIN_TOOL\\CjClutter.ObjLoader.Loader", código modificad
 **At.te: JADERLINK**
 <br>Thanks to \"mariokart64n\" and \"CodeMan02Fr\"
 <br>Material information by \"Albert\"
-<br>2025-03-23
+<br>2025-04-20

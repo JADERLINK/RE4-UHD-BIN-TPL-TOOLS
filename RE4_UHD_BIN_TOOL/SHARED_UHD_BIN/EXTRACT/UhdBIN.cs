@@ -47,10 +47,16 @@ namespace SHARED_UHD_BIN.EXTRACT
 
     public class WeightMap
     {
-        public ushort boneId1; //pode ser ushort ou byte
-        public ushort boneId2; //pode ser ushort ou byte
-        public ushort boneId3; //pode ser ushort ou byte
-        public ushort count;   //pode ser ushort ou byte
+        // correção: é sempre byte
+        // o jogo base so aceita so 255 combinações desse objeto(WeightMap)
+        // para ter mais que 255 tem que usar a DLL do qingsheng
+        // X3DAudio1_7.dll
+        // no "X3DAudio1_7.ini" mudar "Allocate more memory for bones" de 0 para 1
+        // atenção: nos arquivos r10c_27.BIN r22a_27.BIN, os bones são ushort, mas essa logica não funciona para os outros arquivos.
+        public byte boneId1; //pode ser ushort ou byte
+        public byte boneId2; //pode ser ushort ou byte
+        public byte boneId3; //pode ser ushort ou byte
+        public byte count;   //pode ser ushort ou byte
         public byte weight1;
         public byte weight2;
         public byte weight3;

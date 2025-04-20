@@ -56,14 +56,14 @@ namespace SHARED_UHD_BIN.REPACK.Structures
         public byte ColorG { get; set; }
         public byte ColorB { get; set; }
         public byte ColorA { get; set; }
-        public ushort Links { get; set; }
-        public ushort BoneID1 { get; set; }
+        public byte Links { get; set; }
+        public byte BoneID1 { get; set; }
         public byte Weight1 { get; set; }
 
-        public ushort BoneID2 { get; set; }
+        public byte BoneID2 { get; set; }
         public byte Weight2 { get; set; }
 
-        public ushort BoneID3 { get; set; }
+        public byte BoneID3 { get; set; }
         public byte Weight3 { get; set; }
 
         public FinalWeightMap GetFinalWeightMap()

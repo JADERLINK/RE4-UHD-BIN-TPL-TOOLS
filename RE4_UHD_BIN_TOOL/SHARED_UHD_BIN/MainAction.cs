@@ -442,6 +442,16 @@ namespace SHARED_UHD_BIN
                     Console.WriteLine("If this .BIN is not used in a Scenario SMD, it will not work correctly;");
                 }
 
+                // checa limite da combinações de pesos (WeightMap)
+                if (final.WeightMaps.Length > byte.MaxValue)
+                {
+                    Console.WriteLine("Warning: Number of WeightMap combinations greater than limit: " + final.WeightMaps.Length + ";");
+                    Console.WriteLine("The limit is: " + byte.MaxValue + ";");
+                    Console.WriteLine("This BIN file in the base game will crash.");
+                    Console.WriteLine("It will only work if you are using the Qingsheng DLL (X3DAudio1_7.dll),");
+                    Console.WriteLine("with \"Allocate more memory for bones\" enabled.");
+                }
+
                 // cria arquivos
                 string binFilePath = baseDirectory + baseName + ".bin";
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
