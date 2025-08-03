@@ -1,13 +1,20 @@
-# RE4-UHD-BIN-TOOL
-Extract and repack RE4 UHD/PS4/NS/X360/PS3 BIN/TPL files;
+# RE4-UHD-BIN-TPL-TOOLS
+Extract and repack BIN/TPL files for RE4 OG UHD/PS4/NS/X360/PS3;
 
 **Translate from Portuguese Brazil**
 
-Programa destinado a extrair e reempacotar os arquivos BIN/TPL do RE4 UHD/PS4/NS/X360/PS3;
+Programa destinado a extrair e reempacotar os arquivos BIN/TPL do RE4 OG UHD/PS4/NS/X360/PS3;
 <br>Nota1: Não suportado o campo de Morph (não foi implementada essa funcionalidade no programa);
 <br>Nota2: A versão de UHD é um executável, a versão de PS4/NS é outro executável, e a versão de X360/PS3 também é outro executável;
 
 ## Updates
+
+**Update: V.1.3.2**
+<br>Adicionado suporte ao Linux via mono e seu sistema de diretório;
+<br>Adicionado os campos faltantes do TPL, agora tem como extrair e fazer repack do TPL do arquivo FNT e dos TPL que estão dentro do EFF.
+<br>Agora você pode fazer repack usando o arquivo IdxuhdBin/IdxuhdBinBig, no qual vai criar um arquivo Bin valido sem modelo 3d.
+<br>Feito melhorias no código.
+<br>Renomeado os nomes das tools para colocar TPL no nome.
 
 **Update: B.1.3.0**
 <br> Corrigido bug: quando a quantidade de combinações de WeightMap é superior a 255, na qual estava sendo colocado o conteúdo de maneira errada no aquivo BIN.
@@ -63,37 +70,37 @@ Programa destinado a extrair e reempacotar os arquivos BIN/TPL do RE4 UHD/PS4/NS
 <br> * No repack ao ler as dimensões das imagens, agora será lido somente uma vez cada imagens, em vez de várias vezes como era feito na versão anterior.
 <br> * Nota: essa versão é compatível com os arquivos da versão anterior.
 
-## JADERLINK_RE4_\*\*_BIN_TOOL.exe
+## JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe
 
 Programa responsável por extrair e recompilar os arquivos .bin/.tpl;
 <br> Segue abaixo os "inputs" e "outputs" do programa:
 <br>Nota: o programa pode receber um ou dois arquivos como parâmetro;
 
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.BIN"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.BIN"**
     <br>Extrai o arquivo bin vai gerar os arquivos: file.obj, file.smd, file.idxmaterial e file.idxuhdbin;
     <br>Caso na pasta tenha um arquivo .tpl de mesmo nome do bin, será considerado como se tivesse passado o arquivo também como parâmetro;
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.TPL"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.TPL"**
     <br>Extrai o arquivo tpl vai gerar o arquivo: file.idxuhdtpl;
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.BIN" "file.TPL"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.BIN" "file.TPL"**
     <br>Ira gera os arquivos citados anteriormente mais o arquivo: file.mtl;
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.OBJ"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.OBJ"**
     <br>Faz repack do arquivo .bin, requisita na mesma pasta o arquivo .idxuhdbin de mesmo nome e o arquivo .mtl de mesmo nome; <del>e opcionalmente o arquivo .idxuhdtpl</del>
     <br>Nota: você pode passar como segundo parâmetro o arquivo .mtl ou .idxuhdtpl/.tpl, o resultado da operação é o mesmo citado acima;
     <br>Nota2: as operações com o .mtl envolvido requisitam que na mesma pasta do mtl tenha as texturas na qual ele faz referência;
     <br>Nota3: a partir da versão B.1.0.8, para usar o arquivo .idxuhdtpl/.tpl, você deve passá-lo como segundo parâmetro.
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.OBJ" "file.idxmaterial"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.OBJ" "file.idxmaterial"**
     <br>Faz repack do arquivo .bin, usando os arquivo .obj e .idxmaterial, requisita somente na mesma pasta o arquivo .idxuhdbin;
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.SMD"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.SMD"**
     <br> Mesma explicação que do arquivo .obj, so que agora fazendo o repack usando o arquivo .smd;
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.SMD" "file.idxmaterial"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.SMD" "file.idxmaterial"**
     <br>O mesmo que expliquei acima.
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.MTL"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.MTL"**
     <br>"Extrai" o arquivo .mtl cria os arquivos: File.Repack.idxmaterial e File.Repack.idxuhdtpl
     <br>Nota: você pode passar como segundo parâmetro o arquivo .tpl/.idxuhdtpl, no qual ele vai usar como referência para ordenar as texturas no tpl;
     <br>Nota2: as operações com o .mtl envolvido requisitam que na mesma pasta do mtl tenha as texturas na qual ele faz referência;
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.tpl" "file.idxmaterial"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.tpl" "file.idxmaterial"**
     <br> Cria o arquivo .mtl;
-* **JADERLINK_RE4_\*\*_BIN_TOOL.exe "file.idxuhdtpl" "file.idxmaterial"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.idxuhdtpl" "file.idxmaterial"**
     <br> Também cria o arquivo .mtl;
 
 ## Explicação para que serve cada arquivo:
@@ -141,4 +148,4 @@ Encontra-se em "RE4_UHD_BIN_TOOL\\CjClutter.ObjLoader.Loader", código modificad
 **At.te: JADERLINK**
 <br>Thanks to \"mariokart64n\" and \"CodeMan02Fr\"
 <br>Material information by \"Albert\"
-<br>2025-04-20
+<br>2025-08-03
