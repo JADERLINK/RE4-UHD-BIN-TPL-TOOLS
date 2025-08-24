@@ -8,7 +8,7 @@ namespace SHARED_UHD_BIN_TPL
 {
     public static class Shared
     {
-        private const string VERSION = "V.1.3.2 (2025-08-03)";
+        private const string VERSION = "V.1.4.0 (2025-08-24)";
 
         public static string HeaderText()
         {

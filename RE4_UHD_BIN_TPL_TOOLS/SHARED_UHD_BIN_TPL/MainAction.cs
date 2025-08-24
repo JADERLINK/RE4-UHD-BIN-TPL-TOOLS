@@ -74,7 +74,7 @@ namespace SHARED_UHD_BIN_TPL
             Stream idxuhdtplFile = null;
             Stream idxmaterialFile = null;
 
-            Stream idxuhdBinFile = null;
+            Stream idxuuBinFile = null;
             Stream objFile = null;
             Stream smdFile = null;
             Stream mtlFile = null;
@@ -84,7 +84,7 @@ namespace SHARED_UHD_BIN_TPL
                 tplFile?.Close();
                 idxuhdtplFile?.Close();
                 idxmaterialFile?.Close();
-                idxuhdBinFile?.Close();
+                idxuuBinFile?.Close();
                 objFile?.Close();
                 smdFile?.Close();
                 mtlFile?.Close();
@@ -110,9 +110,8 @@ namespace SHARED_UHD_BIN_TPL
                 case ".MTL":
                     mtlFile = fileInfo1.OpenRead();
                     break;
-                case ".IDXUHDBIN":
-                case ".IDXUHDBINBIG":
-                    idxuhdBinFile = fileInfo1.OpenRead();
+                case ".IDXUUBIN":
+                    idxuuBinFile = fileInfo1.OpenRead();
                     break;
                 case ".IDXUHDTPL":
                     idxuhdtplFile = fileInfo1.OpenRead();
@@ -133,13 +132,12 @@ namespace SHARED_UHD_BIN_TPL
                     case ".BIN":
                     case ".OBJ":
                     case ".SMD":
-                    case ".IDXUHDBIN":
-                    case ".IDXUHDBINBIG":
+                    case ".IDXUUBIN":
                         Console.WriteLine("Pass this file as the first parameter: " + fileInfo2.Name);
                         CloseOpenedStreams();
                         return;
                     case ".TPL":
-                        if (idxuhdBinFile != null)
+                        if (idxuuBinFile != null)
                         {
                             Console.WriteLine("You cannot pass an TPL together with a IDXUHDBIN file.");
                             CloseOpenedStreams();
@@ -163,7 +161,7 @@ namespace SHARED_UHD_BIN_TPL
                         }
                         break;
                     case ".IDXUHDTPL":
-                        if (idxuhdBinFile != null)
+                        if (idxuuBinFile != null)
                         {
                             Console.WriteLine("You cannot pass an IDXUHDTPL together with a IDXUHDBIN file.");
                             CloseOpenedStreams();
@@ -187,7 +185,7 @@ namespace SHARED_UHD_BIN_TPL
                         }
                         break;
                     case ".IDXMATERIAL":
-                        if (idxuhdBinFile != null)
+                        if (idxuuBinFile != null)
                         {
                             Console.WriteLine("You cannot pass an IDXMATERIAL together with a IDXUHDBIN file.");
                             CloseOpenedStreams();
@@ -217,7 +215,7 @@ namespace SHARED_UHD_BIN_TPL
                         }
                         break;
                     case ".MTL":
-                        if (idxuhdBinFile != null)
+                        if (idxuuBinFile != null)
                         {
                             Console.WriteLine("You cannot pass an MTL together with a IDXUHDBIN file.");
                             CloseOpenedStreams();
@@ -257,22 +255,6 @@ namespace SHARED_UHD_BIN_TPL
             //carregando arquivos adicionais
             switch (file1Extension)
             {
-                case ".IDXUHDBIN":
-                    if (endianness == Endianness.BigEndian)
-                    {
-                        Console.WriteLine("The file format is invalid: " + fileInfo1.Name);
-                        CloseOpenedStreams();
-                        return;
-                    }
-                    break;
-                case ".IDXUHDBINBIG":
-                    if (endianness == Endianness.LittleEndian)
-                    {
-                        Console.WriteLine("The file format is invalid: " + fileInfo1.Name);
-                        CloseOpenedStreams();
-                        return;
-                    }
-                    break;
                 case ".BIN":
                     // tenta caregar um tpl de mesmo nome, caso não tenha sido declarado um
                     // se não tiver fica sem mesmo.
@@ -288,19 +270,15 @@ namespace SHARED_UHD_BIN_TPL
                     break;
                 case ".OBJ":
                 case ".SMD":
-                    // modo repack, tem que carregar o .IDXUHDBIN
+                    // modo repack, tem que carregar o .IDXUUBIN
                     // requisita tambem o .MTL, caso não tenha sido declarado um .IdxMaterial
 
-                    string idxbinFormat = ".idxuhdbin";
-                    if (endianness == Endianness.BigEndian)
-                    {
-                        idxbinFormat = ".idxuhdbinbig";
-                    }
+                    string idxbinFormat = ".idxuubin";
                     string idxbinFilePath = Path.Combine(baseDirectory, baseName + idxbinFormat);
                     if (File.Exists(idxbinFilePath))
                     {
                         Console.WriteLine("Load File: " + baseName + idxbinFormat);
-                        idxuhdBinFile = new FileInfo(idxbinFilePath).OpenRead();
+                        idxuuBinFile = new FileInfo(idxbinFilePath).OpenRead();
                     }
                     else
                     {
@@ -347,10 +325,11 @@ namespace SHARED_UHD_BIN_TPL
             //carrega os objetos arquivos.
 
             EXTRACT.UhdBIN uhdBIN = null;
+            EXTRACT.MorphBIN Morph = null;
             EXTRACT.UhdTPL uhdTPL = null;
             ALL.IdxMaterial material = null;
 
-            REPACK.IdxUhdBin idxbin = null;
+            REPACK.IdxUuBin idxbin = null;
 
             ALL.IdxMtl idxMtl = null;
 
@@ -358,6 +337,7 @@ namespace SHARED_UHD_BIN_TPL
             {
                 uhdBIN = EXTRACT.UhdBinDecoder.Decoder(binFile, 0, out _, isPS4NS, endianness);
                 material = ALL.IdxMaterialParser.Parser(uhdBIN);
+                Morph = EXTRACT.MorphBinDecoder.Decoder(binFile, 0, uhdBIN.Header, endianness);
                 binFile.Close();
             }
 
@@ -379,10 +359,10 @@ namespace SHARED_UHD_BIN_TPL
                 idxmaterialFile.Close();
             }
 
-            if (idxuhdBinFile != null) //.IDXUHDBIN
+            if (idxuuBinFile != null) //.IDXUHDBIN
             {
-                idxbin = REPACK.IdxUhdBinLoad.Load(idxuhdBinFile, endianness);
-                idxuhdBinFile.Close();
+                idxbin = REPACK.IdxUuBinLoad.Load(idxuuBinFile);
+                idxuuBinFile.Close();
             }
 
             if (mtlFile != null) //.MTL
@@ -393,19 +373,19 @@ namespace SHARED_UHD_BIN_TPL
 
             // cria arquivos
 
-            if (file1Extension == ".IDXUHDBIN" || file1Extension == ".IDXUHDBINBIG") // repack sem modelo 3d
+            if (file1Extension == ".IDXUUBIN") // repack sem modelo 3d
             {
                 material = new ALL.IdxMaterial();
                 material.MaterialDic = new Dictionary<string, ALL.MaterialPart>();
 
-                REPACK.FinalBoneLine[] boneLines = idxbin.Bones;
+                REPACK.FinalBoneLine[] boneLines = REPACK.BinRepack.GetBoneLines(idxbin.Bones, endianness);
                 REPACK.Structures.FinalStructure final = REPACK.BinRepack.MakeFinalStructure(new REPACK.Structures.IntermediaryLevel2());
 
                 // cria arquivos
                 string binFilePath = Path.Combine(baseDirectory, baseName + ".BIN");
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
-                    idxbin.BonePairLines, idxbin.UseExtendedNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag,
+                    idxbin.BonePairs, idxbin.UseAlternativeNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag,
                     idxbin.EnableAdjacentBoneTag, idxbin.UseVertexColor, isPS4NS, endianness);
                 binstream.Close();
             }
@@ -413,7 +393,7 @@ namespace SHARED_UHD_BIN_TPL
             {
                 EXTRACT.OutputFiles.CreateSMD(uhdBIN, baseDirectory, baseName);
                 EXTRACT.OutputFiles.CreateOBJ(uhdBIN, baseDirectory, baseName);
-                EXTRACT.OutputFiles.CreateIdxUhdBin(uhdBIN, baseDirectory, baseName, endianness);
+                EXTRACT.OutputFiles.CreateIdxBin(uhdBIN, baseDirectory, baseName);
                 EXTRACT.OutputMaterial.CreateIdxMaterial(material, baseDirectory, baseName);
 
                 if (tplFile != null) // cria somente um arquivo .idxuhdtpl somente se a origem for .tpl
@@ -425,6 +405,8 @@ namespace SHARED_UHD_BIN_TPL
                     var _idxMtl = ALL.IdxMtlParser.Parser(material, uhdTPL, isPS4NS);
                     EXTRACT.OutputMaterial.CreateMTL(_idxMtl, baseDirectory, baseName);
                 }
+
+                EXTRACT.OutputMorph.CreateMorphFiles(uhdBIN, Morph, baseDirectory, baseName);
             }
             else if (file1Extension == ".OBJ") //repack with obj
             {
@@ -436,14 +418,14 @@ namespace SHARED_UHD_BIN_TPL
                     EXTRACT.OutputMaterial.CreateIdxMaterial(material, baseDirectory, baseName + ".Repack");
                 }
 
-                REPACK.FinalBoneLine[] boneLines = idxbin.Bones;
+                REPACK.FinalBoneLine[] boneLines = REPACK.BinRepack.GetBoneLines(idxbin.Bones, endianness);
                 REPACK.Structures.FinalStructure final = null;
 
                 {
-                    int ObjFileUseBone = idxbin.ObjFileUseBone;
-                    bool CompressVertices = idxbin.CompressVertices;
+                    int ObjFileUseBone = (int)idxbin.ObjFileUseBone;
+                    bool CompressVertices = true; // é sempre true
                     REPACK.Structures.IntermediaryStructure intermediaryStructure = null;
-                    REPACK.BinRepack.RepackOBJ(objFile, CompressVertices, ObjFileUseBone, out intermediaryStructure, idxbin.UseExtendedNormals, idxbin.UseVertexColor);
+                    REPACK.BinRepack.RepackOBJ(objFile, CompressVertices, ObjFileUseBone, out intermediaryStructure, idxbin.UseAlternativeNormals, idxbin.UseVertexColor);
                     REPACK.Structures.IntermediaryLevel2 level2 = REPACK.BinRepack.MakeIntermediaryLevel2(intermediaryStructure);
                     final = REPACK.BinRepack.MakeFinalStructure(level2);
                 }
@@ -460,7 +442,7 @@ namespace SHARED_UHD_BIN_TPL
                 string binFilePath = Path.Combine(baseDirectory, baseName + ".BIN");
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
-                    idxbin.BonePairLines, idxbin.UseExtendedNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag, 
+                    idxbin.BonePairs, idxbin.UseAlternativeNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag, 
                     idxbin.EnableAdjacentBoneTag, idxbin.UseVertexColor, isPS4NS, endianness);
                 binstream.Close();
 
@@ -486,9 +468,9 @@ namespace SHARED_UHD_BIN_TPL
                 REPACK.Structures.FinalStructure final = null;
 
                 {
-                    bool CompressVertices = idxbin.CompressVertices;
+                    bool CompressVertices = true; // é sempre true
                     REPACK.Structures.IntermediaryStructure intermediaryStructure = null;
-                    REPACK.BinRepack.RepackSMD(smdFile, CompressVertices, out intermediaryStructure, out boneLines, idxbin.UseExtendedNormals, endianness);
+                    REPACK.BinRepack.RepackSMD(smdFile, CompressVertices, out intermediaryStructure, out boneLines, idxbin.UseAlternativeNormals, endianness);
                     REPACK.Structures.IntermediaryLevel2 level2 = REPACK.BinRepack.MakeIntermediaryLevel2(intermediaryStructure);
                     final = REPACK.BinRepack.MakeFinalStructure(level2);
                 }
@@ -516,7 +498,7 @@ namespace SHARED_UHD_BIN_TPL
                 string binFilePath = Path.Combine(baseDirectory, baseName + ".BIN");
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
-                    idxbin.BonePairLines, idxbin.UseExtendedNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag,
+                    idxbin.BonePairs, idxbin.UseAlternativeNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag,
                     idxbin.EnableAdjacentBoneTag, false, isPS4NS, endianness);
                 binstream.Close();
 

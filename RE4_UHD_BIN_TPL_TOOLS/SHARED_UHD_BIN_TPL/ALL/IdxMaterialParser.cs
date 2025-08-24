@@ -16,7 +16,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
 
             for (int i = 0; i < uhdBIN.Materials.Length; i++)
             {
-                idx.MaterialDic.Add(CONSTs.UHD_MATERIAL + i.ToString("D3"), uhdBIN.Materials[i].material);
+                idx.MaterialDic.Add(CONSTs.MATERIAL + i.ToString("D3"), uhdBIN.Materials[i].material);
             }
 
             return idx;

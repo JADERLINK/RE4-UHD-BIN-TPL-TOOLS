@@ -10,6 +10,10 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 {
     public static partial class BinRepack
     {
+        private const byte FACE_TYPE_TRIANGLE_LIST = 0x05;
+        private const byte FACE_TYPE_TRIANGLE_STRIP = 0x06;
+        private const byte FACE_TYPE_QUAD_LIST = 0x08;
+
         public static IntermediaryLevel2 MakeIntermediaryLevel2(IntermediaryStructure intermediaryStructure)
         {
             IntermediaryLevel2 level2 = new IntermediaryLevel2();
@@ -34,7 +38,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                 if (count == 3) // triangulo
                 {
                     var res = (from obj in mesh.Faces
-                               where obj.Type == CONSTs.FACE_TYPE_TRIANGLE_LIST && obj.Count < short.MaxValue
+                               where obj.Type == FACE_TYPE_TRIANGLE_LIST && obj.Count < short.MaxValue
                                select obj).ToList();
 
                     if (res.Count != 0)
@@ -46,7 +50,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                     {
                         IntermediaryLevel2Face level2Face = new IntermediaryLevel2Face();
                         level2Face.Count = count;
-                        level2Face.Type = CONSTs.FACE_TYPE_TRIANGLE_LIST;
+                        level2Face.Type = FACE_TYPE_TRIANGLE_LIST;
                         level2Face.Vertexs.AddRange(intermediaryMesh.Faces[i].Vertexs);
                         mesh.Faces.Add(level2Face);
                     }
@@ -61,7 +65,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                     reordered.Add(intermediaryMesh.Faces[i].Vertexs[3]);
 
                     var res = (from obj in mesh.Faces
-                               where obj.Type == CONSTs.FACE_TYPE_QUAD_LIST && obj.Count < short.MaxValue
+                               where obj.Type == FACE_TYPE_QUAD_LIST && obj.Count < short.MaxValue
                                select obj).ToList();
 
                     if (res.Count != 0)
@@ -73,7 +77,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                     {
                         IntermediaryLevel2Face level2Face = new IntermediaryLevel2Face();
                         level2Face.Count = count;
-                        level2Face.Type = CONSTs.FACE_TYPE_QUAD_LIST;
+                        level2Face.Type = FACE_TYPE_QUAD_LIST;
                         level2Face.Vertexs.AddRange(reordered);
                         mesh.Faces.Add(level2Face);
                     }
@@ -83,7 +87,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                 {
                     IntermediaryLevel2Face level2Face = new IntermediaryLevel2Face();
                     level2Face.Count = count;
-                    level2Face.Type = CONSTs.FACE_TYPE_TRIANGLE_STRIP;
+                    level2Face.Type = FACE_TYPE_TRIANGLE_STRIP;
                     level2Face.Vertexs.AddRange(intermediaryMesh.Faces[i].Vertexs);
                     mesh.Faces.Add(level2Face);
 

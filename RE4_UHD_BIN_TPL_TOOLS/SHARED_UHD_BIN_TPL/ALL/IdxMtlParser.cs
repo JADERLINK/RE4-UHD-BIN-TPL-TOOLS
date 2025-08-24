@@ -25,22 +25,22 @@ namespace SHARED_UHD_BIN_TPL.ALL
 
                 mtl.specular_scale = mat.Value.specular_scale;
 
-                if (mat.Value.bump_map != 255)
+                if ((mat.Value.material_flag & 0x01) == 0x01) //bump_map
                 {
                     mtl.map_Bump = GetTexPathRef(uhdTPL.TplArray, mat.Value.bump_map, IsPS4NS);
                 }
 
-                if (mat.Value.opacity_map != 255)
+                if ((mat.Value.material_flag & 0x04) == 0x04) //opacity_map
                 {
                     mtl.map_d = GetTexPathRef(uhdTPL.TplArray, mat.Value.opacity_map, IsPS4NS);
                 }
 
-                if (mat.Value.generic_specular_map != 255)
+                if ((mat.Value.material_flag & 0x02) == 0x02) //generic_specular_map
                 {
                     mtl.ref_specular_map = new TexPathRef(0x07000000, mat.Value.generic_specular_map, "dds");
                 }
 
-                if (mat.Value.custom_specular_map != 255)
+                if ((mat.Value.material_flag & 0x10) == 0x10) //custom_specular_map
                 {
                     mtl.ref_specular_map = GetTexPathRef(uhdTPL.TplArray, mat.Value.custom_specular_map, IsPS4NS);
                 }
@@ -61,7 +61,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
             }
             else 
             {
-                return new TexPathRef(0x00000000, 0x00000000, "null");
+                return new TexPathRef(0x00000000, 0000, "null");
             }
         }
 

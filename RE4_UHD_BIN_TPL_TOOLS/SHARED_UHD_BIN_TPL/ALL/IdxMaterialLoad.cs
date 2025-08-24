@@ -21,7 +21,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
 
             while (!reader.EndOfStream)
             {
-                string line = reader.ReadLine().Trim().ToUpperInvariant();
+                string line = reader?.ReadLine()?.Trim()?.ToUpperInvariant();
 
                 if (line == null || line.Length == 0 || line.StartsWith("\\") || line.StartsWith("/") || line.StartsWith("#") || line.StartsWith(":"))
                 {
@@ -42,368 +42,40 @@ namespace SHARED_UHD_BIN_TPL.ALL
                         }
                     }
                 }
-
-                else if (line.StartsWith("MATERIAL_FLAG"))
+                else 
                 {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.material_flag = byte.Parse(Utils.ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
+                   _ = Utils.SetByteHex(ref line, "MATERIAL_FLAG", ref temp.material_flag) //HEX
+                    || Utils.SetByteDec(ref line, "DIFFUSE_MAP", ref temp.diffuse_map)
+                    || Utils.SetByteDec(ref line, "BUMP_MAP", ref temp.bump_map)
+                    || Utils.SetByteDec(ref line, "OPACITY_MAP", ref temp.opacity_map)
+                    || Utils.SetByteDec(ref line, "GENERIC_SPECULAR_MAP", ref temp.generic_specular_map)
+                    || Utils.SetByteDec(ref line, "INTENSITY_SPECULAR_R", ref temp.intensity_specular_r)
+                    || Utils.SetByteDec(ref line, "INTENSITY_SPECULAR_G", ref temp.intensity_specular_g)
+                    || Utils.SetByteDec(ref line, "INTENSITY_SPECULAR_B", ref temp.intensity_specular_b)
+                    || Utils.SetByteDec(ref line, "UNK_08", ref temp.unk_08)
+                    || Utils.SetByteDec(ref line, "UNK_09", ref temp.unk_09)
+                    || Utils.SetByteHex(ref line, "SPECULAR_SCALE", ref temp.specular_scale) //HEX
+                    || Utils.SetByteDec(ref line, "UNK_11", ref temp.unk_11)
+                    || Utils.SetByteDec(ref line, "CUSTOM_SPECULAR_MAP", ref temp.custom_specular_map)
+                    //------
+                    || Utils.SetByteDec(ref line, "UNK_MIN_01", ref temp.unk_min_01)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_02", ref temp.unk_min_02)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_03", ref temp.unk_min_03)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_04", ref temp.unk_min_04)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_05", ref temp.unk_min_05)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_06", ref temp.unk_min_06)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_07", ref temp.unk_min_07)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_08", ref temp.unk_min_08)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_09", ref temp.unk_min_09)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_10", ref temp.unk_min_10)
+                    || Utils.SetByteDec(ref line, "UNK_MIN_11", ref temp.unk_min_11)
+                    ;
                 }
-
-                else if (line.StartsWith("DIFFUSE_MAP"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.diffuse_map = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("BUMP_MAP"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.bump_map = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("OPACITY_MAP"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.opacity_map = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("GENERIC_SPECULAR_MAP"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.generic_specular_map = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("INTENSITY_SPECULAR_R"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.intensity_specular_r = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("INTENSITY_SPECULAR_G"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.intensity_specular_g = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("INTENSITY_SPECULAR_B"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.intensity_specular_b = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("UNK_08"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_08 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("UNK_09"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_09 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("SPECULAR_SCALE"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.specular_scale = byte.Parse(Utils.ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("UNK_11"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_11 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                else if (line.StartsWith("CUSTOM_SPECULAR_MAP"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.custom_specular_map = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                //----
-
-
-                else if (line.StartsWith("UNK_MIN_01"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_01 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_02"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_02 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_03"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_03 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_04"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_04 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_05"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_05 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_06"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_06 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_07"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_07 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_08"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_08 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_09"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_09 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_10"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_10 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-                else if (line.StartsWith("UNK_MIN_11"))
-                {
-                    var split = line.Split(':');
-                    if (split.Length >= 2)
-                    {
-                        try
-                        {
-                            temp.unk_min_11 = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                //----
-
 
             }
 
             return idx;
         }
-
 
     }
 }

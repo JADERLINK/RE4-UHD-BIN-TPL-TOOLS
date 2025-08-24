@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN_TPL.ALL;
-using SimpleEndianBinaryIO;
 
 namespace SHARED_UHD_BIN_TPL.EXTRACT
 {
@@ -77,7 +76,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             {
                 for (int l = 0; l < uhdbin.Materials[g].face_index_array.Length; l++)
                 {
-                    text.WriteLine(CONSTs.UHD_MATERIAL + g.ToString("D3"));
+                    text.WriteLine(CONSTs.MATERIAL + g.ToString("D3"));
 
                     int[] indexs = new int[3];
                     indexs[0] = uhdbin.Materials[g].face_index_array[l].i1;
@@ -170,7 +169,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
                 string v = "v " + vx.ToFloatString() + " " + vy.ToFloatString() + " " + vz.ToFloatString();
 
-                if (uhdbin.Header.ReturnsIsEnableVertexColors())
+                if (uhdbin.Header.ReturnsHasEnableVertexColorsTag() && uhdbin.Vertex_Color_Array.Length > i)
                 {
                     float r = uhdbin.Vertex_Color_Array[i].r / 255f;
                     float g = uhdbin.Vertex_Color_Array[i].g / 255f;
@@ -208,8 +207,8 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
             for (int g = 0; g < uhdbin.Materials.Length; g++)
             {
-                obj.WriteLine("g " + CONSTs.UHD_MATERIAL + g.ToString("D3"));
-                obj.WriteLine("usemtl " + CONSTs.UHD_MATERIAL + g.ToString("D3"));
+                obj.WriteLine("g " + CONSTs.MATERIAL + g.ToString("D3"));
+                obj.WriteLine("usemtl " + CONSTs.MATERIAL + g.ToString("D3"));
 
                 for (int i = 0; i < uhdbin.Materials[g].face_index_array.Length; i++)
                 {
@@ -228,79 +227,54 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             obj.Close();
         }
 
-        public static void CreateIdxUhdBin(UhdBIN uhdbin, string baseDirectory, string baseFileName, Endianness endianness) 
+        public static void CreateIdxBin(UhdBIN uhdbin, string baseDirectory, string baseFileName) 
         {
-            string idxbinFormat = ".idxuhdbin";
-            if (endianness == Endianness.BigEndian)
-            {
-                idxbinFormat = ".idxuhdbinbig";
-            }
-            var idx = new FileInfo(Path.Combine(baseDirectory, baseFileName + idxbinFormat)).CreateText();
+
+            var idx = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".idxuubin")).CreateText();
             idx.WriteLine(Shared.HeaderText());
-
-            //idx.WriteLine();
-            //idx.WriteLine();
-            //idx.WriteLine("#info:");
-            //idx.WriteLine("#version_flags:" + uhdbin.Header.version_flags.ToString("X8"));
-            //idx.WriteLine("#texture1_flags:" + uhdbin.Header.texture1_flags.ToString("X4"));
-            //idx.WriteLine("#texture2_flags:" + uhdbin.Header.texture2_flags.ToString("X4"));
-            //idx.WriteLine("#vertex_scale:" + uhdbin.Header.vertex_scale);
-            //idx.WriteLine("#TPL_count:" + uhdbin.Header.TPL_count);
-
-
             idx.WriteLine();
             idx.WriteLine();
-            idx.WriteLine("CompressVertices:True");
-            idx.WriteLine("UseExtendedNormals:" + uhdbin.Header.ReturnsIfItIsNormalsExtended());
-            idx.WriteLine("UseWeightMap:" + (uhdbin.Header.weight_count != 0));
-            idx.WriteLine("EnableAdjacentBoneTag:" + uhdbin.Header.ReturnsEnableAdjacentBoneTag());
-            idx.WriteLine("EnableBonepairTag:" + uhdbin.Header.ReturnsEnableBonepairTag());
+
+            idx.WriteLine("UseAlternativeNormals:" + uhdbin.Header.ReturnsHasNormalsAlternativeTag());
+            idx.WriteLine("UseWeightMap:" + (uhdbin.Header.weightmap_count != 0));
+            idx.WriteLine("EnableAdjacentBoneTag:" + uhdbin.Header.ReturnsHasEnableAdjacentBoneTag());
+            idx.WriteLine("EnableBonepairTag:" + uhdbin.Header.ReturnsHasEnableBonepairTag());
             idx.WriteLine("UseVertexColor:False");
+            idx.WriteLine("ObjFileUseBone:0");
 
             idx.WriteLine();
-            idx.WriteLine();
-            idx.WriteLine("## Bones:");
-            idx.WriteLine("ObjFileUseBone:0");
-            idx.WriteLine("# BonesCount in decimal value");
-            idx.WriteLine("BonesCount:" + uhdbin.Bones.Length.ToString());
-            idx.WriteLine("# BoneLines -> 16 bytes in hex");
+            idx.WriteLine();      
+            idx.WriteLine("## Bones");
             for (int i = 0; i < uhdbin.Bones.Length; i++)
             {
-                idx.WriteLine("BoneLine_" + i + ":" + BitConverter.ToString(uhdbin.Bones[i].boneLine).Replace("-", ""));
+                float p1 = uhdbin.Bones[i].PositionX / CONSTs.GLOBAL_POSITION_SCALE;
+                float p2 = uhdbin.Bones[i].PositionZ * -1 / CONSTs.GLOBAL_POSITION_SCALE;
+                float p3 = uhdbin.Bones[i].PositionY / CONSTs.GLOBAL_POSITION_SCALE;
+
+                idx.WriteLine("BoneLine:" +
+                    uhdbin.Bones[i].BoneID.ToString().PadLeft(4) + " " +
+                    (uhdbin.Bones[i].BoneParent != 0xFF ? uhdbin.Bones[i].BoneParent : -1).ToString().PadLeft(4) + "   " +
+                    p1.ToFloatString() + "  " +
+                    p2.ToFloatString() + "  " +
+                    p3.ToFloatString()
+                    );
             }
 
 
-            if (uhdbin.bonepairLines != null && uhdbin.bonepairLines.Length != 0)
+            if (uhdbin.BonePairs != null && uhdbin.BonePairs.Length != 0)
             {
                 idx.WriteLine();
                 idx.WriteLine();
-                idx.WriteLine("## bonepair:");
-                idx.WriteLine("# bonepairCount in decimal value");
-                idx.WriteLine("bonepairCount:" + uhdbin.bonepairLines.Length.ToString());
+                idx.WriteLine("## BonePairs:");
 
-                idx.WriteLine("# bonepairLines -> 8 bytes in hex");
-                for (int i = 0; i < uhdbin.bonepairLines.Length; i++)
+                for (int i = 0; i < uhdbin.BonePairs.Length; i++)
                 {
-                    idx.WriteLine("bonepairLine_" + i + ":" + BitConverter.ToString(uhdbin.bonepairLines[i]).Replace("-", ""));
-                }
-            }
-
-            if (uhdbin.adjacent_bone != null && uhdbin.adjacent_bone.Length != 0)
-            {
-                idx.WriteLine();
-                idx.WriteLine();
-                idx.WriteLine("## adjacentBone:");
-                idx.WriteLine("# adjacentBoneCount in decimal value");
-                idx.WriteLine("adjacentBoneCount:" + uhdbin.adjacent_bone.Length.ToString());
-
-                idx.WriteLine("# adjacentBoneLines -> ushort in hex");
-
-                for (int i = 0; i < uhdbin.adjacent_bone.Length; i++)
-                {
-                    if (uhdbin.adjacent_bone[i] != 0xFFFF)
-                    {
-                        idx.WriteLine("adjacentBoneLine_" + i + ":" + uhdbin.adjacent_bone[i].ToString("X4"));
-                    }
+                    idx.WriteLine("BonePair:" +
+                       uhdbin.BonePairs[i].Bone1.ToString().PadLeft(4) + " " +
+                       uhdbin.BonePairs[i].Bone2.ToString().PadLeft(4) + " " +
+                       uhdbin.BonePairs[i].Bone3.ToString().PadLeft(4) + " " +
+                       uhdbin.BonePairs[i].Bone4.ToString().PadLeft(4)
+                       );
                 }
             }
 

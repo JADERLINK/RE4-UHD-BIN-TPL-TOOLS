@@ -24,7 +24,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             }
             else
             {
-                uhdBIN.Header = GetHeader(br, endianness);
+                uhdBIN.Header = GetHeader(br);
             }
 
             //Quantidade real de vertices/normals, calculado pela montagem de faces
@@ -48,19 +48,19 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
                 uhdBIN.Vertex_Color_Array = new (byte a, byte r, byte g, byte b)[0];
             }
 
-            uhdBIN.Bones = Get_Bones(br, uhdBIN.Header.bone_offset + startOffset, uhdBIN.Header.bone_count, endianness);
+            uhdBIN.Bones = Get_Bones(br, uhdBIN.Header.bone_offset + startOffset, uhdBIN.Header.bone_count);
 
             //WeightMap
-            if (uhdBIN.Header.weight_offset != 0 && (uhdBIN.Header.weight_count > 0 || uhdBIN.Header.weight2_count > 0))
+            if (uhdBIN.Header.weightmap_offset != 0 && (uhdBIN.Header.weightmap_count > 0 || uhdBIN.Header.weightmap2_count > 0))
             {
 
-                if (uhdBIN.Header.weight2_count > 255)
+                if (uhdBIN.Header.weightmap2_count > 255)
                 {
-                    uhdBIN.WeightMaps = fmtBIN_Weight(br, uhdBIN.Header.weight_offset + startOffset, uhdBIN.Header.weight2_count);
+                    uhdBIN.WeightMaps = Get_WeightMaps(br, uhdBIN.Header.weightmap_offset + startOffset, uhdBIN.Header.weightmap2_count);
                 }
                 else
                 {
-                    uhdBIN.WeightMaps = fmtBIN_Weight(br, uhdBIN.Header.weight_offset + startOffset, uhdBIN.Header.weight_count);
+                    uhdBIN.WeightMaps = Get_WeightMaps(br, uhdBIN.Header.weightmap_offset + startOffset, uhdBIN.Header.weightmap_count);
                 }
             }
 
@@ -74,29 +74,15 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
                 uhdBIN.WeightIndex = new ushort[0];
             }
 
-            //Weight2Index
-            if (uhdBIN.Header.vertex_weight2_index_offset != 0)
+            //bonepairLines
+            if (uhdBIN.Header.bonepair_offset != 0 && uhdBIN.Header.ReturnsHasEnableBonepairTag())
             {
-                uhdBIN.Weight2Index = Get_WeightIndex(br, uhdBIN.Header.vertex_weight2_index_offset + startOffset, True_Vertex_Count);
+                uhdBIN.BonePairs = Get_Bonepairs(br, uhdBIN.Header.bonepair_offset + startOffset);
             }
             else
             {
-                uhdBIN.Weight2Index = new ushort[0];
+                uhdBIN.BonePairs = new BonePair[0];
             }
-
-            //bonepairLines
-            if (uhdBIN.Header.bonepair_offset != 0)
-            {
-                uhdBIN.bonepairLines = Get_bonepairLines(br, uhdBIN.Header.bonepair_offset + startOffset);
-            }
-
-            //adjacent_offset
-            if (uhdBIN.Header.adjacent_offset != 0)
-            {
-                uhdBIN.adjacent_bone = Get_adjacent_bone(br, uhdBIN.Header.adjacent_offset + startOffset);
-            }
-
-            //-----------
 
             br.BaseStream.Position = endOffset;
             return uhdBIN;
@@ -290,47 +276,6 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             }
         }
 
-        private static ushort[] Get_adjacent_bone(BinaryReader br, long offset) 
-        {
-            br.BaseStream.Position = offset;
-
-            byte[] big_count = new byte[4];
-            br.BaseStream.Read(big_count, 0, big_count.Length);
-            big_count = big_count.Reverse().ToArray();
-            uint count = BitConverter.ToUInt32(big_count, 0);
-
-            ushort[] adjacents = new ushort[count];
-
-            for (int i = 0; i < count; i++)
-            {
-                byte[] big_adjacent = new byte[2];
-                br.BaseStream.Read(big_adjacent, 0, big_adjacent.Length);
-                big_adjacent = big_adjacent.Reverse().ToArray();
-                ushort adjacent = BitConverter.ToUInt16(big_adjacent, 0);
-                adjacents[i] = adjacent;
-            }
-
-            return adjacents;
-        }
-
-        private static byte[][] Get_bonepairLines(BinaryReader br, long offset) 
-        {
-            br.BaseStream.Position = offset;
-
-            uint count = br.ReadUInt32();
-
-            byte[][] bonepairLines = new byte[count][];
-
-            for (int i = 0; i < count; i++)
-            {
-                byte[] line = new byte[8];
-                br.BaseStream.Read(line, 0, line.Length);
-                bonepairLines[i] = line;
-            }
-            return bonepairLines;
-        }
-
-
         private static ushort[] Get_WeightIndex(BinaryReader br, long offset, int count) 
         {
             ushort[] weightIndex = new ushort[count];
@@ -345,7 +290,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
         }
 
-        private static Bone[] Get_Bones(BinaryReader br, long offset, ushort count, Endianness endianness) 
+        private static Bone[] Get_Bones(BinaryReader br, long offset, ushort count) 
         {
             Bone[] bones = new Bone[count];
            
@@ -353,15 +298,40 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
             for (int i = 0; i < count; i++)
             {
-                Bone bone = new Bone(endianness);
-                bone.boneLine = br.ReadBytes(0x10);
+                Bone bone = new Bone();
+                bone.BoneID = br.ReadByte();
+                bone.BoneParent = br.ReadByte();
+                _ = br.ReadUInt16(); // padding
+                bone.PositionX = br.ReadSingle();
+                bone.PositionY = br.ReadSingle();
+                bone.PositionZ = br.ReadSingle();
                 bones[i] = bone;
             }
 
             return bones;
         }
 
-        private static WeightMap[] fmtBIN_Weight(BinaryReader br, long offset, ushort count) 
+        private static BonePair[] Get_Bonepairs(BinaryReader br, long offset)
+        {
+            br.BaseStream.Position = offset;
+
+            uint count = br.ReadUInt32();
+
+            BonePair[] Bonepairs = new BonePair[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                BonePair bonePair = new BonePair();
+                bonePair.Bone1 = br.ReadUInt16();
+                bonePair.Bone2 = br.ReadUInt16();
+                bonePair.Bone3 = br.ReadUInt16();
+                bonePair.Bone4 = br.ReadUInt16();
+                Bonepairs[i] = bonePair;
+            }
+            return Bonepairs;
+        }
+
+        private static WeightMap[] Get_WeightMaps(BinaryReader br, long offset, ushort count) 
         {
             br.BaseStream.Position = offset;
 
@@ -376,7 +346,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
                 weightMap.weight1 = br.ReadByte();
                 weightMap.weight2 = br.ReadByte();
                 weightMap.weight3 = br.ReadByte();
-                weightMap.unk018 = br.ReadByte();
+                weightMap.unused = br.ReadByte();
                 weightMaps[i] = weightMap;
             }
             return weightMaps;
@@ -449,7 +419,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             return positions;
         }
 
-        private static UhdBinHeader GetHeader(BinaryReader br, Endianness endianness) 
+        private static UhdBinHeader GetHeader(BinaryReader br) 
         {
             UhdBinHeader header = new UhdBinHeader();
 
@@ -466,28 +436,24 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
 
             header.vertex_texcoord_offset = br.ReadUInt32();
-            header.weight_offset = br.ReadUInt32();
-            header.weight_count = br.ReadByte();
+            header.weightmap_offset = br.ReadUInt32();
+            header.weightmap_count = br.ReadByte();
             header.bone_count = br.ReadByte();
             header.material_count = br.ReadUInt16();
             header.material_offset = br.ReadUInt32();
 
 
-            if (endianness == Endianness.BigEndian)
+            header.Bin_flags = br.ReadUInt32();
+
+            if ((header.Bin_flags & 0x80_00_00_00) != 0x80_00_00_00)
             {
-                header.texture2_flags = br.ReadUInt16();
-                header.texture1_flags = br.ReadUInt16();
+                throw new ArgumentException("Invalid BIN file!");
             }
-            else 
-            {
-                header.texture1_flags = br.ReadUInt16();
-                header.texture2_flags = br.ReadUInt16();
-            }
-           
-            header.TPL_count = br.ReadUInt32();
+
+            header.Tex_count = br.ReadUInt32();
             header.vertex_scale = br.ReadByte();
             header.unknown_x29 = br.ReadByte();
-            header.weight2_count = br.ReadUInt16(); //--same as weightcount
+            header.weightmap2_count = br.ReadUInt16(); //--same as weightcount
             header.morph_offset = br.ReadUInt32();
 
 
@@ -501,8 +467,8 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             {
                 header.bonepair_offset = br.ReadUInt32();
                 header.adjacent_offset = br.ReadUInt32();
-                header.vertex_weight_index_offset = br.ReadUInt32();  //--vertex weights id's array (2 words )* numvertex
-                header.vertex_weight2_index_offset = br.ReadUInt32(); //--vertex weights array (2 words )* numvertex
+                header.vertex_weight_index_offset = br.ReadUInt32();
+                header.vertex_weight2_index_offset = br.ReadUInt32();
             }
 
             return header;
@@ -530,10 +496,10 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             header.vertex_texcoord_offset = br.ReadUInt32();
             _ = br.ReadUInt32(); //vertex_texcoord_offset part2
 
-            header.weight_offset = br.ReadUInt32();
+            header.weightmap_offset = br.ReadUInt32();
             _ = br.ReadUInt32(); // weight_offset part2
 
-            header.weight_count = br.ReadByte();
+            header.weightmap_count = br.ReadByte();
             header.bone_count = br.ReadByte();
             header.material_count = br.ReadUInt16();
 
@@ -542,12 +508,11 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             header.material_offset = br.ReadUInt32();
             _ = br.ReadUInt32(); // material_offset part2
 
-            header.texture1_flags = br.ReadUInt16();
-            header.texture2_flags = br.ReadUInt16();
-            header.TPL_count = br.ReadUInt32();
+            header.Bin_flags = br.ReadUInt32();
+            header.Tex_count = br.ReadUInt32();
             header.vertex_scale = br.ReadByte();
             header.unknown_x29 = br.ReadByte();
-            header.weight2_count = br.ReadUInt16(); //--same as weightcount
+            header.weightmap2_count = br.ReadUInt16(); //--same as weightcount
             header.morph_offset = br.ReadUInt32();
 
             header.vertex_position_offset = br.ReadUInt32();
@@ -564,9 +529,9 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             _ = br.ReadUInt32(); // bonepair_offset part2
             header.adjacent_offset = br.ReadUInt32();
             _ = br.ReadUInt32(); // adjacent_offset part2
-            header.vertex_weight_index_offset = br.ReadUInt32();  //--vertex weights id's array (2 words )* numvertex
+            header.vertex_weight_index_offset = br.ReadUInt32();
             _ = br.ReadUInt32(); // vertex_weight_index_offset part2
-            header.vertex_weight2_index_offset = br.ReadUInt32(); //--vertex weights array (2 words )* numvertex
+            header.vertex_weight2_index_offset = br.ReadUInt32();
             _ = br.ReadUInt32(); // vertex_weight2_index_offset part2
 
             // proximos dados são lixo da versão uhd e padding

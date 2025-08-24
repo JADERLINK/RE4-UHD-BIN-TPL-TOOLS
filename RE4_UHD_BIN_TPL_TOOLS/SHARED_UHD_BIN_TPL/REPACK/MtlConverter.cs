@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN_TPL.ALL;
 using SHARED_UHD_BIN_TPL.EXTRACT;
@@ -233,10 +232,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             }
             finally 
             {
-                if (br != null)
-                {
-                    br.Close();
-                }
+                br?.Close();
             }
         
         }

@@ -12,8 +12,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)ALL\CONSTs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ALL\FloatExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ALL\MaterialPart.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\HeaderExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ALL\HeaderExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\MorphBIN.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\MorphBinDecoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\OutputMaterial.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\OutputMorph.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\BINmakeFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\BINrepackFinal.cs" />
@@ -34,7 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\UhdTplDecoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ALL\Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\FinalBoneLine.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)REPACK\IdxUhdBin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)REPACK\IdxUuBin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\MtlConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\MtlLoad.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\Structures\FinalStructure.cs" />

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN_TPL.REPACK.Structures;
+using SimpleEndianBinaryIO;
+using SHARED_UHD_BIN_TPL.ALL;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
 {
@@ -147,8 +149,32 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
         }
 
+        public static FinalBoneLine[] GetBoneLines((int ID, int parent, float x, float y, float z)[] Bones, Endianness endianness)
+        {
+            List<FinalBoneLine> bones = new List<FinalBoneLine>();
 
+            for (int i = 0; i < Bones.Length; i++)
+            {
 
+                (float X, float Y, float Z) bonePos = (0, 0, 0);
+
+                bonePos.X = Bones[i].x * CONSTs.GLOBAL_POSITION_SCALE;
+                bonePos.Y = Bones[i].z * CONSTs.GLOBAL_POSITION_SCALE;
+                bonePos.Z = Bones[i].y * -1 * CONSTs.GLOBAL_POSITION_SCALE;
+
+                if (bonePos.Z == 0f * -1f) { bonePos.Z = 0; }
+
+                byte ParentID = (byte)Bones[i].parent;
+                if (Bones[i].parent < 0)
+                {
+                    ParentID = 0xFF;
+                }
+
+                bones.Add(new FinalBoneLine((byte)(ushort)Bones[i].ID, ParentID, bonePos.X, bonePos.Y, bonePos.Z, endianness));
+            }
+
+            return bones.ToArray();
+        }
 
     }
 }

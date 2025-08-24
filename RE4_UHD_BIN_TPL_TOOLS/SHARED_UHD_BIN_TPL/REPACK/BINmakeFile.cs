@@ -12,19 +12,20 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 {
     public static class BINmakeFile
     {
-        public static void MakeFile(Stream stream, long startOffset, out long endOffset, FinalStructure finalStructure, FinalBoneLine[] boneLines, IdxMaterial material,
-            byte[][] BonePairLines, bool UseExtendedNormals, bool UseWeightMap, bool EnableBonepairTag, bool EnableAdjacentBoneTag, bool UseColors, bool IsPS4NS, Endianness endianness)
+        public static void MakeFile(Stream stream, long startOffset, out long endOffset, 
+            FinalStructure finalStructure, FinalBoneLine[] boneLines, IdxMaterial material, 
+            (ushort b1, ushort b2, ushort b3, ushort b4)[] BonePairLines, bool UseExtendedNormals, 
+            bool UseWeightMap, bool EnableBonepairTag, bool EnableAdjacentBoneTag, bool UseColors, 
+            bool IsPS4NS, Endianness endianness)
         {
             //header 0x60 bytes
 
             //bone lines
             //weightMap
             //bonepair
-            //adjacent bone
             //vertex position
             //vertex weight
             //vertex normal
-            //vertex weight2
             //vertex color
             //vertex uv
             //material
@@ -40,9 +41,9 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             byte[] bones = MakeBone(boneLines);
             bin.Write(bones, 0, bones.Length);
 
-            if (header.weight_count != 0 && UseWeightMap)
+            if (header.weightmap_count != 0 && UseWeightMap)
             {
-                bin.BaseStream.Position = header.weight_offset + startOffset;
+                bin.BaseStream.Position = header.weightmap_offset + startOffset;
                 byte[] weightMap = MakeWeightMap(finalStructure.WeightMaps, endianness);
                 bin.Write(weightMap, 0, weightMap.Length);
             }
@@ -249,7 +250,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             return b;
         }
 
-        private static byte[] MakeBonepair(byte[][] bonepairLines, Endianness endianness) 
+        private static byte[] MakeBonepair((ushort b1, ushort b2, ushort b3, ushort b4)[] bonepairLines, Endianness endianness) 
         {
             byte[] b = new byte[CalculateBytesBonePairAmount((uint)bonepairLines.Length)];
             EndianBitConverter.GetBytes((uint)bonepairLines.Length, endianness).CopyTo(b, 0);
@@ -257,7 +258,10 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             int offset = 4;
             for (int i = 0; i < bonepairLines.Length; i++)
             {
-                bonepairLines[i].CopyTo(b, offset);
+                EndianBitConverter.GetBytes((ushort)bonepairLines[i].b1, endianness).CopyTo(b, offset);
+                EndianBitConverter.GetBytes((ushort)bonepairLines[i].b2, endianness).CopyTo(b, offset + 2);
+                EndianBitConverter.GetBytes((ushort)bonepairLines[i].b3, endianness).CopyTo(b, offset + 4);
+                EndianBitConverter.GetBytes((ushort)bonepairLines[i].b4, endianness).CopyTo(b, offset + 6);
                 offset += 8;
             }
 
@@ -345,23 +349,23 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             header.vertex_colour_offset = VertexColorsOffset;
 
             header.vertex_texcoord_offset = VertexTexcoordOffset;
-            header.weight_offset = WeightMapOffset;
+            header.weightmap_offset = WeightMapOffset;
 
             if (UseWeightMap)
             {
-                header.weight_count = (byte)finalStructure.WeightMaps.Length;
-                header.weight2_count = (ushort)finalStructure.WeightMaps.Length; //--same as weightcount
+                header.weightmap_count = (byte)finalStructure.WeightMaps.Length;
+                header.weightmap2_count = (ushort)finalStructure.WeightMaps.Length; //--same as weightcount
 
                 if (finalStructure.WeightMaps.Length > ushort.MaxValue)
                 {
-                    header.weight_count = byte.MaxValue;
-                    header.weight2_count = ushort.MaxValue;
+                    header.weightmap_count = byte.MaxValue;
+                    header.weightmap2_count = ushort.MaxValue;
                 }
             }
             else 
             {
-                header.weight_count = 0;
-                header.weight2_count = 0;
+                header.weightmap_count = 0;
+                header.weightmap2_count = 0;
             }
 
 
@@ -369,22 +373,24 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             header.material_count = (ushort)finalStructure.Groups.Length;
             header.material_offset = MaterialOffset;
 
-
-            header.texture1_flags = 0x0000;
+            uint binFlags = (uint)BinFlags.AlwaysActivated;
+            ushort texture1_flags = 0x0000;
 
             if (EnableAdjacentBoneTag)
             {
                 header.unknown_x08 = 0x50;
-                header.texture1_flags = 0x0200;
+                texture1_flags = 0x0200;
+                binFlags |= (uint)BinFlags.EnableAdjacentBoneTag;
             }
 
             if (EnableBonepairTag)
             {
                 header.unknown_x08 = 0x50;
-                header.texture1_flags = 0x0300;
+                texture1_flags = 0x0300;
+                binFlags |= (uint)BinFlags.EnableBonepairTag;
             }
 
-            if (header.texture1_flags != 0x0000)
+            if (texture1_flags != 0x0000)
             {
                 header.version_flags = 0x20030818;
             }
@@ -393,22 +399,21 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                 header.version_flags = 0x20010801;
             }
 
-            //------------
-            header.texture2_flags = 0x8000;
-
             if (UseExtendedNormals)
             {
-                header.texture2_flags |= 0x2000;
+                binFlags |= (uint)BinFlags.EnableAltNormals;
             }
 
             if (UseColors)
             {
-                header.texture2_flags |= 0x4000;
+                binFlags |= (uint)BinFlags.EnableVertexColors;
             }
             //----------
 
-            header.TPL_count = 0; // afazer
-            header.vertex_scale = 0; // afazer
+            header.Bin_flags = binFlags;
+
+            header.Tex_count = 0;
+            header.vertex_scale = 0;
             header.unknown_x29 = 0;
           
             header.morph_offset = 0; // não suportado nessa versão do programa
@@ -459,28 +464,17 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
 
             EndianBitConverter.GetBytes(header.vertex_texcoord_offset, endianness).CopyTo(b, 0x10);
-            EndianBitConverter.GetBytes(header.weight_offset, endianness).CopyTo(b, 0x14);
-            b[0x18] = header.weight_count;
+            EndianBitConverter.GetBytes(header.weightmap_offset, endianness).CopyTo(b, 0x14);
+            b[0x18] = header.weightmap_count;
             b[0x19] = header.bone_count;
             EndianBitConverter.GetBytes(header.material_count, endianness).CopyTo(b, 0x1A);
             EndianBitConverter.GetBytes(header.material_offset, endianness).CopyTo(b, 0x1C);
 
-
-            if (endianness == Endianness.BigEndian)
-            {
-                EndianBitConverter.GetBytes(header.texture2_flags, endianness).CopyTo(b, 0x20);
-                EndianBitConverter.GetBytes(header.texture1_flags, endianness).CopyTo(b, 0x22);
-            }
-            else
-            {
-                EndianBitConverter.GetBytes(header.texture1_flags, endianness).CopyTo(b, 0x20);
-                EndianBitConverter.GetBytes(header.texture2_flags, endianness).CopyTo(b, 0x22);
-            }
-
-            EndianBitConverter.GetBytes(header.TPL_count, endianness).CopyTo(b, 0x24);
+            EndianBitConverter.GetBytes(header.Bin_flags, endianness).CopyTo(b, 0x20);
+            EndianBitConverter.GetBytes(header.Tex_count, endianness).CopyTo(b, 0x24);
             b[0x28] = header.vertex_scale;
             b[0x29] = header.unknown_x29;
-            EndianBitConverter.GetBytes(header.weight2_count, endianness).CopyTo(b, 0x2A);
+            EndianBitConverter.GetBytes(header.weightmap2_count, endianness).CopyTo(b, 0x2A);
             EndianBitConverter.GetBytes(header.morph_offset, endianness).CopyTo(b, 0x2C);
 
 
@@ -510,19 +504,17 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
 
             BitConverter.GetBytes(header.vertex_texcoord_offset).CopyTo(b, 0x18);
-            BitConverter.GetBytes(header.weight_offset).CopyTo(b, 0x20);
-            b[0x28] = header.weight_count;
+            BitConverter.GetBytes(header.weightmap_offset).CopyTo(b, 0x20);
+            b[0x28] = header.weightmap_count;
             b[0x29] = header.bone_count;
             BitConverter.GetBytes(header.material_count).CopyTo(b, 0x2A);
             BitConverter.GetBytes(header.material_offset).CopyTo(b, 0x30);
 
-
-            BitConverter.GetBytes(header.texture1_flags).CopyTo(b, 0x38);
-            BitConverter.GetBytes(header.texture2_flags).CopyTo(b, 0x3A);
-            BitConverter.GetBytes(header.TPL_count).CopyTo(b, 0x3C);
+            BitConverter.GetBytes(header.Bin_flags).CopyTo(b, 0x38);
+            BitConverter.GetBytes(header.Tex_count).CopyTo(b, 0x3C);
             b[0x40] = header.vertex_scale;
             b[0x41] = header.unknown_x29;
-            BitConverter.GetBytes(header.weight2_count).CopyTo(b, 0x42);
+            BitConverter.GetBytes(header.weightmap2_count).CopyTo(b, 0x42);
             BitConverter.GetBytes(header.morph_offset).CopyTo(b, 0x44);
 
 

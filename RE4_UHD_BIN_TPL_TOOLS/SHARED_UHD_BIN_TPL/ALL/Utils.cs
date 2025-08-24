@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SHARED_UHD_BIN_TPL.ALL
 {
@@ -111,26 +111,144 @@ namespace SHARED_UHD_BIN_TPL.ALL
             return (short)iv;
         }
 
-        public static ushort ParseDoubleToUshort(double value)
+        public static bool SetByteHex(ref string line, string key, ref byte varToSet)
         {
-            string sv = value.ToString("F", System.Globalization.CultureInfo.InvariantCulture).Split('.')[0];
-            int iv = 0;
-            try
+            if (line.StartsWith(key))
             {
-                iv = int.Parse(sv, System.Globalization.NumberStyles.Integer);
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = byte.Parse(Utils.ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
             }
-            catch (Exception)
+            return false;
+        }
+
+        public static bool SetByteDec(ref string line, string key, ref byte varToSet)
+        {
+            if (line.StartsWith(key))
             {
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
             }
-            if (iv > ushort.MaxValue)
+            return false;
+        }
+
+        public static bool SetUintHex(ref string line, string key, ref uint varToSet)
+        {
+            if (line.StartsWith(key))
             {
-                iv = ushort.MaxValue;
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = uint.Parse(Utils.ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
             }
-            else if (iv < ushort.MinValue)
+            return false;
+        }
+
+        public static bool SetUintDec(ref string line, string key, ref uint varToSet)
+        {
+            if (line.StartsWith(key))
             {
-                iv = ushort.MinValue;
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = uint.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
             }
-            return (ushort)iv;
+            return false;
+        }
+
+        public static bool SetUshortDec(ref string line, string key, ref ushort varToSet)
+        {
+            if (line.StartsWith(key))
+            {
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = ushort.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SetFloatDec(ref string line, string key, ref float varToSet)
+        {
+            if (line.StartsWith(key))
+            {
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = float.Parse(Utils.ReturnValidFloatValue(split[1]), NumberStyles.Float, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SetBoolean(ref string line, string key, ref bool varToSet) 
+        {
+            if (line.StartsWith(key))
+            {
+                var split = line.ToLowerInvariant().Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = bool.Parse(split[1].Trim());
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 }

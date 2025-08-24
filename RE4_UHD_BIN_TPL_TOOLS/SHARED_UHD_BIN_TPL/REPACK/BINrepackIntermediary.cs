@@ -10,9 +10,12 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 {
     public static partial class BinRepack
     {
+        private const float GLOBAL_NORMAL_FIX_EXTENDED = 545460800000f;
+        private const float GLOBAL_NORMAL_FIX_REDUCED = 16384f;
+
         private static IntermediaryStructure MakeIntermediaryStructure(StartStructure startStructure, bool UseExtendedNormals)
         {
-            float NORMAL_FIX = UseExtendedNormals ? CONSTs.GLOBAL_NORMAL_FIX_EXTENDED : CONSTs.GLOBAL_NORMAL_FIX_REDUCED;
+            float NORMAL_FIX = UseExtendedNormals ? GLOBAL_NORMAL_FIX_EXTENDED : GLOBAL_NORMAL_FIX_REDUCED;
 
             IntermediaryStructure intermediary = new IntermediaryStructure();
 
