@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SHARED_UHD_BIN_TPL.ALL
+namespace SHARED_TOOLS.ALL
 {
     /// <summary>
-    /// representa o conjunto de materiais do .bin
+    /// representa o conjunto de materiais do BIN
     /// </summary>
     public class IdxMaterial
     {

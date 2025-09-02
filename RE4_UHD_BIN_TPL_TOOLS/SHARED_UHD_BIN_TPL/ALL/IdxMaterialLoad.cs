@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Globalization;
 
-namespace SHARED_UHD_BIN_TPL.ALL
+namespace SHARED_TOOLS.ALL
 {
     public static class IdxMaterialLoad
     {

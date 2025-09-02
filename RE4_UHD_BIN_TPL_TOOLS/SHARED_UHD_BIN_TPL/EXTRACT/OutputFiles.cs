@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN_TPL.ALL;
+using SHARED_TOOLS.ALL;
 
 namespace SHARED_UHD_BIN_TPL.EXTRACT
 {
@@ -149,7 +149,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
 
             text.WriteLine("end");
-            text.Write(Shared.HeaderTextSmd());
+            text.Write(SHARED_TOOLS.Shared.HeaderTextSmd());
             text.Close();
         }
 
@@ -157,7 +157,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
         {
             var obj = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".obj")).CreateText();
 
-            obj.WriteLine(Shared.HeaderText());
+            obj.WriteLine(SHARED_TOOLS.Shared.HeaderText());
 
             obj.WriteLine("mtllib " + baseFileName + ".mtl");
 
@@ -231,7 +231,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
         {
 
             var idx = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".idxuubin")).CreateText();
-            idx.WriteLine(Shared.HeaderText());
+            idx.WriteLine(SHARED_TOOLS.Shared.HeaderText());
             idx.WriteLine();
             idx.WriteLine();
 
@@ -240,11 +240,11 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             idx.WriteLine("EnableAdjacentBoneTag:" + uhdbin.Header.ReturnsHasEnableAdjacentBoneTag());
             idx.WriteLine("EnableBonepairTag:" + uhdbin.Header.ReturnsHasEnableBonepairTag());
             idx.WriteLine("UseVertexColor:False");
-            idx.WriteLine("ObjFileUseBone:0");
+            idx.WriteLine("ObjFileUseBone:" + uhdbin.Bones.Min(x => x.BoneID).ToString());
 
             idx.WriteLine();
-            idx.WriteLine();      
-            idx.WriteLine("## Bones");
+            idx.WriteLine();
+            idx.WriteLine("## BoneLine: <boneId:number> <ParentId:number> <x:float> <-z:float> <y:float>");
             for (int i = 0; i < uhdbin.Bones.Length; i++)
             {
                 float p1 = uhdbin.Bones[i].PositionX / CONSTs.GLOBAL_POSITION_SCALE;
@@ -265,7 +265,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             {
                 idx.WriteLine();
                 idx.WriteLine();
-                idx.WriteLine("## BonePairs:");
+                idx.WriteLine("## BonePair: <bone1:number> <bone2:number> <bone3:number> <unk:number>");
 
                 for (int i = 0; i < uhdbin.BonePairs.Length; i++)
                 {

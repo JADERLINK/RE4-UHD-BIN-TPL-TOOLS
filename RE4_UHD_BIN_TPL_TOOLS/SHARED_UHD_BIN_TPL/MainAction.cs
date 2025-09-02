@@ -14,7 +14,7 @@ namespace SHARED_UHD_BIN_TPL
         {
             System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-            Console.WriteLine(Shared.HeaderText());
+            Console.WriteLine(SHARED_TOOLS.Shared.HeaderText());
 
             if (args.Length == 0)
             {
@@ -327,7 +327,7 @@ namespace SHARED_UHD_BIN_TPL
             EXTRACT.UhdBIN uhdBIN = null;
             EXTRACT.MorphBIN Morph = null;
             EXTRACT.UhdTPL uhdTPL = null;
-            ALL.IdxMaterial material = null;
+            SHARED_TOOLS.ALL.IdxMaterial material = null;
 
             REPACK.IdxUuBin idxbin = null;
 
@@ -355,11 +355,11 @@ namespace SHARED_UHD_BIN_TPL
 
             if (idxmaterialFile != null) //.IDXMATERIAL
             {
-                material = ALL.IdxMaterialLoad.Load(idxmaterialFile);
+                material = SHARED_TOOLS.ALL.IdxMaterialLoad.Load(idxmaterialFile);
                 idxmaterialFile.Close();
             }
 
-            if (idxuuBinFile != null) //.IDXUHDBIN
+            if (idxuuBinFile != null) //.IDXUUBIN
             {
                 idxbin = REPACK.IdxUuBinLoad.Load(idxuuBinFile);
                 idxuuBinFile.Close();
@@ -375,10 +375,10 @@ namespace SHARED_UHD_BIN_TPL
 
             if (file1Extension == ".IDXUUBIN") // repack sem modelo 3d
             {
-                material = new ALL.IdxMaterial();
-                material.MaterialDic = new Dictionary<string, ALL.MaterialPart>();
+                material = new SHARED_TOOLS.ALL.IdxMaterial();
+                material.MaterialDic = new Dictionary<string, SHARED_TOOLS.ALL.MaterialPart>();
 
-                REPACK.FinalBoneLine[] boneLines = REPACK.BinRepack.GetBoneLines(idxbin.Bones, endianness);
+                SHARED_TOOLS.REPACK.FinalBoneLine[] boneLines = REPACK.BinRepack.GetBoneLines(idxbin.Bones, endianness);
                 REPACK.Structures.FinalStructure final = REPACK.BinRepack.MakeFinalStructure(new REPACK.Structures.IntermediaryLevel2());
 
                 // cria arquivos
@@ -386,7 +386,7 @@ namespace SHARED_UHD_BIN_TPL
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
                     idxbin.BonePairs, idxbin.UseAlternativeNormals, idxbin.UseWeightMap, idxbin.EnableBonepairTag,
-                    idxbin.EnableAdjacentBoneTag, idxbin.UseVertexColor, isPS4NS, endianness);
+                    idxbin.EnableAdjacentBoneTag, false, isPS4NS, endianness);
                 binstream.Close();
             }
             else if (file1Extension == ".BIN") // modo extract
@@ -418,7 +418,7 @@ namespace SHARED_UHD_BIN_TPL
                     EXTRACT.OutputMaterial.CreateIdxMaterial(material, baseDirectory, baseName + ".Repack");
                 }
 
-                REPACK.FinalBoneLine[] boneLines = REPACK.BinRepack.GetBoneLines(idxbin.Bones, endianness);
+                SHARED_TOOLS.REPACK.FinalBoneLine[] boneLines = REPACK.BinRepack.GetBoneLines(idxbin.Bones, endianness);
                 REPACK.Structures.FinalStructure final = null;
 
                 {
@@ -464,7 +464,7 @@ namespace SHARED_UHD_BIN_TPL
                     EXTRACT.OutputMaterial.CreateIdxMaterial(material, baseDirectory, baseName + ".Repack");
                 }
 
-                REPACK.FinalBoneLine[] boneLines = null;
+                SHARED_TOOLS.REPACK.FinalBoneLine[] boneLines = null;
                 REPACK.Structures.FinalStructure final = null;
 
                 {

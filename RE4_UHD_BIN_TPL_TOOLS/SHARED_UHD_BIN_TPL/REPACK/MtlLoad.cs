@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using SHARED_UHD_BIN_TPL.ALL;
+using SHARED_TOOLS.ALL;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
 {
@@ -35,7 +36,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             idxmtl = new IdxMtl();
             idxmtl.MtlDic = new Dictionary<string, MtlObj>();
 
-            foreach (var mat in MtlMaterials)
+            foreach (var mat in MtlMaterials.OrderBy(a => a.Name.ToUpperInvariant()).ToArray())
             {
                 string name = mat.Name.Trim().ToUpperInvariant();
                 MtlObj mtlObj = new MtlObj();

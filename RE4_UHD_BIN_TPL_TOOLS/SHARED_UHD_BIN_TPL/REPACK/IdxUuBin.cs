@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Globalization;
-using SHARED_UHD_BIN_TPL.ALL;
+using SHARED_TOOLS.ALL;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
 {

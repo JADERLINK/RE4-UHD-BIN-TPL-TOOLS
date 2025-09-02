@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Globalization;
+using SHARED_TOOLS.ALL;
 
 namespace SHARED_UHD_BIN_TPL.ALL
 {
@@ -23,73 +23,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
     /// representa um material do .mtl
     /// </summary>
     public class MtlObj 
-    {
-        /*
-        // ambient color
-        #white
-        Ka 1.000 1.000 1.000
-        
-        // diffuse color
-        #white
-        Kd 1.000 1.000 1.000
-        
-        // specular color
-        #black (off)
-        Ks 0.000 0.000 0.000
-
-        //specular exponent
-        # ranges between 0 and 1000
-        Ns 10.000
-
-        //Materials can be transparent.
-        //A value of 1.0 for "d" (dissolve) is the default and means fully opaque, as does a value of 0.0 for "Tr". Dissolve works on all illumination models.
-        # some implementations use 'd'
-        d 0.9
-        # others use 'Tr' (inverted: Tr = 1 - d)
-        Tr 0.1
-
-        //Texture maps
-
-        # the ambient texture map
-        map_Ka lemur.tga
-   
-        //Blender base Color
-        # the diffuse texture map (most of the time, it will be the same as the
-        # ambient texture map)
-        map_Kd lemur.tga
-   
-        //Blender Specular
-        # specular color texture map
-        map_Ks lemur.tga
-   
-        //blender Roughness
-        # specular highlight component
-        map_Ns lemur_spec.tga
-   
-        //blender Alpha
-        # the alpha texture map
-        map_d lemur_alpha.tga
-   
-        # some implementations use 'map_bump' instead of 'bump' below
-        map_bump lemur_bump.tga
-   
-        # bump map (which by default uses luminance channel of the image)
-        bump lemur_bump.tga
-   
-        // não funciona no blender
-        # displacement map
-        disp lemur_disp.tga
-   
-        // não funciona no blender
-        # stencil decal texture (defaults to 'matte' channel of the image)
-        decal lemur_stencil.tga
-
-        //Blender metalic
-        refl -s 16 16 1 07000000/0001.dds
-
-        */
-
-
+    {        
         /// <summary>
         /// diffuse_texture
         /// </summary>
@@ -136,7 +70,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
         {
             this.PackID = PackID;
             this.TextureID = TextureID;
-            this.Format = FormatType == 0xE ? "dds" : "tga";
+            Format = FormatType == 0xE ? "dds" : "tga";
             Format = IsPS4NS ? "dds" : Format;
         }
 
@@ -144,7 +78,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
         {
             this.PackID = PackID;
             this.TextureID = TextureID;
-            this.Format = ImageFormat.ToLowerInvariant();
+            Format = ImageFormat?.ToLowerInvariant() ?? "null";
         }
 
         public TexPathRef(string texturePath) 
@@ -155,7 +89,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
                 texturePath = "";
             }
 
-            texturePath = texturePath.Replace("\\", "/").ToUpperInvariant();
+            texturePath = texturePath.Replace("\\\\", "/").Replace("\\", "/");
             var split = texturePath.Split('/').Where(s => s.Length != 0).ToArray();
 
             try
@@ -271,6 +205,5 @@ namespace SHARED_UHD_BIN_TPL.ALL
             }
         }
     }
-
 
 }

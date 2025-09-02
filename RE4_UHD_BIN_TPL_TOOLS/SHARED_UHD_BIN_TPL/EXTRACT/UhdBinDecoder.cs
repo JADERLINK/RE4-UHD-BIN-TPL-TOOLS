@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN_TPL.ALL;
+using SHARED_TOOLS.ALL;
 using SimpleEndianBinaryIO;
 
 namespace SHARED_UHD_BIN_TPL.EXTRACT
@@ -361,10 +361,11 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
             for (int i = 0; i < count; i++)
             {
-                byte a = br.ReadByte();
-                byte r = br.ReadByte();
-                byte g = br.ReadByte();
-                byte b = br.ReadByte();
+                uint color = br.ReadUInt32();
+                byte a = (byte)(color & 0xFF);
+                byte r = (byte)((color >> 8) & 0xFF);
+                byte g = (byte)((color >> 16) & 0xFF);
+                byte b = (byte)((color >> 24) & 0xFF);
                 colors[i] = (a, r, g, b);
             }
             return colors;

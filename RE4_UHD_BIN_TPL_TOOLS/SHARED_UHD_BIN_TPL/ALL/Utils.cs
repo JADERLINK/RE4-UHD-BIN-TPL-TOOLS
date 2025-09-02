@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace SHARED_UHD_BIN_TPL.ALL
+namespace SHARED_TOOLS.ALL
 {
     public static class Utils
     {
@@ -64,7 +64,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
 
         public static string ReturnValidFloatValue(string cont)
         {
-            bool Dot = false;
+            bool dot = false;
             bool negative = false;
 
             string res = "";
@@ -76,10 +76,10 @@ namespace SHARED_UHD_BIN_TPL.ALL
                     negative = true;
                 }
 
-                if (Dot == false && c == '.')
+                if (dot == false && c == '.')
                 {
                     res += c;
-                    Dot = true;
+                    dot = true;
                 }
                 if (char.IsDigit(c))
                 {
@@ -91,11 +91,11 @@ namespace SHARED_UHD_BIN_TPL.ALL
 
         public static short ParseFloatToShort(float value)
         {
-            string sv = value.ToString("F", System.Globalization.CultureInfo.InvariantCulture).Split('.')[0];
+            string sv = value.ToString("F", CultureInfo.InvariantCulture).Split('.')[0];
             int iv = 0;
             try
             {
-                iv = int.Parse(sv, System.Globalization.NumberStyles.Integer);
+                iv = int.Parse(sv, NumberStyles.Integer);
             }
             catch (Exception)
             {

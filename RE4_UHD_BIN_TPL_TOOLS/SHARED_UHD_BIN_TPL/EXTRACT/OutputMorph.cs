@@ -1,4 +1,5 @@
-﻿using SHARED_UHD_BIN_TPL.ALL;
+﻿using SHARED_TOOLS.ALL;
+using SHARED_UHD_BIN_TPL.ALL;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,7 +33,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
         {
             var obj = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".obj")).CreateText();
 
-            obj.WriteLine(Shared.HeaderText());
+            obj.WriteLine(SHARED_TOOLS.Shared.HeaderText());
 
             obj.WriteLine("mtllib " + mtlName + ".mtl");
 
@@ -284,7 +285,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
             text.WriteLine("end");
 
-            text.Write(Shared.HeaderTextSmd());
+            text.Write(SHARED_TOOLS.Shared.HeaderTextSmd());
             text.Close();
         }
 

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using SHARED_UHD_BIN_TPL.REPACK.Structures;
-using SHARED_UHD_BIN_TPL.ALL;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
 {
@@ -56,7 +54,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                     }
 
                 }
-                else if (count == 4) //vai virar guad
+                else if (count == 4) //vai virar quad
                 {
                     List<IntermediaryVertex> reordered = new List<IntermediaryVertex>();
                     reordered.Add(intermediaryMesh.Faces[i].Vertexs[2]);

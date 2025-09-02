@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SHARED_UHD_BIN_TPL
+namespace SHARED_TOOLS
 {
     public static class Shared
     {
-        private const string VERSION = "V.1.4.0 (2025-08-24)";
+        private const string VERSION = "V.1.4.1 (2025-09-02)";
 
         public static string HeaderText()
         {

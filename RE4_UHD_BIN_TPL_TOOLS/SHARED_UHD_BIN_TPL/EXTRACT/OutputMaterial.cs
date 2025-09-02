@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using SHARED_UHD_BIN_TPL.ALL;
+using SHARED_TOOLS.ALL;
 
 namespace SHARED_UHD_BIN_TPL.EXTRACT
 {
@@ -15,7 +15,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             var inv = System.Globalization.CultureInfo.InvariantCulture;
 
             TextWriter text = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".idxuhdtpl")).CreateText();
-            text.WriteLine(Shared.HeaderText());
+            text.WriteLine(SHARED_TOOLS.Shared.HeaderText());
             text.WriteLine();
             text.WriteLine();
 
@@ -102,9 +102,8 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
         public static void CreateIdxMaterial(IdxMaterial idxmaterial, string baseDirectory, string baseFileName)
         {
-
             TextWriter text = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".idxmaterial")).CreateText();
-            text.WriteLine(Shared.HeaderText());
+            text.WriteLine(SHARED_TOOLS.Shared.HeaderText());
             text.WriteLine();
             text.WriteLine();
 
@@ -184,7 +183,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             var inv = System.Globalization.CultureInfo.InvariantCulture;
 
             TextWriter text = new FileInfo(Path.Combine(baseDirectory, baseFileName + ".mtl")).CreateText();
-            text.WriteLine(Shared.HeaderText());
+            text.WriteLine(SHARED_TOOLS.Shared.HeaderText());
             text.WriteLine();
             text.WriteLine();
 

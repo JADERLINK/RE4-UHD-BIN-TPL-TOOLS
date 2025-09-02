@@ -4,11 +4,18 @@ Extract and repack BIN/TPL files for RE4 OG UHD/PS4/NS/X360/PS3;
 **Translate from Portuguese Brazil**
 
 Programa destinado a extrair e reempacotar os arquivos BIN/TPL do RE4 OG UHD/PS4/NS/X360/PS3;
-<br>Nota1: Não suportado o campo de Morph (não foi implementada essa funcionalidade no programa);
+<br>Nota1: Não suportado o campo de Morph <del>(não foi implementada essa funcionalidade no programa)</del>;
 <br>Nota2: Agora Morph são extraídos, porém, ainda não tem como fazer o repack deles.
 <br>Nota3: A versão de UHD é um executável, a versão de PS4/NS é outro executável, e a versão de X360/PS3 também é outro executável;
 
 ## Updates
+
+**Update: V.1.4.1**
+<br> Corrigido bug dos materiais não serem ordenados em ordem alfabética;
+<br> Agora os materiais são ordenados em ordem alfabética, recomento que enumere os materiais, os materiais com texturas com transparência devem ficar no final;
+<br> Corrido bug na cor por vértice na tool de x360ps3, na qual estava na ordem errada;
+<br> Agora, a cor por vértice está correta em todas as versões. Nota: A cor por vértice só pode ser usada no arquivo OBJ e a flag "UseVertexColor" deve ser definida como 'true';
+<br> E foram feitas melhorias no código;
 
 **Update: V.1.4.0**
 <br>Foi trocado os arquivos 'idxuhdbin' e 'idxuhdbinbig' para 'idxuubin' no qual seu conteúdo agora é todo em decimal, e mais fácil de editar.
@@ -110,7 +117,7 @@ Programa responsável por extrair e recompilar os arquivos '.bin'/'.tpl';
     <br> Cria o arquivo '.mtl';
 * **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.idxuhdtpl" "file.idxmaterial"**
     <br> Também cria o arquivo '.mtl';
-* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.IDXUUBIN"**
+* **JADERLINK_RE4_\*\*_BIN_TPL_TOOL.exe "file.idxuubin"**
     <br>Faz repack do arquivo BIN, sem modelo 3D (o modelo 3D fica invisível no jogo) 
 
 ## Explicação para que serve cada arquivo:
@@ -144,7 +151,7 @@ Pode ser usado para editar os materiais do bin sem usar o arquivo .mtl
 
 ## Ordem dos bones no arquivo .SMD
 
-Para arrumar a ordem dos ids dos bones nos arquivos smd, depois de serem exportados do blender ou outro software de edição de modelos,<del> usar o programa: GC_GC_Skeleton_Changer.exe (procure o programa no fórum do re4, remod)</del>
+Para arrumar a ordem dos ids dos bones nos arquivos smd, depois de serem exportados do blender ou outro software de edição de modelos. <del>Usar o programa: GC_GC_Skeleton_Changer.exe (procure o programa no fórum do re4, remod)</del>
 <br>Veja: [SMD_BONE_TOOLS](https://github.com/JADERLINK/SMD_BONE_TOOLS)
 
 ## Carregando as texturas no arquivo .SMD
@@ -155,9 +162,9 @@ No blender para carregar o modelo .SMD com as texturas, em um novo "projeto", im
 ## Código de terceiro:
 
 [ObjLoader by chrisjansson](https://github.com/chrisjansson/ObjLoader):
-Encontra-se em "RE4_UHD_BIN_TOOL\\CjClutter.ObjLoader.Loader", código modificado, as modificações podem ser vistas aqui: [link](https://github.com/JADERLINK/ObjLoader).
+Encontra-se em "RE4_UHD_BIN_TPL_TOOLS/CjClutter.ObjLoader.Loader", código modificado, as modificações podem ser vistas aqui: [link](https://github.com/JADERLINK/ObjLoader).
 
 **At.te: JADERLINK**
 <br>Thanks to \"mariokart64n\" and \"CodeMan02Fr\"
 <br>Material information by \"Albert\"
-<br>2025-08-24
+<br>2025-09-02

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using SHARED_UHD_BIN_TPL.REPACK.Structures;
-using SHARED_UHD_BIN_TPL.ALL;
 using SHARED_UHD_BIN_TPL.EXTRACT;
+using SHARED_TOOLS.ALL;
+using SHARED_TOOLS.REPACK;
 using SimpleEndianBinaryIO;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
@@ -44,7 +45,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             if (header.weightmap_count != 0 && UseWeightMap)
             {
                 bin.BaseStream.Position = header.weightmap_offset + startOffset;
-                byte[] weightMap = MakeWeightMap(finalStructure.WeightMaps, endianness);
+                byte[] weightMap = MakeWeightMap(finalStructure.WeightMaps);
                 bin.Write(weightMap, 0, weightMap.Length);
             }
 
@@ -75,7 +76,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             if (UseColors)
             {
                 bin.BaseStream.Position = header.vertex_colour_offset + startOffset;
-                byte[] colors = MakeVertexColors(finalStructure.Vertex_Color_Array);
+                byte[] colors = MakeVertexColors(finalStructure.Vertex_Color_Array, endianness);
                 bin.Write(colors, 0, colors.Length);
             }
 
@@ -152,7 +153,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
         }
 
 
-        private static byte[] MakeVertexColors((byte a, byte r, byte g, byte b)[] Vertex_Color_Array) 
+        private static byte[] MakeVertexColors((byte a, byte r, byte g, byte b)[] Vertex_Color_Array, Endianness endianness) 
         {
             
             byte[] b = new byte[CalculateBytesVertexColor((uint)Vertex_Color_Array.Length)];
@@ -160,10 +161,20 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             int tempOffset = 0;
             for (int i = 0; i < Vertex_Color_Array.Length; i++)
             {
-                b[tempOffset] = Vertex_Color_Array[i].a;
-                b[tempOffset+1] = Vertex_Color_Array[i].r;
-                b[tempOffset+2] = Vertex_Color_Array[i].g;
-                b[tempOffset+3] = Vertex_Color_Array[i].b;
+                if (endianness == Endianness.BigEndian)
+                {
+                    b[tempOffset] = Vertex_Color_Array[i].b;
+                    b[tempOffset + 1] = Vertex_Color_Array[i].g;
+                    b[tempOffset + 2] = Vertex_Color_Array[i].r;
+                    b[tempOffset + 3] = Vertex_Color_Array[i].a;
+                }
+                else
+                {
+                    b[tempOffset] = Vertex_Color_Array[i].a;
+                    b[tempOffset + 1] = Vertex_Color_Array[i].r;
+                    b[tempOffset + 2] = Vertex_Color_Array[i].g;
+                    b[tempOffset + 3] = Vertex_Color_Array[i].b;
+                }
 
                 tempOffset += 4;
             }
@@ -216,7 +227,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             return b;
         }
 
-        private static byte[] MakeWeightMap(FinalWeightMap[] WeightMaps, Endianness endianness) 
+        private static byte[] MakeWeightMap(FinalWeightMap[] WeightMaps) 
         {
             byte[] b = new byte[CalculateBytesVertexWeightMap((uint)WeightMaps.Length)];
 
@@ -387,6 +398,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             {
                 header.unknown_x08 = 0x50;
                 texture1_flags = 0x0300;
+                binFlags |= (uint)BinFlags.EnableAdjacentBoneTag;
                 binFlags |= (uint)BinFlags.EnableBonepairTag;
             }
 

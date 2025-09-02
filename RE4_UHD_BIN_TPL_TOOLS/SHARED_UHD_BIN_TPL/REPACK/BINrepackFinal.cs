@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using SHARED_UHD_BIN_TPL.REPACK.Structures;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
@@ -23,7 +22,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
             List<FinalMaterialGroup> Groups = new List<FinalMaterialGroup>();
 
-            foreach (var item in intermediaryStructure.Groups)
+            foreach (var item in intermediaryStructure.Groups.OrderBy(a => a.Key).ToArray())
             {
                 FinalMaterialGroup group = new FinalMaterialGroup();
                 group.materialName = item.Key;
@@ -55,23 +54,13 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
                         ushort weightMapIndex = (ushort)WeightMaps.IndexOf(weightMap);
                         WeightIndex.Add(weightMapIndex);
-
                     }
 
-
                 }
-
-
 
                 Groups.Add(group);
             }
             
-
-
-
-
-
-
             final.Groups = Groups.ToArray();
             final.WeightIndex = WeightIndex.ToArray();
             final.WeightMaps = WeightMaps.ToArray();
@@ -81,8 +70,6 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             final.Vertex_UV_Array = Vertex_UV_Array.ToArray();
             return final;
         }
-
-
 
     }
 }

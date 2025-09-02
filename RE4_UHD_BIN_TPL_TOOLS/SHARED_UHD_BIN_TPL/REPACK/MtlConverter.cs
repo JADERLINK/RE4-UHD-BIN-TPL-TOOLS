@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using SHARED_UHD_BIN_TPL.ALL;
 using SHARED_UHD_BIN_TPL.EXTRACT;
+using SHARED_TOOLS.ALL;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
 {
@@ -37,7 +38,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             }
             //-----
 
-            foreach (var item in idxmtl.MtlDic)
+            foreach (var item in idxmtl.MtlDic.OrderBy(a => a.Key).ToArray())
             {
                 MaterialPart mat = new MaterialPart();
                 mat.custom_specular_map = 255;
@@ -73,7 +74,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                     mat.intensity_specular_r = item.Value.Ks.GetB();
                     mat.specular_scale = item.Value.specular_scale;
 
-                    if (item.Value.ref_specular_map.PackID == 0x07000000)
+                    if (item.Value.ref_specular_map.PackID == 0x07000000 || item.Value.ref_specular_map.PackID == 0x00000000)
                     {
                         mat.generic_specular_map = (byte)item.Value.ref_specular_map.TextureID;
                     }
