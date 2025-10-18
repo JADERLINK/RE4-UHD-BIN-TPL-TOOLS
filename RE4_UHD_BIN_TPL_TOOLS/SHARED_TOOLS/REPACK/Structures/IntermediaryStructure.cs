@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SHARED_UHD_BIN_TPL.REPACK.Structures
+namespace SHARED_TOOLS.REPACK.Structures
 {
     public class IntermediaryStructure
     {
@@ -55,28 +55,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK.Structures
         public byte ColorG { get; set; }
         public byte ColorB { get; set; }
         public byte ColorA { get; set; }
-        public byte Links { get; set; }
-        public byte BoneID1 { get; set; }
-        public byte Weight1 { get; set; }
-
-        public byte BoneID2 { get; set; }
-        public byte Weight2 { get; set; }
-
-        public byte BoneID3 { get; set; }
-        public byte Weight3 { get; set; }
-
-        public FinalWeightMap GetFinalWeightMap()
-        {
-            FinalWeightMap weightMap = new FinalWeightMap();
-            weightMap.Links = Links;
-            weightMap.BoneID1 = BoneID1;
-            weightMap.BoneID2 = BoneID2;
-            weightMap.BoneID3 = BoneID3;
-            weightMap.Weight1 = Weight1;
-            weightMap.Weight2 = Weight2;
-            weightMap.Weight3 = Weight3;
-            return weightMap;
-        }
+        public FinalWeightMap WeightMap { get; set; }
     }
 
 

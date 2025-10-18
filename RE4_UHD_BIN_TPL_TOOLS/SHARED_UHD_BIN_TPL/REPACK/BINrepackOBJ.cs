@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using SHARED_UHD_BIN_TPL.REPACK.Structures;
+using SHARED_TOOLS.REPACK.Structures;
 using SimpleEndianBinaryIO;
 using SHARED_TOOLS.ALL;
 using SHARED_TOOLS.REPACK;
@@ -12,7 +12,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 {
     public static partial class BinRepack
     {
-        public static void RepackOBJ(Stream objFile, bool CompressVertices, int ObjFileUseBone, out IntermediaryStructure intermediaryStructure, bool UseExtendedNormals, bool UseColors)
+        public static void RepackOBJ(Stream objFile, bool CompressVertices, byte ObjFileUseBone, out IntermediaryStructure intermediaryStructure, bool UseExtendedNormals, bool UseColors)
         {
             // load .obj file
             var objLoaderFactory = new ObjLoader.Loader.Loaders.ObjLoaderFactory();
@@ -38,7 +38,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
             StartStructure startStructure = new StartStructure();
 
-            StartWeightMap weightMap = new StartWeightMap(1, ObjFileUseBone, 1, 0, 0, 0, 0);
+            FinalWeightMap weightMap = new FinalWeightMap(1, ObjFileUseBone, 100, 0, 0, 0, 0);
 
             for (int iG = 0; iG < arqObj.Groups.Count; iG++)
             {
@@ -48,7 +48,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
                 for (int iF = 0; iF < arqObj.Groups[iG].Faces.Count; iF++)
                 {
-                    List<StartVertex> face = new List<StartVertex>();
+                    List<StartVertex> verticeListInObjFace = new List<StartVertex>();
 
                     for (int iI = 0; iI < arqObj.Groups[iG].Faces[iF].Count; iI++)
                     {
@@ -56,7 +56,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
                         if (arqObj.Groups[iG].Faces[iF][iI].VertexIndex <= 0 || arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1 >= arqObj.Vertices.Count)
                         {
-                            throw new ArgumentException("Vertex Position Index is invalid! Value: " + arqObj.Groups[iG].Faces[iF][iI].VertexIndex);
+                            throw new ApplicationException("Vertex Position Index is invalid! Value: " + arqObj.Groups[iG].Faces[iF][iI].VertexIndex);
                         }
 
                         Vector3 position = new Vector3(
@@ -101,27 +101,34 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                             vertice.Normal = new Vector3(nx, ny, nz);
                         }
 
-                        Vector4 color = new Vector4(1, 1, 1, 1);
+                        VColor color = new VColor(255, 255, 255, 255);
                         if (UseColors)
                         {
-                           color = new Vector4(
-                           arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].R,
-                           arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].G,
-                           arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].B,
-                           arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].A
+                           color = new VColor(
+                           (byte)(arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].R * 255),
+                           (byte)(arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].G * 255),
+                           (byte)(arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].B * 255),
+                           (byte)(arqObj.Vertices[arqObj.Groups[iG].Faces[iF][iI].VertexIndex - 1].A * 255)
                            );
                         }
 
                         vertice.Color = color;
                         vertice.WeightMap = weightMap;
 
-                        face.Add(vertice);
+                        verticeListInObjFace.Add(vertice);
 
                     }
 
-                    if (face.Count != 0)
+                    if (verticeListInObjFace.Count >= 3)
                     {
-                        facesList.Add(face);
+                        for (int i = 2; i < verticeListInObjFace.Count; i++)
+                        {
+                            List<StartVertex> face = new List<StartVertex>();
+                            face.Add(verticeListInObjFace[0]);
+                            face.Add(verticeListInObjFace[i - 1]);
+                            face.Add(verticeListInObjFace[i]);
+                            facesList.Add(face);
+                        }
                     }
 
                 }

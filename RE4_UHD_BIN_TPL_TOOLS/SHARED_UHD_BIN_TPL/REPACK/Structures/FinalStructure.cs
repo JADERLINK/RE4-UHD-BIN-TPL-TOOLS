@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SHARED_TOOLS.REPACK.Structures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,61 +31,6 @@ namespace SHARED_UHD_BIN_TPL.REPACK.Structures
     {
         public ushort Type;
         public ushort Count;
-    }
-
-
-    public class FinalWeightMap : IEquatable<FinalWeightMap>
-    {
-        public byte Links { get; set; }
-
-        public byte BoneID1 { get; set; }
-        public byte Weight1 { get; set; }
-
-        public byte BoneID2 { get; set; }
-        public byte Weight2 { get; set; }
-
-        public byte BoneID3 { get; set; }
-        public byte Weight3 { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            return obj is FinalWeightMap map
-                && map.Links == Links
-                && map.BoneID1 == BoneID1
-                && map.BoneID2 == BoneID2
-                && map.BoneID3 == BoneID3
-                && map.Weight1 == Weight1
-                && map.Weight2 == Weight2
-                && map.Weight3 == Weight3;
-        }
-
-        public bool Equals(FinalWeightMap other)
-        {
-            return other.Links == Links
-                && other.BoneID1 == BoneID1
-                && other.BoneID2 == BoneID2
-                && other.BoneID3 == BoneID3
-                && other.Weight1 == Weight1
-                && other.Weight2 == Weight2
-                && other.Weight3 == Weight3;
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 23 + Links.GetHashCode();
-                hash = hash * 23 + BoneID1.GetHashCode();
-                hash = hash * 23 + Weight1.GetHashCode();
-                hash = hash * 23 + BoneID2.GetHashCode();
-                hash = hash * 23 + Weight2.GetHashCode();
-                hash = hash * 23 + BoneID3.GetHashCode();
-                hash = hash * 23 + Weight3.GetHashCode();
-                return hash;
-            }
-        }
-
     }
 
 }

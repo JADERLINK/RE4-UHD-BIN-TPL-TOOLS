@@ -54,7 +54,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                     var split = NormalizeLine(line).Split(':');
                     if (split.Length >= 2)
                     {
-                        var parts = split[1].Trim().Split(' ');
+                        var parts = split[1].Split(' ').Where(a => a.Length != 0).ToArray();
                         if (parts.Length >= 2)
                         {
                             int id;
@@ -87,7 +87,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                     var split = NormalizeLine(line).Split(':');
                     if (split.Length >= 2)
                     {
-                        var parts = split[1].Trim().Split(' ');
+                        var parts = split[1].Split(' ').Where(a => a.Length != 0).ToArray();
                         if (parts.Length >= 4)
                         {
                             ushort b1;

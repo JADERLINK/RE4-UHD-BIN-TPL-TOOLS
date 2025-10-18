@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using SHARED_UHD_BIN_TPL.REPACK.Structures;
+using SHARED_TOOLS.REPACK.Structures;
 using SimpleEndianBinaryIO;
 using SHARED_TOOLS.ALL;
 using SHARED_TOOLS.REPACK;
@@ -39,7 +40,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
             StartStructure startStructure = new StartStructure();
 
-            Vector4 color = new Vector4(1, 1, 1, 1);
+            VColor color = new VColor(255, 255, 255, 255);
 
             for (int i = 0; i < smd.Triangles.Count; i++)
             {
@@ -85,16 +86,16 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
                     if (smd.Triangles[i].Vertexs[t].Links.Count == 0)
                     {
-                        StartWeightMap weightMap = new StartWeightMap();
+                        PrepareWeightMap weightMap = new PrepareWeightMap();
                         weightMap.Links = 1;
                         weightMap.BoneID1 = smd.Triangles[i].Vertexs[t].ParentBone;
                         weightMap.Weight1 = 1f;
 
-                        vertice.WeightMap = weightMap;
+                        vertice.WeightMap = weightMap.GetFinalWeightMap();
                     }
                     else
                     {
-                        StartWeightMap weightMap = new StartWeightMap();
+                        PrepareWeightMap weightMap = new PrepareWeightMap();
 
                         var links = (from link in smd.Triangles[i].Vertexs[t].Links
                                      orderby link.Weight
@@ -154,7 +155,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                             }
                         }
 
-                        vertice.WeightMap = weightMap;
+                        vertice.WeightMap = weightMap.GetFinalWeightMap();
                     }
 
 

@@ -190,8 +190,8 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             foreach (var item in idxmtl.MtlDic)
             {
                 text.WriteLine("newmtl " + item.Key);
-                text.WriteLine("Ka 1.000 1.000 1.000");
-                text.WriteLine("Kd 1.000 1.000 1.000");
+                text.WriteLine("Ka 1.0 1.0 1.0");
+                text.WriteLine("Kd 1.0 1.0 1.0");
                 text.WriteLine("Ks " + item.Value.Ks);
                 text.WriteLine("Ns 0");
                 text.WriteLine("d 1");
@@ -212,11 +212,11 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
                 {
                     byte x = (byte)((item.Value.specular_scale & 0xF0) >> 4);
                     byte y = (byte)(item.Value.specular_scale & 0x0F);
-                    float fx = x + 1f;
-                    float fy = y + 1f;
+                    int fx = x + 1;
+                    int fy = y + 1;
 
-                    text.WriteLine("map_Ns -s " + fx.ToString("f6", inv)
-                        + " " + fy.ToString("f6", inv) + " 1 " + item.Value.ref_specular_map); //map_ks
+                    text.WriteLine("map_Ns -s " + fx.ToString("D", inv)
+                        + " " + fy.ToString("D", inv) + " 1 " + item.Value.ref_specular_map); //map_ks
                 }
 
                 text.WriteLine();

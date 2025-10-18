@@ -58,5 +58,6 @@
   <Import Project="..\CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.projitems" Label="Shared" />
   <Import Project="..\SMD_READER_LIB\SMD_READER_LIB.projitems" Label="Shared" />
   <Import Project="..\SimpleEndianBinaryIO\SimpleEndianBinaryIO.projitems" Label="Shared" />
+  <Import Project="..\SHARED_TOOLS\SHARED_TOOLS.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

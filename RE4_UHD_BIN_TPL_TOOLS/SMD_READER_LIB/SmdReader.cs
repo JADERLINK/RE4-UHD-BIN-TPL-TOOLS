@@ -1,7 +1,7 @@
 ﻿/*
 MIT License
 
-Copyright (c) 2023 JADERLINK
+Copyright (c) 2023-2025 JADERLINK
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,18 +23,15 @@ SOFTWARE.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace SMD_READER_LIB
 {
     // Codigo escrito por JADERLINK
     //https://github.com/JADERLINK
-    // referencia do formato SMD
+    // Referencia do formato SMD
     //https://developer.valvesoftware.com/wiki/SMD
-    // versão do codigo: 1.1.1
+    // Versão do codigo: 1.1.2
 
     public static class SmdReader
     {
@@ -88,7 +85,7 @@ namespace SMD_READER_LIB
                     }
                     else
                     {
-                        throw new ArgumentException(versionError);
+                        throw new SmdException(versionError);
                     }
                 }
                 else 
@@ -120,7 +117,7 @@ namespace SMD_READER_LIB
                         }
                         else
                         {
-                            throw new ArgumentException(commandError);
+                            throw new SmdException(commandError);
                         }
                     }
 
@@ -267,7 +264,7 @@ namespace SMD_READER_LIB
 
                     else
                     {
-                        throw new ArgumentException(commandError);
+                        throw new SmdException(commandError);
                     }
 
                 }
@@ -276,11 +273,11 @@ namespace SMD_READER_LIB
 
             if (status == Status.RequiresVersion1)
             {
-                throw new ArgumentException(versionError);
+                throw new SmdException(versionError);
             }
             else if (status == Status.Nodes || status == Status.Skeleton || status == Status.Triangles || status == Status.VertexAnimation)
             {
-                throw new ArgumentException(endError);
+                throw new SmdException(endError);
             }
 
             return smd;
@@ -559,6 +556,9 @@ namespace SMD_READER_LIB
 
     public class Node 
     {
+        //nodes
+        //<int|ID> "<string|Bone Name>" <int|Parent ID>
+
         public int ID { get; private set; }
         public string BoneName { get; private set; }
         public int ParentID { get; private set; }
@@ -573,6 +573,9 @@ namespace SMD_READER_LIB
 
     public class Time 
     {
+        //skeleton
+        //time<int>
+
         public int ID { get; private set; }
         public IList<Skeleton> Skeletons { get; set; } 
 
@@ -584,6 +587,8 @@ namespace SMD_READER_LIB
 
     public class Skeleton 
     {
+        //<int|bone ID> <float|PosX PosY PosZ> <float|RotX RotY RotZ>
+
         public int BoneID { get; private set; }
         public float PosX { get; set; }
         public float PosY { get; set; }
@@ -640,6 +645,9 @@ namespace SMD_READER_LIB
 
     public class VertexAnimationTime 
     {
+        //vertexanimation
+        //time <int>
+
         public int ID { get; private set; }
         public IList<VertexAnimationLine> Vextexs { get; set; }
 
@@ -652,6 +660,7 @@ namespace SMD_READER_LIB
     public class VertexAnimationLine 
     {
         //<int|ID> <float|PosX PosY PosZ> <normal|NormX NormY NormZ>
+
         public int VertexID { get; set; }
 
         public float PosX { get; set; }
@@ -663,4 +672,8 @@ namespace SMD_READER_LIB
         public float NormZ { get; set; }
     }
 
+    public class SmdException : ApplicationException 
+    {
+        public SmdException(string message) : base(message) { }
+    }
 }

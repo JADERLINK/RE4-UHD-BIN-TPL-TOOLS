@@ -32,15 +32,16 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             {
                 uhdTpl = new UhdTPL();
             }
-            else 
+            else
             {
-                tplInfos = uhdTpl.TplArray.ToList();
+                tplInfos.AddRange(uhdTpl.TplArray);
             }
             //-----
 
-            foreach (var item in idxmtl.MtlDic.OrderBy(a => a.Key).ToArray())
+            foreach (var item in idxmtl.MtlDic.OrderBy(a => a.Key).OrderBy(a => a.Value.map_Kd.TextureID).ToArray())
             {
                 MaterialPart mat = new MaterialPart();
+                mat.material_flag = 0;
                 mat.custom_specular_map = 255;
                 mat.generic_specular_map = 255;
                 mat.opacity_map = 255;
@@ -69,9 +70,9 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                 {
                     mat.material_flag |= 0x02; //generic specular flag
 
-                    mat.intensity_specular_b = item.Value.Ks.GetR();
+                    mat.intensity_specular_b = item.Value.Ks.GetB();
                     mat.intensity_specular_g = item.Value.Ks.GetG();
-                    mat.intensity_specular_r = item.Value.Ks.GetB();
+                    mat.intensity_specular_r = item.Value.Ks.GetR();
                     mat.specular_scale = item.Value.specular_scale;
 
                     if (item.Value.ref_specular_map.PackID == 0x07000000 || item.Value.ref_specular_map.PackID == 0x00000000)
@@ -94,14 +95,15 @@ namespace SHARED_UHD_BIN_TPL.REPACK
 
             //----
             uhdTpl.TplArray = tplInfos.ToArray();
+            idxMaterial.MaterialDic = idxMaterial.MaterialDic.OrderBy(a => a.Key).ToDictionary(k => k.Key, v => v.Value);
         }
 
-        private enum TexType 
+        private enum TexType : byte
         {
-            diffuse, // 0x0E
-            bump,    // 0x00
-            opacity, // 0x03
-            custom_specular //0x06
+            diffuse = 0x0E,
+            bump = 0x03,
+            opacity = 0x00,
+            custom_specular = 0x06,
         }
 
         private byte TextureIndex(ref List<TplInfo> tplInfos, TexPathRef texPathRef, TexType type) 
@@ -127,24 +129,7 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                 tplInfos.Add(info);
             }
 
-            switch (type)
-            {
-                case TexType.diffuse:
-                    info.PixelFormatType = 0x0E;
-                    break;
-                case TexType.bump:
-                    info.PixelFormatType = 0x03;
-                    break;
-                case TexType.opacity:
-                    info.PixelFormatType = 0x00;
-                    break;
-                case TexType.custom_specular:
-                    info.PixelFormatType = 0x06;
-                    break;
-                default:
-                    break;
-            }
-
+            info.PixelFormatType = (uint)type;
             info.HasPalette = false;
 
             (ushort width, ushort height) dimension = (info.Width, info.Height);

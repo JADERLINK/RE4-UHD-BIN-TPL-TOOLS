@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using SimpleEndianBinaryIO;
 
@@ -10,7 +9,7 @@ namespace SHARED_UHD_BIN_TPL
 {
     public static class MainAction
     {
-        public static void MainContinue(string[] args, bool isPS4NS, Endianness endianness) 
+        public static void MainContinue(string[] args, bool isPS4NS, Endianness endianness)
         {
             System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -349,12 +348,14 @@ namespace SHARED_UHD_BIN_TPL
 
             if (idxuhdtplFile != null) //.IDXUHDTPL
             {
+                Console.WriteLine("Processing IDXUHDTPL");
                 uhdTPL = ALL.IdxUhdTplLoad.Load(idxuhdtplFile);
                 idxuhdtplFile.Close();
             }
 
             if (idxmaterialFile != null) //.IDXMATERIAL
             {
+                Console.WriteLine("Processing IDXMATERIAL");
                 material = SHARED_TOOLS.ALL.IdxMaterialLoad.Load(idxmaterialFile);
                 idxmaterialFile.Close();
             }
@@ -367,6 +368,7 @@ namespace SHARED_UHD_BIN_TPL
 
             if (mtlFile != null) //.MTL
             {
+                Console.WriteLine("Processing MTL");
                 REPACK.MtlLoad.Load(mtlFile, out idxMtl);
                 // o mtlFile é fechado no metodo acima.
             }
@@ -382,6 +384,7 @@ namespace SHARED_UHD_BIN_TPL
                 REPACK.Structures.FinalStructure final = REPACK.BinRepack.MakeFinalStructure(new REPACK.Structures.IntermediaryLevel2());
 
                 // cria arquivos
+                Console.WriteLine("Creating file: " + baseName + ".BIN");
                 string binFilePath = Path.Combine(baseDirectory, baseName + ".BIN");
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
@@ -422,9 +425,9 @@ namespace SHARED_UHD_BIN_TPL
                 REPACK.Structures.FinalStructure final = null;
 
                 {
-                    int ObjFileUseBone = (int)idxbin.ObjFileUseBone;
+                    byte ObjFileUseBone = (byte)idxbin.ObjFileUseBone;
                     bool CompressVertices = true; // é sempre true
-                    REPACK.Structures.IntermediaryStructure intermediaryStructure = null;
+                    SHARED_TOOLS.REPACK.Structures.IntermediaryStructure intermediaryStructure = null;
                     REPACK.BinRepack.RepackOBJ(objFile, CompressVertices, ObjFileUseBone, out intermediaryStructure, idxbin.UseAlternativeNormals, idxbin.UseVertexColor);
                     REPACK.Structures.IntermediaryLevel2 level2 = REPACK.BinRepack.MakeIntermediaryLevel2(intermediaryStructure);
                     final = REPACK.BinRepack.MakeFinalStructure(level2);
@@ -439,6 +442,8 @@ namespace SHARED_UHD_BIN_TPL
                 }
 
                 // cria arquivos
+                Console.WriteLine("Creating file: " + baseName + ".BIN");
+                Console.WriteLine("Below is the order of the mesh with the name of the material used:");
                 string binFilePath = Path.Combine(baseDirectory, baseName + ".BIN");
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
@@ -448,6 +453,7 @@ namespace SHARED_UHD_BIN_TPL
 
                 if (uhdTPL != null)
                 {
+                    Console.WriteLine("Creating file: " + baseName + ".TPL");
                     string tplFilePath = Path.Combine(baseDirectory, baseName + ".TPL");
                     Stream tplstream = File.Open(tplFilePath, FileMode.Create);
                     REPACK.TPLmakeFile.MakeFile(uhdTPL, tplstream, 0, out _, isPS4NS, endianness);
@@ -469,7 +475,7 @@ namespace SHARED_UHD_BIN_TPL
 
                 {
                     bool CompressVertices = true; // é sempre true
-                    REPACK.Structures.IntermediaryStructure intermediaryStructure = null;
+                    SHARED_TOOLS.REPACK.Structures.IntermediaryStructure intermediaryStructure = null;
                     REPACK.BinRepack.RepackSMD(smdFile, CompressVertices, out intermediaryStructure, out boneLines, idxbin.UseAlternativeNormals, endianness);
                     REPACK.Structures.IntermediaryLevel2 level2 = REPACK.BinRepack.MakeIntermediaryLevel2(intermediaryStructure);
                     final = REPACK.BinRepack.MakeFinalStructure(level2);
@@ -495,6 +501,8 @@ namespace SHARED_UHD_BIN_TPL
                 }
 
                 // cria arquivos
+                Console.WriteLine("Creating file: " + baseName + ".BIN");
+                Console.WriteLine("Below is the order of the mesh with the name of the material used:");
                 string binFilePath = Path.Combine(baseDirectory, baseName + ".BIN");
                 Stream binstream = File.Open(binFilePath, FileMode.Create);
                 REPACK.BINmakeFile.MakeFile(binstream, 0, out _, final, boneLines, material,
@@ -504,6 +512,7 @@ namespace SHARED_UHD_BIN_TPL
 
                 if (uhdTPL != null)
                 {
+                    Console.WriteLine("Creating file: " + baseName + ".TPL");
                     string tplFilePath = Path.Combine(baseDirectory, baseName + ".TPL");
                     Stream tplstream = File.Open(tplFilePath, FileMode.Create);
                     REPACK.TPLmakeFile.MakeFile(uhdTPL, tplstream, 0, out _, isPS4NS, endianness);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SHARED_UHD_BIN_TPL.REPACK.Structures;
+using SHARED_TOOLS.REPACK.Structures;
 using SHARED_TOOLS.ALL;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
@@ -41,21 +42,12 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                         vertex.TextureU = item.Value.Faces[i][iv].Texture.U;
                         vertex.TextureV = item.Value.Faces[i][iv].Texture.V;
 
-                        vertex.ColorR = (byte)(item.Value.Faces[i][iv].Color.R * 255);
-                        vertex.ColorG = (byte)(item.Value.Faces[i][iv].Color.G * 255);
-                        vertex.ColorB = (byte)(item.Value.Faces[i][iv].Color.B * 255);
-                        vertex.ColorA = (byte)(item.Value.Faces[i][iv].Color.A * 255);
+                        vertex.ColorR = item.Value.Faces[i][iv].Color.R;
+                        vertex.ColorG = item.Value.Faces[i][iv].Color.G;
+                        vertex.ColorB = item.Value.Faces[i][iv].Color.B;
+                        vertex.ColorA = item.Value.Faces[i][iv].Color.A;
 
-                        vertex.Links = (byte)item.Value.Faces[i][iv].WeightMap.Links;
-
-
-                        vertex.BoneID1 = (byte)(ushort)item.Value.Faces[i][iv].WeightMap.BoneID1;
-                        vertex.BoneID2 = (byte)(ushort)item.Value.Faces[i][iv].WeightMap.BoneID2;
-                        vertex.BoneID3 = (byte)(ushort)item.Value.Faces[i][iv].WeightMap.BoneID3;
-
-                        vertex.Weight1 = (byte)(item.Value.Faces[i][iv].WeightMap.Weight1 * 100);
-                        vertex.Weight2 = (byte)(item.Value.Faces[i][iv].WeightMap.Weight2 * 100);
-                        vertex.Weight3 = (byte)(item.Value.Faces[i][iv].WeightMap.Weight3 * 100);
+                        vertex.WeightMap = item.Value.Faces[i][iv].WeightMap;
 
                         face.Vertexs.Add(vertex);
                     }

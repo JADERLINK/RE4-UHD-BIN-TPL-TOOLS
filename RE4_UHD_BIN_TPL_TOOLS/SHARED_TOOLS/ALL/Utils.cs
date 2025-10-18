@@ -10,7 +10,7 @@ namespace SHARED_TOOLS.ALL
     {
         public static string ReturnValidHexValue(string cont)
         {
-            string res = "";
+            StringBuilder res = new StringBuilder();
             foreach (var c in cont.ToUpperInvariant())
             {
                 if (char.IsDigit(c)
@@ -22,44 +22,45 @@ namespace SHARED_TOOLS.ALL
                     || c == 'F'
                     )
                 {
-                    res += c;
+                    res.Append(c);
                 }
             }
-            return res;
+            return res.ToString();
         }
 
         public static string ReturnValidDecValue(string cont)
         {
-            string res = "";
+            StringBuilder res = new StringBuilder();
             foreach (var c in cont)
             {
                 if (char.IsDigit(c))
                 {
-                    res += c;
+                    res.Append(c);
                 }
             }
-            return res;
+            return res.ToString();
         }
 
         public static string ReturnValidDecWithNegativeValue(string cont)
         {
             bool negative = false;
 
-            string res = "";
+            StringBuilder res = new StringBuilder();
             foreach (var c in cont)
             {
                 if (negative == false && c == '-')
                 {
-                    res = c + res;
+                    res.Insert(0, c);
                     negative = true;
+                    continue;
                 }
 
                 if (char.IsDigit(c))
                 {
-                    res += c;
+                    res.Append(c);
                 }
             }
-            return res;
+            return res.ToString();
         }
 
         public static string ReturnValidFloatValue(string cont)
@@ -67,47 +68,36 @@ namespace SHARED_TOOLS.ALL
             bool dot = false;
             bool negative = false;
 
-            string res = "";
+            StringBuilder res = new StringBuilder();
             foreach (var c in cont)
             {
                 if (negative == false && c == '-')
                 {
-                    res = c + res;
+                    res.Insert(0, c);
                     negative = true;
+                    continue;
                 }
 
                 if (dot == false && c == '.')
                 {
-                    res += c;
+                    res.Append(c);
                     dot = true;
+                    continue;
                 }
+
                 if (char.IsDigit(c))
                 {
-                    res += c;
+                    res.Append(c);
                 }
             }
-            return res;
+            return res.ToString();
         }
 
         public static short ParseFloatToShort(float value)
         {
-            string sv = value.ToString("F", CultureInfo.InvariantCulture).Split('.')[0];
-            int iv = 0;
-            try
-            {
-                iv = int.Parse(sv, NumberStyles.Integer);
-            }
-            catch (Exception)
-            {
-            }
-            if (iv > short.MaxValue)
-            {
-                iv = short.MaxValue;
-            }
-            else if (iv < short.MinValue)
-            {
-                iv = short.MinValue;
-            }
+            int iv = (int)Math.Round(value, MidpointRounding.AwayFromZero);
+            if (iv > short.MaxValue) { return short.MaxValue; }
+            if (iv < short.MinValue) { return short.MinValue; }
             return (short)iv;
         }
 
@@ -120,7 +110,7 @@ namespace SHARED_TOOLS.ALL
                 {
                     try
                     {
-                        varToSet = byte.Parse(Utils.ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                        varToSet = byte.Parse(ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     {
@@ -140,7 +130,7 @@ namespace SHARED_TOOLS.ALL
                 {
                     try
                     {
-                        varToSet = byte.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                        varToSet = byte.Parse(ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     {
@@ -160,7 +150,7 @@ namespace SHARED_TOOLS.ALL
                 {
                     try
                     {
-                        varToSet = uint.Parse(Utils.ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                        varToSet = uint.Parse(ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     {
@@ -180,7 +170,7 @@ namespace SHARED_TOOLS.ALL
                 {
                     try
                     {
-                        varToSet = uint.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                        varToSet = uint.Parse(ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     {
@@ -200,7 +190,87 @@ namespace SHARED_TOOLS.ALL
                 {
                     try
                     {
-                        varToSet = ushort.Parse(Utils.ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                        varToSet = ushort.Parse(ReturnValidDecValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SetUshortHex(ref string line, string key, ref ushort varToSet)
+        {
+            if (line.StartsWith(key))
+            {
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = ushort.Parse(ReturnValidHexValue(split[1]), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SetSbyteDec(ref string line, string key, ref sbyte varToSet)
+        {
+            if (line.StartsWith(key))
+            {
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = sbyte.Parse(ReturnValidDecWithNegativeValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SetShortDec(ref string line, string key, ref short varToSet)
+        {
+            if (line.StartsWith(key))
+            {
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = short.Parse(ReturnValidDecWithNegativeValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SetintDec(ref string line, string key, ref int varToSet)
+        {
+            if (line.StartsWith(key))
+            {
+                var split = line.Split(':');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        varToSet = int.Parse(ReturnValidDecWithNegativeValue(split[1]), NumberStyles.Integer, CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     {
@@ -220,7 +290,7 @@ namespace SHARED_TOOLS.ALL
                 {
                     try
                     {
-                        varToSet = float.Parse(Utils.ReturnValidFloatValue(split[1]), NumberStyles.Float, CultureInfo.InvariantCulture);
+                        varToSet = float.Parse(ReturnValidFloatValue(split[1]), NumberStyles.Float, CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     {

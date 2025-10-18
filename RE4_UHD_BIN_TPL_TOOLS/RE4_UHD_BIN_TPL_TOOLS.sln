@@ -17,20 +17,26 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SimpleEndianBinaryIO", "Sim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RE4_X360PS3_BIN_TPL_TOOL", "RE4_X360PS3_BIN_TPL_TOOL\RE4_X360PS3_BIN_TPL_TOOL.csproj", "{18DDD1F5-233C-406E-ACAF-F96CF8878328}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SHARED_TOOLS", "SHARED_TOOLS\SHARED_TOOLS.shproj", "{37AB8C65-6125-4036-9A48-34CF0EA9DED6}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.projitems*{18ddd1f5-233c-406e-acaf-f96cf8878328}*SharedItemsImports = 4
+		SHARED_TOOLS\SHARED_TOOLS.projitems*{18ddd1f5-233c-406e-acaf-f96cf8878328}*SharedItemsImports = 4
 		SHARED_UHD_BIN_TPL\SHARED_UHD_BIN_TPL.projitems*{18ddd1f5-233c-406e-acaf-f96cf8878328}*SharedItemsImports = 4
 		SimpleEndianBinaryIO\SimpleEndianBinaryIO.projitems*{18ddd1f5-233c-406e-acaf-f96cf8878328}*SharedItemsImports = 4
 		SMD_READER_LIB\SMD_READER_LIB.projitems*{18ddd1f5-233c-406e-acaf-f96cf8878328}*SharedItemsImports = 4
 		CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.projitems*{2dab4144-8de5-4d91-bf36-e4c96c31980e}*SharedItemsImports = 4
+		SHARED_TOOLS\SHARED_TOOLS.projitems*{2dab4144-8de5-4d91-bf36-e4c96c31980e}*SharedItemsImports = 4
 		SHARED_UHD_BIN_TPL\SHARED_UHD_BIN_TPL.projitems*{2dab4144-8de5-4d91-bf36-e4c96c31980e}*SharedItemsImports = 4
 		SimpleEndianBinaryIO\SimpleEndianBinaryIO.projitems*{2dab4144-8de5-4d91-bf36-e4c96c31980e}*SharedItemsImports = 4
 		SMD_READER_LIB\SMD_READER_LIB.projitems*{2dab4144-8de5-4d91-bf36-e4c96c31980e}*SharedItemsImports = 4
+		SHARED_TOOLS\SHARED_TOOLS.projitems*{37ab8c65-6125-4036-9a48-34cf0ea9ded6}*SharedItemsImports = 13
 		SMD_READER_LIB\SMD_READER_LIB.projitems*{41d7e25d-2731-4ccc-847a-f54591c4635c}*SharedItemsImports = 13
 		SimpleEndianBinaryIO\SimpleEndianBinaryIO.projitems*{5ddb0d8f-d1ea-479f-8fac-be2b5c6bab65}*SharedItemsImports = 13
 		CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.projitems*{8a3a7579-5ef1-448e-a7e3-2bf569f56ed4}*SharedItemsImports = 13
 		CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.projitems*{b032f333-140c-4c27-a3a8-5199e92b7a0e}*SharedItemsImports = 4
+		SHARED_TOOLS\SHARED_TOOLS.projitems*{b032f333-140c-4c27-a3a8-5199e92b7a0e}*SharedItemsImports = 4
 		SHARED_UHD_BIN_TPL\SHARED_UHD_BIN_TPL.projitems*{b032f333-140c-4c27-a3a8-5199e92b7a0e}*SharedItemsImports = 4
 		SimpleEndianBinaryIO\SimpleEndianBinaryIO.projitems*{b032f333-140c-4c27-a3a8-5199e92b7a0e}*SharedItemsImports = 4
 		SMD_READER_LIB\SMD_READER_LIB.projitems*{b032f333-140c-4c27-a3a8-5199e92b7a0e}*SharedItemsImports = 4

@@ -9,9 +9,6 @@
     <Import_RootNamespace>SHARED_UHD_BIN_TPL</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ALL\CONSTs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ALL\FloatExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ALL\MaterialPart.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ALL\HeaderExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\MorphBIN.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\MorphBinDecoder.cs" />
@@ -24,8 +21,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\BINrepackIntermediaryL2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\BINrepackOBJ.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\BINrepackSMD.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ALL\IdxMaterial.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ALL\IdxMaterialLoad.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ALL\IdxMaterialParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ALL\IdxMtl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ALL\IdxMtlParser.cs" />
@@ -35,15 +30,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\UhdBinDecoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\UhdTPL.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\UhdTplDecoder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ALL\Utils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)REPACK\FinalBoneLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\IdxUuBin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\MtlConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\MtlLoad.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\Structures\FinalStructure.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\Structures\IntermediaryLevel2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)REPACK\Structures\IntermediaryStructure.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)REPACK\Structures\StartStructure.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\TPLmakeFile.cs" />
   </ItemGroup>
 </Project>

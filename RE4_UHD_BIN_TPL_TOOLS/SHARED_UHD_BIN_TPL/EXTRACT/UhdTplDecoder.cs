@@ -19,15 +19,15 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
             uint magic = br.ReadUInt32();
             if ( ! (magic == 0x78563412 || magic == 0x12345678))
             {
-                throw new ArgumentException("Invalid TPL file!");
+                throw new ApplicationException("Invalid TPL file!");
             }
 
             uint TplAmount = br.ReadUInt32();
-
             uint offsetToOffsetArea = br.ReadUInt32();
-            if (offsetToOffsetArea > 0x01_00_00_00)
+
+            if (TplAmount > 0x00_01_00_00 || offsetToOffsetArea > 0x00_01_00_00)
             {
-                throw new ArgumentException("Invalid TPL file!");
+                throw new ApplicationException("Invalid TPL file!");
             }
 
             br.BaseStream.Position = offsetToOffsetArea + startOffset;

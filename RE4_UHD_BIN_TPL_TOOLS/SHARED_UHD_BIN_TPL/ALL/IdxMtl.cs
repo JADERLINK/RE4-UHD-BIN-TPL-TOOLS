@@ -8,7 +8,7 @@ using SHARED_TOOLS.ALL;
 namespace SHARED_UHD_BIN_TPL.ALL
 {
     /// <summary>
-    /// representa o arquivo .mtl
+    /// representa o arquivo MTL
     /// </summary>
     public class IdxMtl
     {
@@ -20,7 +20,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
 
 
     /// <summary>
-    /// representa um material do .mtl
+    /// representa um material do MTL
     /// </summary>
     public class MtlObj 
     {        
@@ -58,7 +58,7 @@ namespace SHARED_UHD_BIN_TPL.ALL
 
 
     /// <summary>
-    /// é usado para definir o caminho das texturas no mtl
+    /// é usado para definir o caminho das texturas no MTL
     /// </summary>
     public class TexPathRef 
     {
@@ -89,30 +89,42 @@ namespace SHARED_UHD_BIN_TPL.ALL
                 texturePath = "";
             }
 
-            texturePath = texturePath.Replace("\\\\", "/").Replace("\\", "/");
-            var split = texturePath.Split('/').Where(s => s.Length != 0).ToArray();
+            texturePath = texturePath.Replace("\\\\", "/").Replace("\\", "/"); // Coloca o tipo de barra no padrão linux
+            var split = texturePath.Split('/').Where(s => s.Length != 0).ToArray(); // Divide o path em pasta e nome do arquivo
 
             try
             {
-                var last = split.Last().Split('.').Where(s => s.Length != 0).ToArray();
+                var last = split.Last().Split('.').Where(s => s.Length != 0).ToArray(); // Pega o conteúdo com o nome do arquivo e divide por ponto, para separar o formato.
                 TextureID = uint.Parse(Utils.ReturnValidDecValue(last[0]), NumberStyles.Integer, CultureInfo.InvariantCulture);
                 Format = last.Last().ToLowerInvariant();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Se aconteceu um erro, é porque não conseguiu pegar um ID válido, então o valor de TextureID vai ficar 0
+                Console.WriteLine("Error getting TextureID from texture path: " + texturePath);
+                Console.WriteLine(ex.Message);
             }
 
-            if (split.Length -1 > 0)
+            if (split.Length - 1 > 0)
             {
                 try
                 {
+                    // Aqui é splitado o ' ' char de espaço, pois pode ter as informações do specular na string
                     var resplit = split[split.Length - 2].Split(' ').Where(s => s.Length != 0).ToArray();
                     PackID = uint.Parse(Utils.ReturnValidHexValue(resplit.Last()), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    // Se aconteceu um erro, é porque não conseguiu pegar um ID válido, então o valor de PackID vai ficar 0
+                    Console.WriteLine("Error getting PackID from texture path: " + texturePath);
+                    Console.WriteLine(ex.Message);
                 }
             }
+            else 
+            {
+                Console.WriteLine("Error getting PackID from texture path: " + texturePath);
+            }
+
         }
 
         public override string ToString()
@@ -168,9 +180,9 @@ namespace SHARED_UHD_BIN_TPL.ALL
 
         public string GetKs()
         {
-           return (r / 255f).ToString("f6", CultureInfo.InvariantCulture)
-          + " " + (g / 255f).ToString("f6", CultureInfo.InvariantCulture)
-          + " " + (b / 255f).ToString("f6", CultureInfo.InvariantCulture);
+           return (r / 255f).ToFloatString()
+          + " " + (g / 255f).ToFloatString()
+          + " " + (b / 255f).ToFloatString();
         }
 
         public byte GetR() 

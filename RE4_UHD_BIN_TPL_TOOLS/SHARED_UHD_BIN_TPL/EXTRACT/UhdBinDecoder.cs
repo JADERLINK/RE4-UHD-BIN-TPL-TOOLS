@@ -428,7 +428,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
             if ( ! (header.bone_offset == 0x00000060 || header.bone_offset == 0x00000040 || header.bone_offset == 0x00000050))
             {
-                throw new ArgumentException("Invalid BIN file!");
+                throw new ApplicationException("Invalid BIN file!");
             }
 
             header.unknown_x04 = br.ReadUInt32(); //--zeros
@@ -448,7 +448,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
             if ((header.Bin_flags & 0x80_00_00_00) != 0x80_00_00_00)
             {
-                throw new ArgumentException("Invalid BIN file!");
+                throw new ApplicationException("Invalid BIN file!");
             }
 
             header.Tex_count = br.ReadUInt32();
@@ -483,7 +483,7 @@ namespace SHARED_UHD_BIN_TPL.EXTRACT
 
             if ( ! (header.bone_offset == 0x00000098))
             {
-                throw new ArgumentException("Invalid BIN file!");
+                throw new ApplicationException("Invalid BIN file!");
             }
 
             _ = br.ReadUInt32(); // bone_offset part2

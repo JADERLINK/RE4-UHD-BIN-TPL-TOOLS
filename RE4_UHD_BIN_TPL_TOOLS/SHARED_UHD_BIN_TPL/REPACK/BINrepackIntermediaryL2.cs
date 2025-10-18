@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SHARED_TOOLS.REPACK.Structures;
 using SHARED_UHD_BIN_TPL.REPACK.Structures;
 
 namespace SHARED_UHD_BIN_TPL.REPACK

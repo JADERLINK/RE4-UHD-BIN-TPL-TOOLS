@@ -8,6 +8,7 @@ using SHARED_UHD_BIN_TPL.EXTRACT;
 using SHARED_TOOLS.ALL;
 using SHARED_TOOLS.REPACK;
 using SimpleEndianBinaryIO;
+using SHARED_TOOLS.REPACK.Structures;
 
 namespace SHARED_UHD_BIN_TPL.REPACK
 {
@@ -107,11 +108,13 @@ namespace SHARED_UHD_BIN_TPL.REPACK
                 if (material.MaterialDic.ContainsKey(Groups[i].materialName))
                 {
                     b.AddRange(material.MaterialDic[Groups[i].materialName].GetArray());
+                    Console.WriteLine($"[{i}] Used material: {Groups[i].materialName}");
                 }
-                else 
+                else
                 {
                     //usado quando não encontrado um material valido
                     b.AddRange(EmpatyMaterialArray());
+                    Console.WriteLine($"[{i}] Not found material: {Groups[i].materialName}");
                 }
 
                 uint buffer = (uint)(4 + (Groups[i].Mesh.Length * 4));
@@ -295,13 +298,13 @@ namespace SHARED_UHD_BIN_TPL.REPACK
             uint WeightMapOffset = 0;
             uint BonePairOffset = 0;
             uint AdjacentBoneOffset = 0;
-            uint VertexPositionOffset = 0;
+            uint VertexPositionOffset;
             uint VertexWeightIndexOffset = 0;
-            uint VertexNormalOffset = 0;
+            uint VertexNormalOffset;
             uint VertexWeight2IndexOffset = 0;
             uint VertexColorsOffset = 0;
-            uint VertexTexcoordOffset = 0;
-            uint MaterialOffset = 0;
+            uint VertexTexcoordOffset;
+            uint MaterialOffset;
 
             uint tempOffset = (uint)(BoneOffset + (boneLines.Length * 16) + 16);
 
