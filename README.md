@@ -10,6 +10,13 @@ Programa destinado a extrair e reempacotar os arquivos BIN/TPL do RE4 OG UHD/PS4
 
 ## Updates
 
+**Update: V.1.4.2**
+<br> Melhorado a velocidade do repack, para modelos que têm mais de um material.
+<br> Agora, ao fazer repack quando o nome da textura ou pack estiver errado, o programa vai avisar.
+<br> E ao fazer repack vai mostrar a ordem em que os materiais/meshes foram colocados no arquivo BIN, isso é usado para conferir se os materiais com transparência estão no final.
+<br> Corrigido o campo 'intensity_specular' que estava invertendo os canais Red e Blue no repack com MTL.
+<br> Foram feitas melhorias no código.
+
 **Update: V.1.4.1**
 <br> Corrigido bug dos materiais não serem ordenados em ordem alfabética;
 <br> Agora os materiais são ordenados em ordem alfabética, recomento que enumere os materiais, os materiais com texturas com transparência devem ficar no final;
@@ -167,4 +174,4 @@ Encontra-se em "RE4_UHD_BIN_TPL_TOOLS/CjClutter.ObjLoader.Loader", código modif
 **At.te: JADERLINK**
 <br>Thanks to \"mariokart64n\" and \"CodeMan02Fr\"
 <br>Material information by \"Albert\"
-<br>2025-09-02
+<br>2025-10-18
