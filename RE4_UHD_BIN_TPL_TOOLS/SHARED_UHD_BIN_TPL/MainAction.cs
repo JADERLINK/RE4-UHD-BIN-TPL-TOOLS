@@ -259,11 +259,15 @@ namespace SHARED_UHD_BIN_TPL
                     // se não tiver fica sem mesmo.
                     if (tplFile == null && idxuhdtplFile == null)
                     {
-                        string tplFilePath = Path.Combine(baseDirectory, baseName + ".TPL");
-                        if (File.Exists(tplFilePath))
+                        string foundTplPath = TplFinder.Find(baseDirectory, baseName, out string foundTplName);
+                        if (foundTplPath != null)
                         {
-                            Console.WriteLine("Load File: " + baseName + ".TPL");
-                            tplFile = new FileInfo(tplFilePath).OpenRead();
+                            Console.WriteLine("Load File: " + foundTplName);
+                            tplFile = new FileInfo(foundTplPath).OpenRead();
+                        }
+                        else
+                        {
+                            Console.WriteLine("There is no TPL for the file: " + fileInfo1.Name + " (the MTL will not be created)");
                         }
                     }
                     break;
