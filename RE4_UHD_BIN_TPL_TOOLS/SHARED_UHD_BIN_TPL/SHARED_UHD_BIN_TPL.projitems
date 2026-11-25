@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\OutputMaterial.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EXTRACT\OutputMorph.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TplFinder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\BINmakeFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\BINrepackFinal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)REPACK\BINrepackIntermediary.cs" />

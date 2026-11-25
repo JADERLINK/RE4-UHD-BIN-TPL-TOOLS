@@ -1,6 +1,39 @@
 # RE4-UHD-BIN-TPL-TOOLS
 Extract and repack BIN/TPL files for RE4 OG UHD/PS4/NS/X360/PS3;
 
+## About this fork
+
+This fork improves how the tools find the `.TPL` file that belongs to a `.BIN` when extracting (the `.mtl` file is created from the BIN + TPL data).
+
+**The problem:** previously, when extracting a `.BIN`, the tool only looked for a `.TPL` with exactly the same name (`0003.BIN` -> `0003.TPL`). In the game files the TPL usually does not share the BIN's name; it is the next file after the BIN (`0003.BIN` -> `0004.TPL`). Because of this, no TPL was found and the `.mtl` was never created.
+
+**The fix:** the TPL lookup now follows these steps (case-insensitive, and the TPL must be in the same folder as the BIN):
+
+1. Look for a TPL with the **same name** as the BIN. If it exists, it is used (this keeps the old behavior).
+2. If it does not exist, look for the TPL with the **number + 1**, keeping the same number of digits:
+
+| BIN | TPL searched (fallback) |
+|---|---|
+| `0003.BIN` | `0004.TPL` |
+| `3.BIN` | `4.TPL` |
+| `R100_027.BIN` | `R100_028.TPL` |
+| `R100_27.BIN` | `R100_28.TPL` |
+| `Em20_27.BIN` | `Em20_28.TPL` |
+
+   Only the number at the end is incremented (for the `PREFIX_NUMBER` form, only the number after the last `_`); the prefix stays unchanged. If the number grows in length (`9` -> `10`, `099` -> `100`), the new length is used.
+3. If no TPL is found, the console prints `There is no TPL for the file: <name>` and the `.mtl` is not created (the rest of the extraction continues as before).
+
+Passing a TPL or IDXUHDTPL explicitly as the second parameter still has priority over this automatic search.
+
+**Changed files:**
+- `SHARED_UHD_BIN_TPL/TplFinder.cs` (new): the TPL search logic.
+- `SHARED_UHD_BIN_TPL/MainAction.cs`: BIN extract mode now uses `TplFinder`.
+- `SHARED_UHD_BIN_TPL/SHARED_UHD_BIN_TPL.projitems`: includes the new file.
+
+The change is in the shared project, so it applies to all three tools (UHD, PS4/NS and X360/PS3).
+
+---
+
 **Translate from Portuguese Brazil**
 
 Programa destinado a extrair e reempacotar os arquivos BIN/TPL do RE4 OG UHD/PS4/NS/X360/PS3;
